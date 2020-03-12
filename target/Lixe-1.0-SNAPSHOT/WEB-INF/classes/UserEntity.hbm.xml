@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Server.model.DB.UserEntity" table="User_" schema="public" catalog="ProjectMusicFilm">
+        <id name="id">
+            <column name="id" sql-type="bigint"/>
+            <generator class="identity"/>
+        </id>
+        <property name="userName">
+            <column name="userName" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="password">
+            <column name="password" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="email">
+            <column name="email" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="ext">
+            <column name="ext" sql-type="text" not-null="true"/>
+        </property>
+        <property name="follow">
+            <column name="follow" sql-type="text" not-null="true"/>
+        </property>
+        <property name="active">
+            <column name="active" sql-type="bit" not-null="true"/>
+        </property>
+        <property name="roleid">
+            <column name="roleid" sql-type="bigint" not-null="true"/>
+        </property>
+        <property name="img">
+            <column name="img" sql-type="text" not-null="true"/>
+        </property>
+        <property name="displayName">
+            <column name="displayName" sql-type="varchar(255)" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
