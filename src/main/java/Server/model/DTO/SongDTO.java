@@ -7,6 +7,7 @@ import java.util.List;
 
 public class SongDTO {
     private SongEntity songEntity = new SongEntity();
+    private AlbumEntity albumEntity = new AlbumEntity();
     private AuthorEntity authorEntity = new AuthorEntity();
     private ImageEntity imageEntity = new ImageEntity();
     private List<SingerEntity> singerEntityList = new ArrayList<>();
@@ -18,8 +19,11 @@ public class SongDTO {
     public SongDTO() {
     }
 
-    public SongDTO(SongEntity songEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorySongEntity> categorySongEntityList, List<CommentEntity> commentEntityList, Criteria criteria) {
+
+
+    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorySongEntity> categorySongEntityList, List<CommentEntity> commentEntityList, Criteria criteria) {
         this.songEntity = songEntity;
+        this.albumEntity = albumEntity;
         this.authorEntity = authorEntity;
         this.imageEntity = imageEntity;
         this.singerEntityList = singerEntityList;
@@ -28,7 +32,13 @@ public class SongDTO {
         this.commentEntityList = commentEntityList;
         this.criteria = criteria;
     }
+    public AlbumEntity getAlbumEntity() {
+        return albumEntity;
+    }
 
+    public void setAlbumEntity(AlbumEntity albumEntity) {
+        this.albumEntity = albumEntity;
+    }
     public SongEntity getSongEntity() {
         return songEntity;
     }

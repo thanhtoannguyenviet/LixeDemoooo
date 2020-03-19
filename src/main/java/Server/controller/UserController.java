@@ -30,11 +30,12 @@ public class UserController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> registerAPI(@RequestBody UserEntity user){
-        userDAO.Add(user);
+        String userid =userDAO.Save(user);
         HttpHeaders responseHeader=new HttpHeaders();
         URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
         responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>(null,responseHeader,HttpStatus.CREATED);
+
+        return new ResponseEntity<>(userid,responseHeader,HttpStatus.CREATED);
     }
 
 

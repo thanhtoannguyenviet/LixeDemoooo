@@ -1,11 +1,14 @@
 package Server.service;
+import Server.model.DTO.Criteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,25 +22,25 @@ public class DBUtil {
         session.getTransaction().commit();
         return data;
     }
-//    public static <T> List<T> loadAllData(Class<T> type, Session session, Criteria criter) {
-//        session.beginTransaction();
-//        CriteriaBuilder builder = session.getCriteriaBuilder();
-//        int itemStart = 0;
-//        int itemEnd = 1;
-//        if(criter != null){
-//            itemStart = criter.getCurrentPage()*criter.getItemPerPage();
-//            itemEnd = itemStart + criter.getItemPerPage();
-//        }
-//        CriteriaQuery<T> criteriaQuery = builder.createQuery(type);
-//        Root<T> from = criteriaQuery.from(type);
-//        CriteriaQuery<T> select = criteriaQuery.select(from);
-//        TypedQuery<T> typedQuery = session.createQuery(select);
-//        typedQuery.setFirstResult(itemStart);
-//        typedQuery.setMaxResults(itemEnd);
-//        List<T> data = typedQuery.getResultList();
-//        session.getTransaction().commit();
-//        return data;
-//    }
+    public static <T> List<T> loadAllData(Class<T> type, Session session, Criteria criter) {
+        session.beginTransaction();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        int itemStart = 0;
+        int itemEnd = 1;
+        if(criter != null){
+            itemStart = criter.getCurrentPage()*criter.getItemPerPage();
+            itemEnd = itemStart + criter.getItemPerPage();
+        }
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(type);
+        Root<T> from = criteriaQuery.from(type);
+        CriteriaQuery<T> select = criteriaQuery.select(from);
+        TypedQuery<T> typedQuery = session.createQuery(select);
+        typedQuery.setFirstResult(itemStart);
+        typedQuery.setMaxResults(itemEnd);
+        List<T> data = typedQuery.getResultList();
+        session.getTransaction().commit();
+        return data;
+    }
     public static <T> void addData(T newItem, Session session) {
         Transaction tx = null;
         try {
