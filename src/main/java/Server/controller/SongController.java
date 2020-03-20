@@ -42,8 +42,17 @@ public class SongController {
             ss.setSongid(entity.getSongEntity().getId());
             songSingerDAO.Save(ss);
         }
+        for(CategorySongEntity cateSong : entity.getCategorySongEntityList()){
+            SongCategorySongEntity sCS = new SongCategorySongEntity();
+            sCS.setSongid(entity.getSongEntity().getId());
+            sCS.setCategoryid(cateSong.getId());
+            songCategorySongDAO.Save(sCS);
+        }
         songDAO.Save(entity.getSongEntity());
-
+        Long idSong = songDAO.GetId("songname",entity.getSongEntity().getSongName());
+        AlbumEntity albumEntity = entity.getAlbumEntity();
+        albumEntity.setListsongid(entity.getAlbumEntity().getListsongid()+","+idSong);
+        albumDAO.Save(albumEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/{id}",
