@@ -39,9 +39,9 @@ public class ImageDAO {
             //sql = select * from User_ where userName = '?'
             String sql = CUSTOM_QUERY.sqlGetIdFromImageOrResource("Image",model,entryId);
             SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(AuthorEntity.class);
-            AuthorEntity authorEntity =(AuthorEntity) q.uniqueResult() ;
-            return authorEntity.getId();
+            q.addEntity(ImageEntity.class);
+            ImageEntity imageEntity =(ImageEntity) q.uniqueResult() ;
+            return imageEntity.getId();
         }catch (HibernateException ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();

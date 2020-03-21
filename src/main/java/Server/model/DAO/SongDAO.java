@@ -1,9 +1,10 @@
 package Server.model.DAO;
 
+import Server.common.CUSTOM_QUERY;
+import Server.model.DB.AuthorEntity;
 import Server.model.DB.SongEntity;
 import Server.service.DBUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +30,24 @@ public class SongDAO {
         Session s = factory.getCurrentSession();
         SongEntity entity = DBUtil.GetDataByID(id,SongEntity.class,s);
         return entity;
+    }
+    public long GetId(String conditionColumn,String condition ){
+
+        Session s = factory.getCurrentSession();
+        Transaction tx = s.beginTransaction();
+        try {
+            //sql = select * from User_ where userName = '?'
+            String sql = CUSTOM_QUERY.sqlGetId("Song",conditionColumn,condition);
+            SQLQuery q = s.createSQLQuery(sql);
+            q.addEntity(SongEntity.class);
+            SongEntity entity =(SongEntity) q.uniqueResult() ;
+            return entity.getId();
+        }catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            ex.printStackTrace();
+            return 0;
+        } finally {
+            s.close();
+        }
     }
 }
