@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
+
 @RequestMapping("api/MusicSite/Song")
 @RestController
 public class SongController {
@@ -23,6 +25,7 @@ public class SongController {
     SongSingerDAO songSingerDAO;
     SingerDAO singerDAO;
     SongCategorySongDAO songCategorySongDAO;
+    CommentDAO commentDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -54,6 +57,41 @@ public class SongController {
         albumEntity.setListsongid(entity.getAlbumEntity().getListsongid()+","+idSong);
         albumDAO.Save(albumEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/{id}",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> Get (@PathVariable Long id){
+      SongEntity songEntity = songDAO.GetByID(id);
+      AlbumEntity albumEntity = albumDAO.GetByID(songEntity.getAlbumid());
+      AuthorEntity authorEntity = authorDAO.GetByID(songEntity.getAuthorid());
+      String[] array = songEntity.getImg().split(",");
+      ImageEntity imageEntity = new ImageEntity();
+      for (String item : array){
+        if(item!=null) {
+            imageEntity = imageDAO.GetByID(Long.parseLong(item));
+        }
+      }
+      List<SongSingerEntity> numberSinger = songSingerDAO.GetId("songid",""+songEntity.getId());
+      List<SingerEntity> lsSinger = new ArrayList<>();
+        for ( SongSingerEntity item: numberSinger) {
+            lsSinger.add(singerDAO.GetByID(item.getSingerid()));
+        }
+        List<UploadEntity> uploadEntities = new ArrayList<>();
+        String[] arrayUpload = songEntity.getUploadsource().split(",");
+        for(String item : arrayUpload){
+            if(item!=null)
+                uploadEntities.add(uploadDAO.GetByID(Long.parseLong(item)));
+        }
+        List<SongCategorySongEntity> lsSongCategory = songCategorySongDAO.GetId("songid",""+songEntity.getId());
+        List<CategorySongEntity> categorySongEntities = new ArrayList<>();
+        for(SongCategorySongEntity item : lsSongCategory){
+            categorySongEntities.add(categoryDAO.GetByID(item.getCategoryid()));
+        }
+        List<CommentEntity> commentEntities = commentDAO.GetId("Song",songEntity.getId());
+        SongDTO entity = new SongDTO(songEntity,albumEntity,authorEntity,imageEntity,lsSinger,uploadEntities,categorySongEntities,commentEntities);
+
+        return new ResponseEntity<>(entity,HttpStatus.ACCEPTED);
     }
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)

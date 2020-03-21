@@ -1,9 +1,10 @@
 package Server.model.DAO;
 
+import Server.common.CUSTOM_QUERY;
 import Server.model.DB.CommentEntity;
+import Server.model.DB.ImageEntity;
 import Server.service.DBUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +30,23 @@ public class CommentDAO {
         Session s = factory.getCurrentSession();
         CommentEntity entity = DBUtil.GetDataByID(id,CommentEntity.class,s);
         return entity;
+    }
+    public List<CommentEntity> GetId(String model,long entryId ){
+
+        Session s = factory.getCurrentSession();
+        Transaction tx = s.beginTransaction();
+        try {
+            //sql = select * from User_ where userName = '?'
+            String sql = CUSTOM_QUERY.sqlGetIdFromImageOrResource("Comment",model,entryId);
+            SQLQuery q = s.createSQLQuery(sql);
+            q.addEntity(CommentEntity.class);
+            return q.getResultList();
+        }catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            ex.printStackTrace();
+            return null;
+        } finally {
+            s.close();
+        }
     }
 }

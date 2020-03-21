@@ -2,7 +2,7 @@ package Server.common;
 
 public class CUSTOM_QUERY {
     public static String GetROLEByUsername =" from ROLE_ r, USER_ where roleId = ?";
-    public static String GetUserByUsername = "select top 1 * from User_ u where userName like '?'";
+    public static String GetUserByUsername = "select * from User_ u where userName like '?' limit 1";
     public static String sqlImg(String model, long entryId){
         String sql = "SELECT * FROM Image WHERE model = '" + model+ "' AND entryId = " + entryId + " ORDER BY id desc ";
         return sql;

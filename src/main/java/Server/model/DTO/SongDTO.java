@@ -18,7 +18,16 @@ public class SongDTO {
 
     public SongDTO() {
     }
-
+    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorySongEntity> categorySongEntityList, List<CommentEntity> commentEntityList) {
+        this.songEntity = songEntity;
+        this.albumEntity = albumEntity;
+        this.authorEntity = authorEntity;
+        this.imageEntity = imageEntity;
+        this.singerEntityList = singerEntityList;
+        this.uploadEntityList = uploadEntityList;
+        this.categorySongEntityList = categorySongEntityList;
+        this.commentEntityList = commentEntityList;
+    }
 
 
     public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorySongEntity> categorySongEntityList, List<CommentEntity> commentEntityList, Criteria criteria) {
