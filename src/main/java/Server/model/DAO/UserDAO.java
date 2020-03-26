@@ -23,7 +23,7 @@ public class UserDAO {
         Session s = factory.getCurrentSession();
 
         List<UserDTO> userList = new ArrayList<>();
-        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, s,null);
+        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, null);
         for (UserEntity userEntity: ls
         ) {
             s = factory.getCurrentSession();
@@ -112,7 +112,7 @@ public class UserDAO {
         Session s = factory.getCurrentSession();
 
         List<UserDTO> userList = new ArrayList<>();
-        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, s,null);
+        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, null);
         for (UserEntity userEntity: ls) {
             s = factory.getCurrentSession();
             RoleEntity role = DBUtil.GetDataByID(userEntity.getRoleid(),RoleEntity.class,s);

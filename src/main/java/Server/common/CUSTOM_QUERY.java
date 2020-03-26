@@ -1,5 +1,8 @@
 package Server.common;
 
+import Server.model.DB.SongEntity;
+import Server.model.DTO.Criteria;
+
 public class CUSTOM_QUERY {
     public static String GetROLEByUsername =" from ROLE_ r, USER_ where roleId = ?";
     public static String GetUserByUsername = "select top 1 * from User_ u where userName like '?'";
@@ -27,6 +30,15 @@ public class CUSTOM_QUERY {
     }
     public static String sqlGetIdFromImageOrResource(String table,String model,long entryId ){
         String sql = "Select * from"+ table + "Where model ='" + model + "'and entryId='"+entryId+"'";
+        return sql;
+    }
+
+    public static String sqlGetTop(Criteria criteria){
+        String model = "";
+        if(criteria.getClazz().equals(SongEntity.class)){
+            model = "Song";
+        }
+        String sql = "SELECT * FROM " + model + " ORDER BY range desc LIMIT " + criteria.getTop();
         return sql;
     }
 }
