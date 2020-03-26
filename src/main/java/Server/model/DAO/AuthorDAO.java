@@ -18,9 +18,9 @@ public class AuthorDAO {
         List<AuthorEntity> ls = DBUtil.loadAllData(AuthorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(AuthorEntity entity){
+    public AuthorEntity Save(AuthorEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

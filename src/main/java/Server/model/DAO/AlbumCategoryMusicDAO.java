@@ -1,9 +1,10 @@
 package Server.model.DAO;
 
+import Server.common.CUSTOM_QUERY;
 import Server.model.DB.AlbumCategoryMusicEntity;
+import Server.model.DB.SongEntity;
 import Server.service.DBUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +30,23 @@ public class AlbumCategoryMusicDAO {
         Session s = factory.getCurrentSession();
         AlbumCategoryMusicEntity entity = DBUtil.GetDataByID(id,AlbumCategoryMusicEntity.class,s);
         return entity;
+    }
+    public List<AlbumCategoryMusicEntity> GetId(String conditionColumn,String condition ){
+
+        Session s = factory.getCurrentSession();
+        Transaction tx = s.beginTransaction();
+        try {
+            //sql = select * from User_ where userName = '?'
+            String sql = CUSTOM_QUERY.sqlGetId("album_categorymusic",conditionColumn,condition);
+            SQLQuery q = s.createSQLQuery(sql);
+            q.addEntity(AlbumCategoryMusicEntity.class);
+            return q.getResultList();
+        }catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            ex.printStackTrace();
+            return null;
+        } finally {
+            s.close();
+        }
     }
 }

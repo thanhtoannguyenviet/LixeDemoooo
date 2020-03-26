@@ -17,9 +17,9 @@ public class AlbumDAO {
         List<AlbumEntity> ls = DBUtil.loadAllData(AlbumEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(AlbumEntity entity){
+    public AlbumEntity Save(AlbumEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

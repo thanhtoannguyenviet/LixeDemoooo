@@ -8,13 +8,23 @@ import java.util.List;
 public class SingerDTO {
     private SingerEntity singerEntity = new SingerEntity();
     private List<SongDTO> songDTOList = new ArrayList<>();
+    private ImageEntity imageEntity = new ImageEntity();
     private Criteria criteria = new Criteria();
     public SingerDTO(){}
 
-    public SingerDTO(SingerEntity singerEntity, List<SongDTO> songDTOList, Criteria criteria) {
+    public SingerDTO(SingerEntity singerEntity, List<SongDTO> songDTOList, ImageEntity imageEntity, Criteria criteria) {
         this.singerEntity = singerEntity;
         this.songDTOList = songDTOList;
+        this.imageEntity = imageEntity;
         this.criteria = criteria;
+    }
+
+    public ImageEntity getImageEntity() {
+        return imageEntity;
+    }
+
+    public void setImageEntity(ImageEntity imageEntity) {
+        this.imageEntity = imageEntity;
     }
 
     public SingerEntity getSingerEntity() {

@@ -26,71 +26,43 @@ public class SongController {
     SingerDAO singerDAO;
     SongCategorySongDAO songCategorySongDAO;
     CommentDAO commentDAO;
+    MusicDAO musicDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SongDTO entity){
-        AuthorEntity authorEntity= entity.getAuthorEntity();
-        authorDAO.Save(authorEntity);
-        entity.getSongEntity().setAuthorid(authorDAO.GetId("name",entity.getAuthorEntity().getName()));
-        imageDAO.Save(entity.getImageEntity());
-        entity.getSongEntity().setImg(entity.getSongEntity().getImg()+","+imageDAO.GetId(entity.getImageEntity().getModel(),entity.getImageEntity().getEntryid()));
-        albumDAO.Save(entity.getAlbumEntity());
-        for ( UploadEntity upload : entity.getUploadEntityList()) {
-            uploadDAO.Save(upload);
-        }
-        for (SingerEntity singer: entity.getSingerEntityList()) {
-            SongSingerEntity ss = new SongSingerEntity();
-            ss.setSingerid(singer.getId());
-            ss.setSongid(entity.getSongEntity().getId());
-            songSingerDAO.Save(ss);
-        }
-        for(CategorySongEntity cateSong : entity.getCategorySongEntityList()){
-            SongCategorySongEntity sCS = new SongCategorySongEntity();
-            sCS.setSongid(entity.getSongEntity().getId());
-            sCS.setCategoryid(cateSong.getId());
-            songCategorySongDAO.Save(sCS);
-        }
-        songDAO.Save(entity.getSongEntity());
-        Long idSong = songDAO.GetId("songname",entity.getSongEntity().getSongName());
-        AlbumEntity albumEntity = entity.getAlbumEntity();
-        albumEntity.setListsongid(entity.getAlbumEntity().getListsongid()+","+idSong);
-        albumDAO.Save(albumEntity);
+//        AuthorEntity authorEntity=  authorDAO.Save(entity.getAuthorEntity());
+//        entity.getSongEntity().setAuthorid(authorDAO.GetId("name",entity.getAuthorEntity().getName()));
+//        imageDAO.Save(entity.getImageEntity());
+//        entity.getSongEntity().setImg(entity.getSongEntity().getImg()+","+imageDAO.GetId(entity.getImageEntity().getModel(),entity.getImageEntity().getEntryid()));
+//        albumDAO.Save(entity.getAlbumEntity());
+//        for ( UploadEntity upload : entity.getUploadEntityList()) {
+//            uploadDAO.Save(upload);
+//        }
+//        for (SingerEntity singer: entity.getSingerEntityList()) {
+//            SongSingerEntity ss = new SongSingerEntity();
+//            ss.setSingerid(singer.getId());
+//            ss.setSongid(entity.getSongEntity().getId());
+//            songSingerDAO.Save(ss);
+//        }
+//        for(CategorySongEntity cateSong : entity.getCategorySongEntityList()){
+//            SongCategorySongEntity sCS = new SongCategorySongEntity();
+//            sCS.setSongid(entity.getSongEntity().getId());
+//            sCS.setCategoryid(cateSong.getId());
+//            songCategorySongDAO.Save(sCS);
+//        }
+//        songDAO.Save(entity.getSongEntity());
+//        Long idSong = songDAO.GetId("songname",entity.getSongEntity().getSongName());
+//        AlbumEntity albumEntity = entity.getAlbumEntity();
+//        albumEntity.setListsongid(entity.getAlbumEntity().getListsongid()+","+idSong);
+//        albumDAO.Save(albumEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/{id}",
             method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> Get (@PathVariable Long id){
-      SongEntity songEntity = songDAO.GetByID(id);
-      AlbumEntity albumEntity = albumDAO.GetByID(songEntity.getAlbumid());
-      AuthorEntity authorEntity = authorDAO.GetByID(songEntity.getAuthorid());
-      String[] array = songEntity.getImg().split(",");
-      ImageEntity imageEntity = new ImageEntity();
-      for (String item : array){
-        if(item!=null) {
-            imageEntity = imageDAO.GetByID(Long.parseLong(item));
-        }
-      }
-      List<SongSingerEntity> numberSinger = songSingerDAO.GetId("songid",""+songEntity.getId());
-      List<SingerEntity> lsSinger = new ArrayList<>();
-        for ( SongSingerEntity item: numberSinger) {
-            lsSinger.add(singerDAO.GetByID(item.getSingerid()));
-        }
-        List<UploadEntity> uploadEntities = new ArrayList<>();
-        String[] arrayUpload = songEntity.getUploadsource().split(",");
-        for(String item : arrayUpload){
-            if(item!=null)
-                uploadEntities.add(uploadDAO.GetByID(Long.parseLong(item)));
-        }
-        List<SongCategorySongEntity> lsSongCategory = songCategorySongDAO.GetId("songid",""+songEntity.getId());
-        List<CategorySongEntity> categorySongEntities = new ArrayList<>();
-        for(SongCategorySongEntity item : lsSongCategory){
-            categorySongEntities.add(categoryDAO.GetByID(item.getCategoryid()));
-        }
-        List<CommentEntity> commentEntities = commentDAO.GetId("Song",songEntity.getId());
-        SongDTO entity = new SongDTO(songEntity,albumEntity,authorEntity,imageEntity,lsSinger,uploadEntities,categorySongEntities,commentEntities);
-
+        SongDTO entity = musicDAO.GetSongDTO(id);
         return new ResponseEntity<>(entity,HttpStatus.ACCEPTED);
     }
     @RequestMapping(value = "/{id}",

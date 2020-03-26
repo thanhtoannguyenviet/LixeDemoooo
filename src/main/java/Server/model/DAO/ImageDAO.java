@@ -31,7 +31,7 @@ public class ImageDAO {
         ImageEntity entity = DBUtil.GetDataByID(id,ImageEntity.class,s);
         return entity;
     }
-    public long GetId(String model,long entryId ){
+    public List<ImageEntity> GetId(String model,long entryId ){
 
         Session s = factory.getCurrentSession();
         Transaction tx = s.beginTransaction();
@@ -41,11 +41,11 @@ public class ImageDAO {
             SQLQuery q = s.createSQLQuery(sql);
             q.addEntity(ImageEntity.class);
             ImageEntity imageEntity =(ImageEntity) q.uniqueResult() ;
-            return imageEntity.getId();
+            return q.getResultList();
         }catch (HibernateException ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
-            return 0;
+            return null;
         } finally {
             s.close();
         }

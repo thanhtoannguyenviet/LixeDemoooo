@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:postgresql://103.1.239.243:5432/ProjectMusicFilm</property>
+    <property name="connection.url">jdbc:postgresql://103.1.239.243:5432/test12345</property>
     <property name="connection.driver_class">org.postgresql.Driver</property>
     <property name="connection.pool_size">1</property>
     <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
@@ -17,7 +17,7 @@
     <property name="show_sql">true</property>
 
     <property name="hibernate.hbm2ddl.auto">update</property>
-
+    <property name="hibernate.connection.Charset">utf8</property>
     <mapping class="Server.model.DB.ApiAccountEntity"/>
     <mapping resource="ApiAccountEntity.hbm.xml"/>
     <mapping class="Server.model.DB.ActorEntity"/>

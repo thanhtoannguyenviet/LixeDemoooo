@@ -41,18 +41,21 @@ public class DBUtil {
         session.getTransaction().commit();
         return data;
     }
-    public static <T> void addData(T newItem, Session session) {
+    public static <T> T addData(T newItem, Session session) {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             session.saveOrUpdate(newItem);
             tx.commit();
-
+            return newItem;
         } catch (HibernateException ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
-        } finally {
+            return null;
+        }
+        finally {
             session.close();
+
         }
     }
     public static <T,K> void deleteData(T primaryID, Class<K> cl,Session session){

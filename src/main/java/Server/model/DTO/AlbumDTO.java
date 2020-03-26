@@ -9,11 +9,11 @@ public class AlbumDTO {
     private AlbumEntity albumEntity = new AlbumEntity();
     private List<SongDTO> songDTOList = new ArrayList<>();
     private ImageEntity imageEntity = new ImageEntity();
-    private SingerEntity singerEntity = new SingerEntity();
+    private List<SingerEntity> singerEntity = new ArrayList<>();
     private Criteria criteria = new Criteria();
     public  AlbumDTO(){}
 
-    public AlbumDTO(AlbumEntity albumEntity, List<SongDTO> songDTOList, ImageEntity imageEntity, SingerEntity singerEntity, Criteria criteria) {
+    public AlbumDTO(AlbumEntity albumEntity, List<SongDTO> songDTOList, ImageEntity imageEntity, List<SingerEntity> singerEntity, Criteria criteria) {
         this.albumEntity = albumEntity;
         this.songDTOList = songDTOList;
         this.imageEntity = imageEntity;
@@ -45,11 +45,11 @@ public class AlbumDTO {
         this.imageEntity = imageEntity;
     }
 
-    public SingerEntity getSingerEntity() {
+    public List<SingerEntity> getSingerEntity() {
         return singerEntity;
     }
 
-    public void setSingerEntity(SingerEntity singerEntity) {
+    public void setSingerEntity(List<SingerEntity> singerEntity) {
         this.singerEntity = singerEntity;
     }
 
