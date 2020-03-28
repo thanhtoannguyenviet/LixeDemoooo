@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.*;
 import Server.model.DB.*;
+import Server.model.DTO.Criteria;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,5 +114,17 @@ public class SongController {
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/test", //
+            method = RequestMethod.GET, //
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @ResponseBody
+    public ResponseEntity<?> getAccount(){
+        Criteria criteria = new Criteria();
+        criteria.setTop(10);
+        criteria.setClazz(SongEntity.class);
+        return new ResponseEntity<>(SignalDAO.findData(criteria), HttpStatus.OK);
+
     }
 }

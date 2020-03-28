@@ -3,16 +3,23 @@ package Server.model.DTO;
 public class Criteria {
 
     private boolean ascending;
-    private int itemPerPage;
-    private int keyword;
-    private int currentPage;
+    private int itemPerPage = 20;
+    private String keyword = "";
+    private int currentPage = 1;
+    private long categoryId = -1;
+    private int top = 10;
+    private Class clazz;
 
-    public Criteria(boolean ascending, int itemPerPage, int keyword,int currentPage) {
+    public Criteria(boolean ascending, int itemPerPage, String keyword, int currentPage, long categoryId, int top, Class clazz) {
         this.ascending = ascending;
         this.itemPerPage = itemPerPage;
         this.keyword = keyword;
         this.currentPage = currentPage;
+        this.categoryId = categoryId;
+        this.top = top;
+        this.clazz = clazz;
     }
+
     public Criteria() {
     }
 
@@ -32,11 +39,11 @@ public class Criteria {
         this.itemPerPage = itemPerPage;
     }
 
-    public int getKeyword() {
+    public String getKeyword() {
         return keyword;
     }
 
-    public void setKeyword(int keyword) {
+    public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
 
@@ -46,5 +53,29 @@ public class Criteria {
 
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
+    }
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
     }
 }
