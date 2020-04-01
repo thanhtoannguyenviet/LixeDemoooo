@@ -2,6 +2,7 @@ package Server.model.DB;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.BitSet;
 import java.util.Objects;
 
 @Entity
@@ -13,11 +14,19 @@ public class SongEntity {
     private Timestamp createdate;
     private String modifiedUser;
     private Timestamp modifieddate;
-    private Boolean active;
+    private boolean active;
     private String uploadsource;
     private String img;
     private Long albumid;
-
+    private int range;
+    @Basic
+    @Column(name = "range",nullable = true)
+    public int getRange() {
+        return range;
+    }
+    public void setRange(int range) {
+        this.range = range;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -81,11 +90,11 @@ public class SongEntity {
 
     @Basic
     @Column(name = "active", nullable = true)
-    public Boolean getActive() {
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 

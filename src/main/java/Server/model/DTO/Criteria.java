@@ -7,8 +7,10 @@ public class Criteria {
     private String keyword = "";
     private int currentPage = 1;
     private long categoryId = -1;
-    private int top = 10;
+    //1 la lay tat ca
+    private int top = -1; // Get theo range
     private Class clazz;
+
 
     public Criteria(boolean ascending, int itemPerPage, String keyword, int currentPage, long categoryId, int top, Class clazz) {
         this.ascending = ascending;

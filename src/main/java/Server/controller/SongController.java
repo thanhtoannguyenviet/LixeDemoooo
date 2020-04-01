@@ -31,32 +31,15 @@ public class SongController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody SongDTO entity){
-//        AuthorEntity authorEntity=  authorDAO.Save(entity.getAuthorEntity());
-//        entity.getSongEntity().setAuthorid(authorDAO.GetId("name",entity.getAuthorEntity().getName()));
-//        imageDAO.Save(entity.getImageEntity());
-//        entity.getSongEntity().setImg(entity.getSongEntity().getImg()+","+imageDAO.GetId(entity.getImageEntity().getModel(),entity.getImageEntity().getEntryid()));
-//        albumDAO.Save(entity.getAlbumEntity());
-//        for ( UploadEntity upload : entity.getUploadEntityList()) {
-//            uploadDAO.Save(upload);
-//        }
-//        for (SingerEntity singer: entity.getSingerEntityList()) {
-//            SongSingerEntity ss = new SongSingerEntity();
-//            ss.setSingerid(singer.getId());
-//            ss.setSongid(entity.getSongEntity().getId());
-//            songSingerDAO.Save(ss);
-//        }
-//        for(CategorySongEntity cateSong : entity.getCategorySongEntityList()){
-//            SongCategorySongEntity sCS = new SongCategorySongEntity();
-//            sCS.setSongid(entity.getSongEntity().getId());
-//            sCS.setCategoryid(cateSong.getId());
-//            songCategorySongDAO.Save(sCS);
-//        }
-//        songDAO.Save(entity.getSongEntity());
-//        Long idSong = songDAO.GetId("songname",entity.getSongEntity().getSongName());
-//        AlbumEntity albumEntity = entity.getAlbumEntity();
-//        albumEntity.setListsongid(entity.getAlbumEntity().getListsongid()+","+idSong);
-//        albumDAO.Save(albumEntity);
+    public ResponseEntity<?> post(@RequestBody SongEntity entity){
+        songDAO.Save(entity);
+        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/Put",
+            method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> put(@RequestBody SongEntity entity){
+        songDAO.Save(entity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/{id}",
@@ -65,6 +48,27 @@ public class SongController {
     public  ResponseEntity<?> Get (@PathVariable Long id){
         SongDTO entity = musicDAO.GetSongDTO(id);
         return new ResponseEntity<>(entity,HttpStatus.ACCEPTED);
+    }
+    @RequestMapping(value = "/SelectTop10",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getTop10 (){
+        Criteria criteria = new Criteria();
+        criteria.setClazz(SongEntity.class);
+        criteria.setTop(10);
+        //SongDTO entity = musicDAO.GetSongDTO(id);
+        return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping(value = "/GetSongPage/{page}",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+        Criteria criteria = new Criteria();
+        criteria.setClazz(SongEntity.class);
+        criteria.setCurrentPage(page-1);
+        //SongDTO entity = musicDAO.GetSongDTO(id);
+        return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.ACCEPTED);
     }
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)

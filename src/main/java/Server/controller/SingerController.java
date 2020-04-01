@@ -1,5 +1,4 @@
-﻿package Server.controller;
-
+package Server.controller;
 import Server.model.DAO.*;
 import Server.model.DB.ImageEntity;
 import Server.model.DB.SingerEntity;
@@ -21,41 +20,49 @@ import java.util.List;
 public class SingerController {
     @Autowired
     SingerDAO singerDAO;
-    SongDAO songDAO;
-    ImageDAO imageDAO;
     SongSingerDAO songSingerDAO;
+    SongDAO songDAO;
+    ImageEntity imageEntity;
     MusicDAO musicDAO;
-    @RequestMapping(value = "/Post",
+    @RequestMapping(value = "/",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody SingerDTO singerDTO){
-        SingerEntity singerEntity = singerDAO.Save(singerDTO.getSingerEntity());
-        singerDTO.getImageEntity().setEntryid(singerEntity.getId());
-        imageDAO.Save(singerDTO.getImageEntity());
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+    public ResponseEntity<?> registeAccount(@RequestBody SingerEntity singer){
+        singerDAO.Save(singer);
+       return new ResponseEntity<>("Post completed",HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/Get/{id}",
-            method = RequestMethod.GET)
+    @RequestMapping(value = "/Put/{id}",
+            method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> get(@PathVariable("id") Long id){
-        SingerEntity singerEntity = singerDAO.GetByID(id);
-        ImageEntity imageEntity = imageDAO.GetId("Singer",id).get(0);
-        List<SongDTO> songDTOList = new ArrayList<>();
-        List<SongSingerEntity> songSingerEntity = songSingerDAO.GetId("singerid",id+"");
-        for ( SongSingerEntity item :songSingerEntity) {
-            songDTOList.add(musicDAO.GetSongDTO(item.getSongid()));
+    public  ResponseEntity<?> updateAccount(@RequestBody SingerEntity singer, @PathVariable Long id){
+        if(singerDAO.GetByID(id)!=null)
+        {
+            singerDAO.Save(singer);
+            return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
-        SingerDTO singerDTO = new SingerDTO(singerEntity,songDTOList,imageEntity,new Criteria());
-        return new ResponseEntity<>(singerDTO, HttpStatus.CREATED);
+        else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
     }
-
-    @RequestMapping(value = "/Delete/",
-            method = RequestMethod.DELETE)
+    @RequestMapping(value = "/Singer/Delete/{id}",
+            method = RequestMethod.DELETE
+    )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody SingerDTO singerDTO){
-        singerDAO.Delete(singerDTO.getSingerEntity().getId());
-        imageDAO.Delete(singerDTO.getImageEntity().getId());
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+    public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id){
+        if(singerDAO.GetByID(id)!=null){
+            singerDAO.Delete(id);
+            return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
+        }
+        else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-
+    @RequestMapping(value = "/Get/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> get(@PathVariable Long id){
+        SingerEntity singerEntity = singerDAO.GetByID(id);
+        List<SongSingerEntity>lsSongEntity = songSingerDAO.GetId("singerid",id+"");
+        List<SongDTO> lsSongDTO = new ArrayList<>();
+        for (SongSingerEntity item:lsSongEntity) {
+            lsSongDTO.add(musicDAO.GetSongDTO(item.getSongid()));
+        }
+        SingerDTO singerDTO = new SingerDTO(singerEntity,lsSongDTO);
+        return  new ResponseEntity<>(singerDTO,HttpStatus.OK);
+    }
 }

@@ -50,4 +50,16 @@ public class MusicDAO {
         SongDTO entity = new SongDTO(songEntity,albumEntity,authorEntity,imageEntity,lsSinger,uploadEntities,categorySongEntities,commentEntities);
         return entity;
     }
+    public void post(SongEntity song){
+        AuthorEntity authorEntity = authorDAO.GetByID(song.getAuthorid());
+        if(authorEntity!=null){
+            authorEntity.setListsongid(authorEntity.getListsongid()+","+song.getAuthorid());
+            authorDAO.Save(authorEntity);
+        }
+        AlbumEntity albumEntity = albumDAO.GetByID(song.getAlbumid());
+        if(albumEntity!=null){
+            albumEntity.setListsongid(albumEntity.getListsongid()+","+song.getAlbumid());
+            albumDAO.Save(albumEntity);
+        }
+    }
 }

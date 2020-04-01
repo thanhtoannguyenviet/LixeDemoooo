@@ -23,7 +23,7 @@ public class UserDAO {
         Session s = factory.getCurrentSession();
 
         List<UserDTO> userList = new ArrayList<>();
-        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, null);
+        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class,s );
         for (UserEntity userEntity: ls
         ) {
             s = factory.getCurrentSession();
@@ -31,6 +31,7 @@ public class UserDAO {
             UserDTO user = new UserDTO();
             user.setRoleEntity(role);
             user.setUserEntity(userEntity);
+
 
             s = factory.getCurrentSession();
             Transaction tx = s.beginTransaction();
@@ -51,7 +52,6 @@ public class UserDAO {
             userList.add(user);
         }
         return Collections.unmodifiableList(userList);
-
     }
     public UserDTO login(String userName, String password){
 

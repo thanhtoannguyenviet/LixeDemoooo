@@ -1,7 +1,9 @@
 package Server.controller;
 
-import Server.model.DAO.CategorySongDAO;
-import Server.model.DB.CategorySongEntity;
+import Server.model.DAO.ActorDAO;
+import Server.model.DB.*;
+import Server.model.DTO.AlbumDTO;
+import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,25 +12,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-@RequestMapping("api/MusicSite/Category")
+import java.util.ArrayList;
+import java.util.List;
+
+@RequestMapping("api/FilmSite/Actor")
 @RestController
-public class CategorySongController {
+public class ActorController {
     @Autowired
-    CategorySongDAO categorySongDAO;
+    ActorDAO actorDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> postCategorySong(@RequestBody CategorySongEntity categorySongEntity){
-        categorySongDAO.Save(categorySongEntity);
+    public ResponseEntity<?> registerActor(@RequestBody ActorEntity actor){
+        actorDAO.Save(actor);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/{id}",
+    @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateCategorySong (@RequestBody CategorySongEntity singer, @PathVariable Long id){
-        if(id==singer.getId())
+    public  ResponseEntity<?> updateActor (@RequestBody ActorEntity actor, @PathVariable Long id){
+        if(id==actor.getId())
         {
-            categorySongDAO.Save(singer);
+            actorDAO.Save(actor);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -37,17 +42,18 @@ public class CategorySongController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(categorySongDAO.GetByID(id)!=null){
-            categorySongDAO.Delete(id);
+    public ResponseEntity<?> deleteActor(@PathVariable("id") Long id){
+        if(actorDAO.GetByID(id)!=null){
+            actorDAO.Delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/Count/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetDetail/{id}",
+            method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> count(){
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> get(@PathVariable Long id){
+        return new ResponseEntity<>(actorDAO.GetByID(id),HttpStatus.OK);
     }
-
 }
+

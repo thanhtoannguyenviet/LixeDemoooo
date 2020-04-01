@@ -15,7 +15,6 @@
     <property name="hibernate.connection.autoReconnect">true</property>
     <!-- Echo all executed SQL to stdout -->
     <property name="show_sql">true</property>
-
     <property name="hibernate.hbm2ddl.auto">update</property>
     <property name="hibernate.connection.Charset">utf8</property>
     <mapping class="Server.model.DB.ApiAccountEntity"/>
