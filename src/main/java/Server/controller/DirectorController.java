@@ -25,7 +25,7 @@ public class DirectorController {
         responseHeader.setLocation(newAccounUrl);
         return new ResponseEntity<>("Post completed",responseHeader, HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/{id}",
+    @RequestMapping(value = "Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> update (@RequestBody DirectorEntity entity, @PathVariable Long id){
@@ -47,4 +47,12 @@ public class DirectorController {
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
+    @RequestMapping(value = "/GetDetail/{id}",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> get (@PathVariable("id") Long id){
+     return  new ResponseEntity<>(directorDAO.GetByID(id),HttpStatus.OK);
+    }
+
 }

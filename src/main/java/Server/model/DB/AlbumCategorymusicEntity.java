@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Album_CategoryMusic", schema = "public", catalog = "ProjectMusicFilm")
-public class AlbumCategoryMusicEntity {
+@Table(name = "album_categorymusic", schema = "public", catalog = "test12345")
+public class AlbumCategorymusicEntity {
     private long id;
-    private Long albumid;
-    private Long catagoryid;
+    private long albumid;
+    private long catagoryid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class AlbumCategoryMusicEntity {
     }
 
     @Basic
-    @Column(name = "albumid", nullable = true)
-    public Long getAlbumid() {
+    @Column(name = "albumid", nullable = false)
+    public long getAlbumid() {
         return albumid;
     }
 
-    public void setAlbumid(Long albumid) {
+    public void setAlbumid(long albumid) {
         this.albumid = albumid;
     }
 
     @Basic
-    @Column(name = "catagoryid", nullable = true)
-    public Long getCatagoryid() {
+    @Column(name = "catagoryid", nullable = false)
+    public long getCatagoryid() {
         return catagoryid;
     }
 
-    public void setCatagoryid(Long catagoryid) {
+    public void setCatagoryid(long catagoryid) {
         this.catagoryid = catagoryid;
     }
 
@@ -45,10 +45,10 @@ public class AlbumCategoryMusicEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AlbumCategoryMusicEntity that = (AlbumCategoryMusicEntity) o;
+        AlbumCategorymusicEntity that = (AlbumCategorymusicEntity) o;
         return id == that.id &&
-                Objects.equals(albumid, that.albumid) &&
-                Objects.equals(catagoryid, that.catagoryid);
+                albumid == that.albumid &&
+                catagoryid == that.catagoryid;
     }
 
     @Override

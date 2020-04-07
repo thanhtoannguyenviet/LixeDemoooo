@@ -2,7 +2,6 @@ package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
 import Server.model.DB.CommentEntity;
-import Server.model.DB.ImageEntity;
 import Server.service.DBUtil;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;

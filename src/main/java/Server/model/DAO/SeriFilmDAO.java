@@ -1,6 +1,6 @@
 package Server.model.DAO;
 
-import Server.model.DB.SeriFilmEntity;
+import Server.model.DB.SerifilmEntity;
 import Server.service.DBUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,23 +11,23 @@ import java.util.Collections;
 import java.util.List;
 @Repository
 public class SeriFilmDAO {
-    SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(SeriFilmEntity.class).buildSessionFactory();
-    public List<SeriFilmEntity> getAll() {
+    SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(SerifilmEntity.class).buildSessionFactory();
+    public List<SerifilmEntity> getAll() {
         Session s = factory.getCurrentSession();
-        List<SeriFilmEntity> ls = DBUtil.loadAllData(SeriFilmEntity.class, s);
+        List<SerifilmEntity> ls = DBUtil.loadAllData(SerifilmEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(SeriFilmEntity entity){
+    public void Save(SerifilmEntity entity){
         Session s = factory.getCurrentSession();
         DBUtil.addData(entity,s);
     }
     public void Delete(long id){
         Session s= factory.getCurrentSession();
-        DBUtil.deleteData(id,SeriFilmEntity.class,s);
+        DBUtil.deleteData(id,SerifilmEntity.class,s);
     }
-    public SeriFilmEntity GetByID(long id){
+    public SerifilmEntity GetByID(long id){
         Session s = factory.getCurrentSession();
-        SeriFilmEntity entity = DBUtil.GetDataByID(id,SeriFilmEntity.class,s);
+        SerifilmEntity entity = DBUtil.GetDataByID(id,SerifilmEntity.class,s);
         return entity;
     }
 }

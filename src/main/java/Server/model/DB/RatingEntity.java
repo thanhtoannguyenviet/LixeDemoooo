@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Rating", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "rating", schema = "public", catalog = "test12345")
 public class RatingEntity {
     private long id;
     private String model;
-    private Integer point;
-    private Integer votelike;
-    private Integer votedislike;
-    private Long entryid;
+    private int point;
+    private int votelike;
+    private int votedislike;
+    private long entryid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class RatingEntity {
     }
 
     @Basic
-    @Column(name = "model", nullable = true, length = 255)
+    @Column(name = "model", nullable = false, length = 255)
     public String getModel() {
         return model;
     }
@@ -35,42 +35,42 @@ public class RatingEntity {
     }
 
     @Basic
-    @Column(name = "point", nullable = true)
-    public Integer getPoint() {
+    @Column(name = "point", nullable = false)
+    public int getPoint() {
         return point;
     }
 
-    public void setPoint(Integer point) {
+    public void setPoint(int point) {
         this.point = point;
     }
 
     @Basic
-    @Column(name = "votelike", nullable = true)
-    public Integer getVotelike() {
+    @Column(name = "votelike", nullable = false)
+    public int getVotelike() {
         return votelike;
     }
 
-    public void setVotelike(Integer votelike) {
+    public void setVotelike(int votelike) {
         this.votelike = votelike;
     }
 
     @Basic
-    @Column(name = "votedislike", nullable = true)
-    public Integer getVotedislike() {
+    @Column(name = "votedislike", nullable = false)
+    public int getVotedislike() {
         return votedislike;
     }
 
-    public void setVotedislike(Integer votedislike) {
+    public void setVotedislike(int votedislike) {
         this.votedislike = votedislike;
     }
 
     @Basic
-    @Column(name = "entryid", nullable = true)
-    public Long getEntryid() {
+    @Column(name = "entryid", nullable = false)
+    public long getEntryid() {
         return entryid;
     }
 
-    public void setEntryid(Long entryid) {
+    public void setEntryid(long entryid) {
         this.entryid = entryid;
     }
 
@@ -80,11 +80,11 @@ public class RatingEntity {
         if (o == null || getClass() != o.getClass()) return false;
         RatingEntity that = (RatingEntity) o;
         return id == that.id &&
-                Objects.equals(model, that.model) &&
-                Objects.equals(point, that.point) &&
-                Objects.equals(votelike, that.votelike) &&
-                Objects.equals(votedislike, that.votedislike) &&
-                Objects.equals(entryid, that.entryid);
+                point == that.point &&
+                votelike == that.votelike &&
+                votedislike == that.votedislike &&
+                entryid == that.entryid &&
+                Objects.equals(model, that.model);
     }
 
     @Override

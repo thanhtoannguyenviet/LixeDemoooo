@@ -41,9 +41,9 @@ public class MusicDAO {
             if(item!=null)
                 uploadEntities.add(uploadDAO.GetByID(Long.parseLong(item)));
         }
-        List<SongCategorySongEntity> lsSongCategory = songCategorySongDAO.GetId("songid",""+songEntity.getId());
-        List<CategorySongEntity> categorySongEntities = new ArrayList<>();
-        for(SongCategorySongEntity item : lsSongCategory){
+        List<SongCategorysongEntity> lsSongCategory = songCategorySongDAO.GetId("songid",""+songEntity.getId());
+        List<CategorysongEntity> categorySongEntities = new ArrayList<>();
+        for(SongCategorysongEntity item : lsSongCategory){
             categorySongEntities.add(categoryDAO.GetByID(item.getCategoryid()));
         }
         List<CommentEntity> commentEntities = commentDAO.GetId("Song",songEntity.getId());

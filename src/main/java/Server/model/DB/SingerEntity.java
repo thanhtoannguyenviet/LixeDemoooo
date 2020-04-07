@@ -4,13 +4,13 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Singer", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "singer", schema = "public", catalog = "test12345")
 public class SingerEntity {
     private long id;
-    private String singerName;
+    private String singername;
     private String info;
     private String img;
-    private Boolean active;
+    private boolean active;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +24,17 @@ public class SingerEntity {
     }
 
     @Basic
-    @Column(name = "singerName", nullable = true, length = 255)
-    public String getSingerName() {
-        return singerName;
+    @Column(name = "singername", nullable = false, length = 255)
+    public String getSingername() {
+        return singername;
     }
 
-    public void setSingerName(String singerName) {
-        this.singerName = singerName;
+    public void setSingername(String singername) {
+        this.singername = singername;
     }
 
     @Basic
-    @Column(name = "info", nullable = true, length = -1)
+    @Column(name = "info", nullable = false, length = -1)
     public String getInfo() {
         return info;
     }
@@ -44,7 +44,7 @@ public class SingerEntity {
     }
 
     @Basic
-    @Column(name = "img", nullable = true, length = -1)
+    @Column(name = "img", nullable = false, length = -1)
     public String getImg() {
         return img;
     }
@@ -54,12 +54,12 @@ public class SingerEntity {
     }
 
     @Basic
-    @Column(name = "active", nullable = true)
-    public Boolean getActive() {
+    @Column(name = "active", nullable = false)
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -69,14 +69,14 @@ public class SingerEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SingerEntity that = (SingerEntity) o;
         return id == that.id &&
-                Objects.equals(singerName, that.singerName) &&
+                active == that.active &&
+                Objects.equals(singername, that.singername) &&
                 Objects.equals(info, that.info) &&
-                Objects.equals(img, that.img) &&
-                Objects.equals(active, that.active);
+                Objects.equals(img, that.img);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, singerName, info, img, active);
+        return Objects.hash(id, singername, info, img, active);
     }
 }

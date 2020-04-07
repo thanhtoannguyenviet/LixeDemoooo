@@ -4,16 +4,16 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="Server.model.DB.SongSingerEntity" table="song_singer" schema="public" catalog="test12345">
+    <class name="Server.model.DB.FilmCategoryfilmEntity" table="film_categoryfilm" schema="public" catalog="test12345">
         <id name="id">
             <column name="id" sql-type="bigint"/>
             <generator class="identity"/>
         </id>
-        <property name="songid">
-            <column name="songid" sql-type="bigint"/>
+        <property name="filmid">
+            <column name="filmid" sql-type="bigint"/>
         </property>
-        <property name="singerid">
-            <column name="singerid" sql-type="bigint"/>
+        <property name="categoryid">
+            <column name="categoryid" sql-type="bigint"/>
         </property>
     </class>
 </hibernate-mapping>

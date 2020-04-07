@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Upload", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "upload", schema = "public", catalog = "test12345")
 public class UploadEntity {
     private long id;
     private String source;
     private String model;
-    private Long entryid;
+    private long entryid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class UploadEntity {
     }
 
     @Basic
-    @Column(name = "source", nullable = true, length = 500)
+    @Column(name = "source", nullable = false, length = 500)
     public String getSource() {
         return source;
     }
@@ -33,7 +33,7 @@ public class UploadEntity {
     }
 
     @Basic
-    @Column(name = "model", nullable = true, length = 255)
+    @Column(name = "model", nullable = false, length = 255)
     public String getModel() {
         return model;
     }
@@ -43,12 +43,12 @@ public class UploadEntity {
     }
 
     @Basic
-    @Column(name = "entryid", nullable = true)
-    public Long getEntryid() {
+    @Column(name = "entryid", nullable = false)
+    public long getEntryid() {
         return entryid;
     }
 
-    public void setEntryid(Long entryid) {
+    public void setEntryid(long entryid) {
         this.entryid = entryid;
     }
 
@@ -58,9 +58,9 @@ public class UploadEntity {
         if (o == null || getClass() != o.getClass()) return false;
         UploadEntity that = (UploadEntity) o;
         return id == that.id &&
+                entryid == that.entryid &&
                 Objects.equals(source, that.source) &&
-                Objects.equals(model, that.model) &&
-                Objects.equals(entryid, that.entryid);
+                Objects.equals(model, that.model);
     }
 
     @Override

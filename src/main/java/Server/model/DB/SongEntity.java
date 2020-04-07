@@ -2,31 +2,23 @@ package Server.model.DB;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.BitSet;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Song", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "song", schema = "public", catalog = "test12345")
 public class SongEntity {
     private long id;
-    private String songName;
-    private Long authorid;
+    private String songname;
+    private long authorid;
     private Timestamp createdate;
-    private String modifiedUser;
+    private String modifieduser;
     private Timestamp modifieddate;
-    private boolean active;
     private String uploadsource;
     private String img;
-    private Long albumid;
+    private long albumid;
     private int range;
-    @Basic
-    @Column(name = "range",nullable = true)
-    public int getRange() {
-        return range;
-    }
-    public void setRange(int range) {
-        this.range = range;
-    }
+    private Boolean active;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -39,27 +31,27 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "songName", nullable = true, length = 255)
-    public String getSongName() {
-        return songName;
+    @Column(name = "songname", nullable = false, length = 255)
+    public String getSongname() {
+        return songname;
     }
 
-    public void setSongName(String songName) {
-        this.songName = songName;
+    public void setSongname(String songname) {
+        this.songname = songname;
     }
 
     @Basic
-    @Column(name = "authorid", nullable = true)
-    public Long getAuthorid() {
+    @Column(name = "authorid", nullable = false)
+    public long getAuthorid() {
         return authorid;
     }
 
-    public void setAuthorid(Long authorid) {
+    public void setAuthorid(long authorid) {
         this.authorid = authorid;
     }
 
     @Basic
-    @Column(name = "createdate", nullable = true)
+    @Column(name = "createdate", nullable = false)
     public Timestamp getCreatedate() {
         return createdate;
     }
@@ -69,17 +61,17 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "modifiedUser", nullable = true, length = 255)
-    public String getModifiedUser() {
-        return modifiedUser;
+    @Column(name = "modifieduser", nullable = false, length = 255)
+    public String getModifieduser() {
+        return modifieduser;
     }
 
-    public void setModifiedUser(String modifiedUser) {
-        this.modifiedUser = modifiedUser;
+    public void setModifieduser(String modifieduser) {
+        this.modifieduser = modifieduser;
     }
 
     @Basic
-    @Column(name = "modifieddate", nullable = true)
+    @Column(name = "modifieddate", nullable = false)
     public Timestamp getModifieddate() {
         return modifieddate;
     }
@@ -89,17 +81,7 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "active", nullable = true)
-    public boolean getActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    @Basic
-    @Column(name = "uploadsource", nullable = true, length = -1)
+    @Column(name = "uploadsource", nullable = false, length = -1)
     public String getUploadsource() {
         return uploadsource;
     }
@@ -109,7 +91,7 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "img", nullable = true, length = -1)
+    @Column(name = "img", nullable = false, length = -1)
     public String getImg() {
         return img;
     }
@@ -119,13 +101,33 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "albumid", nullable = true)
-    public Long getAlbumid() {
+    @Column(name = "albumid", nullable = false)
+    public long getAlbumid() {
         return albumid;
     }
 
-    public void setAlbumid(Long albumid) {
+    public void setAlbumid(long albumid) {
         this.albumid = albumid;
+    }
+
+    @Basic
+    @Column(name = "range", nullable = false)
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+    @Basic
+    @Column(name = "active", nullable = true)
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -134,19 +136,20 @@ public class SongEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SongEntity that = (SongEntity) o;
         return id == that.id &&
-                Objects.equals(songName, that.songName) &&
-                Objects.equals(authorid, that.authorid) &&
+                authorid == that.authorid &&
+                albumid == that.albumid &&
+                range == that.range &&
+                Objects.equals(songname, that.songname) &&
                 Objects.equals(createdate, that.createdate) &&
-                Objects.equals(modifiedUser, that.modifiedUser) &&
+                Objects.equals(modifieduser, that.modifieduser) &&
                 Objects.equals(modifieddate, that.modifieddate) &&
-                Objects.equals(active, that.active) &&
                 Objects.equals(uploadsource, that.uploadsource) &&
                 Objects.equals(img, that.img) &&
-                Objects.equals(albumid, that.albumid);
+                Objects.equals(active, that.active);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, songName, authorid, createdate, modifiedUser, modifieddate, active, uploadsource, img, albumid);
+        return Objects.hash(id, songname, authorid, createdate, modifieduser, modifieddate, uploadsource, img, albumid, range, active);
     }
 }

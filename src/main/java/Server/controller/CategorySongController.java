@@ -1,15 +1,12 @@
 package Server.controller;
 
 import Server.model.DAO.CategorySongDAO;
-import Server.model.DB.CategorySongEntity;
+import Server.model.DB.CategorysongEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 @RequestMapping("api/MusicSite/Category")
 @RestController
 public class CategorySongController {
@@ -18,14 +15,14 @@ public class CategorySongController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> postCategorySong(@RequestBody CategorySongEntity categorySongEntity){
+    public ResponseEntity<?> postCategorySong(@RequestBody CategorysongEntity categorySongEntity){
         categorySongDAO.Save(categorySongEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/{id}",
+    @RequestMapping(value = "Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateCategorySong (@RequestBody CategorySongEntity singer, @PathVariable Long id){
+    public  ResponseEntity<?> updateCategorySong (@RequestBody CategorysongEntity singer, @PathVariable Long id){
         if(id==singer.getId())
         {
             categorySongDAO.Save(singer);
@@ -44,10 +41,16 @@ public class CategorySongController {
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/Count/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetDetail/{id}" , method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> count(){
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> getDetail(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(categorySongDAO.GetByID(id),HttpStatus.OK);
     }
-
+    @RequestMapping(value = "/GetAll/" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getAll(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(categorySongDAO.getAll(),HttpStatus.OK);
+    }
 }

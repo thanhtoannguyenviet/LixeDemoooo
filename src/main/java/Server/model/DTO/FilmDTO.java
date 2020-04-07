@@ -11,15 +11,15 @@ public class FilmDTO {
     private List<ActorEntity> actorEntityList = new ArrayList<>();
     private List<ImageEntity> imageEntity = new ArrayList<>();
     private List<UploadEntity> uploadEntityList = new ArrayList<>();
-    private List<CategoryFilmEntity> categoryFilmEntityList = new ArrayList<>();
-    private SeriFilmEntity seriCategoryFilmEntity = new SeriFilmEntity();
+    private List<CategoryfilmEntity> categoryFilmEntityList = new ArrayList<>();
+    private SerifilmEntity seriCategoryFilmEntity = new SerifilmEntity();
     private List<CommentEntity> commentEntityList = new ArrayList<>();
     private Criteria criteria = new Criteria();
 
     public FilmDTO() {
     }
 
-    public FilmDTO(FilmEntity filmEntity, DirectorEntity directorEntity, List<ActorEntity> actorEntityList, List<ImageEntity> imageEntity, List<UploadEntity> uploadEntityList, List<CategoryFilmEntity> categoryFilmEntityList, SeriFilmEntity seriCategoryFilmEntity, List<CommentEntity> commentEntityList, Criteria criteria) {
+    public FilmDTO(FilmEntity filmEntity, DirectorEntity directorEntity, List<ActorEntity> actorEntityList, List<ImageEntity> imageEntity, List<UploadEntity> uploadEntityList, List<CategoryfilmEntity> categoryFilmEntityList, SerifilmEntity seriCategoryFilmEntity, List<CommentEntity> commentEntityList, Criteria criteria) {
         this.filmEntity = filmEntity;
         this.directorEntity = directorEntity;
         this.actorEntityList = actorEntityList;
@@ -71,19 +71,19 @@ public class FilmDTO {
         this.uploadEntityList = uploadEntityList;
     }
 
-    public List<CategoryFilmEntity> getCategoryFilmEntityList() {
+    public List<CategoryfilmEntity> getCategoryFilmEntityList() {
         return categoryFilmEntityList;
     }
 
-    public void setCategoryFilmEntityList(List<CategoryFilmEntity> categoryFilmEntityList) {
+    public void setCategoryFilmEntityList(List<CategoryfilmEntity> categoryFilmEntityList) {
         this.categoryFilmEntityList = categoryFilmEntityList;
     }
 
-    public SeriFilmEntity getSeriCategoryFilmEntity() {
+    public SerifilmEntity getSeriCategoryFilmEntity() {
         return seriCategoryFilmEntity;
     }
 
-    public void setSeriCategoryFilmEntity(SeriFilmEntity seriCategoryFilmEntity) {
+    public void setSeriCategoryFilmEntity(SerifilmEntity seriCategoryFilmEntity) {
         this.seriCategoryFilmEntity = seriCategoryFilmEntity;
     }
 

@@ -5,14 +5,14 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Image", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "image", schema = "public", catalog = "test12345")
 public class ImageEntity {
     private long id;
     private String path;
     private BigInteger size;
-    private String fileExtension;
+    private String fileextension;
     private String model;
-    private Long entryid;
+    private long entryid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class ImageEntity {
     }
 
     @Basic
-    @Column(name = "path", nullable = true, length = 255)
+    @Column(name = "path", nullable = false, length = 255)
     public String getPath() {
         return path;
     }
@@ -36,7 +36,7 @@ public class ImageEntity {
     }
 
     @Basic
-    @Column(name = "size", nullable = true, precision = 0)
+    @Column(name = "size", nullable = false, precision = 0)
     public BigInteger getSize() {
         return size;
     }
@@ -46,17 +46,17 @@ public class ImageEntity {
     }
 
     @Basic
-    @Column(name = "fileExtension", nullable = true, length = 50)
-    public String getFileExtension() {
-        return fileExtension;
+    @Column(name = "fileextension", nullable = false, length = 50)
+    public String getFileextension() {
+        return fileextension;
     }
 
-    public void setFileExtension(String fileExtension) {
-        this.fileExtension = fileExtension;
+    public void setFileextension(String fileextension) {
+        this.fileextension = fileextension;
     }
 
     @Basic
-    @Column(name = "model", nullable = true, length = 255)
+    @Column(name = "model", nullable = false, length = 255)
     public String getModel() {
         return model;
     }
@@ -66,12 +66,12 @@ public class ImageEntity {
     }
 
     @Basic
-    @Column(name = "entryid", nullable = true)
-    public Long getEntryid() {
+    @Column(name = "entryid", nullable = false)
+    public long getEntryid() {
         return entryid;
     }
 
-    public void setEntryid(Long entryid) {
+    public void setEntryid(long entryid) {
         this.entryid = entryid;
     }
 
@@ -81,15 +81,15 @@ public class ImageEntity {
         if (o == null || getClass() != o.getClass()) return false;
         ImageEntity that = (ImageEntity) o;
         return id == that.id &&
+                entryid == that.entryid &&
                 Objects.equals(path, that.path) &&
                 Objects.equals(size, that.size) &&
-                Objects.equals(fileExtension, that.fileExtension) &&
-                Objects.equals(model, that.model) &&
-                Objects.equals(entryid, that.entryid);
+                Objects.equals(fileextension, that.fileextension) &&
+                Objects.equals(model, that.model);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, path, size, fileExtension, model, entryid);
+        return Objects.hash(id, path, size, fileextension, model, entryid);
     }
 }

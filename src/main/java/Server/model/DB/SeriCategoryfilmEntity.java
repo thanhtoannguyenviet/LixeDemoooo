@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Seri_CategoryFilm", schema = "public", catalog = "ProjectMusicFilm")
-public class SeriCategoryFilmEntity {
+@Table(name = "seri_categoryfilm", schema = "public", catalog = "test12345")
+public class SeriCategoryfilmEntity {
     private long id;
-    private Long categoryid;
-    private Long seriid;
+    private long categoryid;
+    private long seriid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class SeriCategoryFilmEntity {
     }
 
     @Basic
-    @Column(name = "categoryid", nullable = true)
-    public Long getCategoryid() {
+    @Column(name = "categoryid", nullable = false)
+    public long getCategoryid() {
         return categoryid;
     }
 
-    public void setCategoryid(Long categoryid) {
+    public void setCategoryid(long categoryid) {
         this.categoryid = categoryid;
     }
 
     @Basic
-    @Column(name = "seriid", nullable = true)
-    public Long getSeriid() {
+    @Column(name = "seriid", nullable = false)
+    public long getSeriid() {
         return seriid;
     }
 
-    public void setSeriid(Long seriid) {
+    public void setSeriid(long seriid) {
         this.seriid = seriid;
     }
 
@@ -45,10 +45,10 @@ public class SeriCategoryFilmEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SeriCategoryFilmEntity that = (SeriCategoryFilmEntity) o;
+        SeriCategoryfilmEntity that = (SeriCategoryfilmEntity) o;
         return id == that.id &&
-                Objects.equals(categoryid, that.categoryid) &&
-                Objects.equals(seriid, that.seriid);
+                categoryid == that.categoryid &&
+                seriid == that.seriid;
     }
 
     @Override

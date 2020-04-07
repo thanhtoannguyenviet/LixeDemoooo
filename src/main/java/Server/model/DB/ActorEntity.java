@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Actor", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "actor", schema = "public", catalog = "test12345")
 public class ActorEntity {
     private long id;
-    private String actorName;
+    private String actorname;
     private String ext;
 
     @Id
@@ -22,17 +22,17 @@ public class ActorEntity {
     }
 
     @Basic
-    @Column(name = "actorName", nullable = true, length = 255)
-    public String getActorName() {
-        return actorName;
+    @Column(name = "actorname", nullable = false, length = 255)
+    public String getActorname() {
+        return actorname;
     }
 
-    public void setActorName(String actorName) {
-        this.actorName = actorName;
+    public void setActorname(String actorname) {
+        this.actorname = actorname;
     }
 
     @Basic
-    @Column(name = "ext", nullable = true, length = -1)
+    @Column(name = "ext", nullable = false, length = -1)
     public String getExt() {
         return ext;
     }
@@ -47,12 +47,12 @@ public class ActorEntity {
         if (o == null || getClass() != o.getClass()) return false;
         ActorEntity that = (ActorEntity) o;
         return id == that.id &&
-                Objects.equals(actorName, that.actorName) &&
+                Objects.equals(actorname, that.actorname) &&
                 Objects.equals(ext, that.ext);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, actorName, ext);
+        return Objects.hash(id, actorname, ext);
     }
 }

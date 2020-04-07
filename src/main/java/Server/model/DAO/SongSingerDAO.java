@@ -1,7 +1,6 @@
 package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
-import Server.model.DB.SongEntity;
 import Server.model.DB.SongSingerEntity;
 import Server.service.DBUtil;
 import org.hibernate.*;

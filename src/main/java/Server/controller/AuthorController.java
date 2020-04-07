@@ -1,9 +1,7 @@
 package Server.controller;
 
 import Server.model.DAO.AuthorDAO;
-import Server.model.DB.ActorEntity;
 import Server.model.DB.AuthorEntity;
-import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,5 +65,11 @@ public class AuthorController {
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
+    }
+    @RequestMapping(value = "/GetDetail/{id}",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> updateActor (@PathVariable Long id){
+        return new ResponseEntity<>(authorDAO.GetByID(id),HttpStatus.OK);
     }
 }

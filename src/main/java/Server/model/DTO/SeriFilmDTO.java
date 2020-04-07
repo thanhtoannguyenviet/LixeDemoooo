@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeriFilmDTO {
-    private SeriFilmEntity seriFilmEntity = new SeriFilmEntity();
+    private SerifilmEntity seriFilmEntity = new SerifilmEntity();
     private List<FilmDTO> filmDTOList = new ArrayList<>();
     private Criteria criteria = new Criteria();
     public SeriFilmDTO(){}
 
-    public SeriFilmDTO(SeriFilmEntity seriFilmEntity, List<FilmDTO> filmDTOList, Criteria criteria) {
+    public SeriFilmDTO(SerifilmEntity seriFilmEntity, List<FilmDTO> filmDTOList, Criteria criteria) {
         this.seriFilmEntity = seriFilmEntity;
         this.filmDTOList = filmDTOList;
         this.criteria = criteria;
     }
 
-    public SeriFilmEntity getSeriFilmEntity() {
+    public SerifilmEntity getSeriFilmEntity() {
         return seriFilmEntity;
     }
 
-    public void setSeriFilmEntity(SeriFilmEntity seriFilmEntity) {
+    public void setSeriFilmEntity(SerifilmEntity seriFilmEntity) {
         this.seriFilmEntity = seriFilmEntity;
     }
 

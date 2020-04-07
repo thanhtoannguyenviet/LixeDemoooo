@@ -4,18 +4,18 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "User_", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "user_", schema = "public", catalog = "test12345")
 public class UserEntity {
     private long id;
-    private String userName;
+    private String username;
     private String password;
     private String email;
     private String ext;
     private String follow;
-    private Boolean active;
-    private Long roleid;
+    private long roleid;
     private String img;
-    private String displayName;
+    private String displayname;
+    private Boolean active;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,17 +29,17 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "userName", nullable = true, length = 255)
-    public String getUserName() {
-        return userName;
+    @Column(name = "username", nullable = false, length = 255)
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Basic
-    @Column(name = "password", nullable = true, length = 255)
+    @Column(name = "password", nullable = false, length = 255)
     public String getPassword() {
         return password;
     }
@@ -49,7 +49,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "email", nullable = true, length = 255)
+    @Column(name = "email", nullable = false, length = 255)
     public String getEmail() {
         return email;
     }
@@ -59,7 +59,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "ext", nullable = true, length = -1)
+    @Column(name = "ext", nullable = false, length = -1)
     public String getExt() {
         return ext;
     }
@@ -69,13 +69,43 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "follow", nullable = true, length = -1)
+    @Column(name = "follow", nullable = false, length = -1)
     public String getFollow() {
         return follow;
     }
 
     public void setFollow(String follow) {
         this.follow = follow;
+    }
+
+    @Basic
+    @Column(name = "roleid", nullable = false)
+    public long getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(long roleid) {
+        this.roleid = roleid;
+    }
+
+    @Basic
+    @Column(name = "img", nullable = false, length = -1)
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    @Basic
+    @Column(name = "displayname", nullable = false, length = 255)
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
     }
 
     @Basic
@@ -88,55 +118,25 @@ public class UserEntity {
         this.active = active;
     }
 
-    @Basic
-    @Column(name = "roleid", nullable = true)
-    public Long getRoleid() {
-        return roleid;
-    }
-
-    public void setRoleid(Long roleid) {
-        this.roleid = roleid;
-    }
-
-    @Basic
-    @Column(name = "img", nullable = true, length = -1)
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    @Basic
-    @Column(name = "displayName", nullable = true, length = 255)
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
         return id == that.id &&
-                Objects.equals(userName, that.userName) &&
+                roleid == that.roleid &&
+                Objects.equals(username, that.username) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(ext, that.ext) &&
                 Objects.equals(follow, that.follow) &&
-                Objects.equals(active, that.active) &&
-                Objects.equals(roleid, that.roleid) &&
                 Objects.equals(img, that.img) &&
-                Objects.equals(displayName, that.displayName);
+                Objects.equals(displayname, that.displayname) &&
+                Objects.equals(active, that.active);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, password, email, ext, follow, active, roleid, img, displayName);
+        return Objects.hash(id, username, password, email, ext, follow, roleid, img, displayname, active);
     }
 }

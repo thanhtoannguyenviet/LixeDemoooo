@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Role_", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "role_", schema = "public", catalog = "test12345")
 public class RoleEntity {
     private long id;
-    private String roleName;
+    private String rolename;
     private String scope;
 
     @Id
@@ -22,17 +22,17 @@ public class RoleEntity {
     }
 
     @Basic
-    @Column(name = "roleName", nullable = true, length = 255)
-    public String getRoleName() {
-        return roleName;
+    @Column(name = "rolename", nullable = false, length = 255)
+    public String getRolename() {
+        return rolename;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
     }
 
     @Basic
-    @Column(name = "scope", nullable = true, length = -1)
+    @Column(name = "scope", nullable = false, length = -1)
     public String getScope() {
         return scope;
     }
@@ -47,12 +47,12 @@ public class RoleEntity {
         if (o == null || getClass() != o.getClass()) return false;
         RoleEntity that = (RoleEntity) o;
         return id == that.id &&
-                Objects.equals(roleName, that.roleName) &&
+                Objects.equals(rolename, that.rolename) &&
                 Objects.equals(scope, that.scope);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName, scope);
+        return Objects.hash(id, rolename, scope);
     }
 }

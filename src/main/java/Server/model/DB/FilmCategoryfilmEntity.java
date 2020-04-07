@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Film_CategoryFilm", schema = "public", catalog = "ProjectMusicFilm")
-public class FilmCategoryFilmEntity {
+@Table(name = "film_categoryfilm", schema = "public", catalog = "test12345")
+public class FilmCategoryfilmEntity {
     private long id;
-    private Long filmid;
-    private Long categoryid;
+    private long filmid;
+    private long categoryid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class FilmCategoryFilmEntity {
     }
 
     @Basic
-    @Column(name = "filmid", nullable = true)
-    public Long getFilmid() {
+    @Column(name = "filmid", nullable = false)
+    public long getFilmid() {
         return filmid;
     }
 
-    public void setFilmid(Long filmid) {
+    public void setFilmid(long filmid) {
         this.filmid = filmid;
     }
 
     @Basic
-    @Column(name = "categoryid", nullable = true)
-    public Long getCategoryid() {
+    @Column(name = "categoryid", nullable = false)
+    public long getCategoryid() {
         return categoryid;
     }
 
-    public void setCategoryid(Long categoryid) {
+    public void setCategoryid(long categoryid) {
         this.categoryid = categoryid;
     }
 
@@ -45,10 +45,10 @@ public class FilmCategoryFilmEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FilmCategoryFilmEntity that = (FilmCategoryFilmEntity) o;
+        FilmCategoryfilmEntity that = (FilmCategoryfilmEntity) o;
         return id == that.id &&
-                Objects.equals(filmid, that.filmid) &&
-                Objects.equals(categoryid, that.categoryid);
+                filmid == that.filmid &&
+                categoryid == that.categoryid;
     }
 
     @Override

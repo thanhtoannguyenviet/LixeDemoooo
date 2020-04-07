@@ -12,13 +12,13 @@ public class SongDTO {
     private ImageEntity imageEntity = new ImageEntity();
     private List<SingerEntity> singerEntityList = new ArrayList<>();
     private List<UploadEntity> uploadEntityList = new ArrayList<>();
-    private List<CategorySongEntity> categorySongEntityList = new ArrayList<>();
+    private List<CategorysongEntity> categorySongEntityList = new ArrayList<>();
     private List<CommentEntity> commentEntityList = new ArrayList<>();
     private Criteria criteria = new Criteria();
 
     public SongDTO() {
     }
-    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorySongEntity> categorySongEntityList, List<CommentEntity> commentEntityList) {
+    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorysongEntity> categorySongEntityList, List<CommentEntity> commentEntityList) {
         this.songEntity = songEntity;
         this.albumEntity = albumEntity;
         this.authorEntity = authorEntity;
@@ -30,7 +30,7 @@ public class SongDTO {
     }
 
 
-    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorySongEntity> categorySongEntityList, List<CommentEntity> commentEntityList, Criteria criteria) {
+    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorysongEntity> categorySongEntityList, List<CommentEntity> commentEntityList, Criteria criteria) {
         this.songEntity = songEntity;
         this.albumEntity = albumEntity;
         this.authorEntity = authorEntity;
@@ -88,11 +88,11 @@ public class SongDTO {
         this.uploadEntityList = uploadEntityList;
     }
 
-    public List<CategorySongEntity> getCategorySongEntityList() {
+    public List<CategorysongEntity> getCategorySongEntityList() {
         return categorySongEntityList;
     }
 
-    public void setCategorySongEntityList(List<CategorySongEntity> categorySongEntityList) {
+    public void setCategorySongEntityList(List<CategorysongEntity> categorySongEntityList) {
         this.categorySongEntityList = categorySongEntityList;
     }
 

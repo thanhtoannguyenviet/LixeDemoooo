@@ -1,7 +1,7 @@
 package Server.controller;
 
 import Server.model.DAO.SeriCategoryFilmDAO;
-import Server.model.DB.SeriCategoryFilmEntity;
+import Server.model.DB.SeriCategoryfilmEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@RequestMapping("Relationship/SeriCategory")
+@RequestMapping("api/FilmSite/SeriCategory")
 @RestController
 public class SeriCategoryController {
     @Autowired
@@ -19,17 +19,14 @@ public class SeriCategoryController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody SeriCategoryFilmEntity entity){
+    public ResponseEntity<?> post(@RequestBody SeriCategoryfilmEntity entity){
         seriCategoryFilmDAO.Save(entity);
-        HttpHeaders responseHeader=new HttpHeaders();
-        URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
-        responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>("Post completed",responseHeader, HttpStatus.CREATED);
+       return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody SeriCategoryFilmEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update (@RequestBody SeriCategoryfilmEntity entity, @PathVariable Long id){
         if(seriCategoryFilmDAO.GetByID(id)!=null)
         {
             seriCategoryFilmDAO.Save(entity);

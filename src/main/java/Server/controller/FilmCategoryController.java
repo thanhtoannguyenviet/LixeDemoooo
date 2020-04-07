@@ -1,9 +1,7 @@
 package Server.controller;
 
-import Server.model.DAO.FilmActorDAO;
 import Server.model.DAO.FilmCategoryFilmDAO;
-import Server.model.DB.FilmActorEntity;
-import Server.model.DB.FilmCategoryFilmEntity;
+import Server.model.DB.FilmCategoryfilmEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,7 @@ public class FilmCategoryController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody FilmCategoryFilmEntity entity){
+    public ResponseEntity<?> post(@RequestBody FilmCategoryfilmEntity entity){
         filmCategoryFilmDAO.Save(entity);
         HttpHeaders responseHeader=new HttpHeaders();
         URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
@@ -31,7 +29,7 @@ public class FilmCategoryController {
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody FilmCategoryFilmEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update (@RequestBody FilmCategoryfilmEntity entity, @PathVariable Long id){
         if(filmCategoryFilmDAO.GetByID(id)!=null)
         {
             filmCategoryFilmDAO.Save(entity);

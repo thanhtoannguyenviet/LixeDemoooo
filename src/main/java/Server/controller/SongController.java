@@ -12,22 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@RequestMapping("api/MusicSite/Song")
+    @RequestMapping("api/MusicSite/Song")
 @RestController
 public class SongController {
     @Autowired
     SongDAO songDAO;
-    AuthorDAO authorDAO;
-    ImageDAO imageDAO;
-    AlbumDAO albumDAO;
-    AlbumCategoryMusicDAO albumCategoryMusicDAO;
-    CategorySongDAO categoryDAO;
-    UploadDAO uploadDAO;
-    SongSingerDAO songSingerDAO;
-    SingerDAO singerDAO;
-    SongCategorySongDAO songCategorySongDAO;
-    CommentDAO commentDAO;
     MusicDAO musicDAO;
+    SongSingerDAO songSingerDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -42,10 +33,10 @@ public class SongController {
         songDAO.Save(entity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/{id}",
+    @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> Get (@PathVariable Long id){
+    public  ResponseEntity<?> Get (@PathVariable("id") Long id){
         SongDTO entity = musicDAO.GetSongDTO(id);
         return new ResponseEntity<>(entity,HttpStatus.ACCEPTED);
     }
@@ -83,7 +74,7 @@ public class SongController {
     }
 
     @RequestMapping(value = "Remove/{id}",
-            method = RequestMethod.PUT)
+            method = RequestMethod.DELETE)
     @ResponseBody
     public  ResponseEntity<?> remove (@PathVariable Long id){
         SongEntity entity=songDAO.GetByID(id);
@@ -106,7 +97,7 @@ public class SongController {
             songDAO.Save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
-        else return new ResponseEntity<>("Not Found" + entity.getSongName(),HttpStatus.BAD_REQUEST);
+        else return new ResponseEntity<>("Not Found" + entity.getId(),HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/Delete/{id}",
             method = RequestMethod.DELETE
@@ -129,6 +120,15 @@ public class SongController {
         criteria.setTop(10);
         criteria.setClazz(SongEntity.class);
         return new ResponseEntity<>(SignalDAO.findData(criteria), HttpStatus.OK);
-
+    }
+    @RequestMapping(value = "PostSinger/{idSong}",method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @ResponseBody
+    public ResponseEntity<?> postSinger(@PathVariable Long idsong,@RequestBody SingerEntity singerEntity){
+        SongSingerEntity songSingerEntity = new SongSingerEntity();
+        songSingerEntity.setSingerid(singerEntity.getId());
+        songSingerEntity.setSongid(idsong);
+        songSingerDAO.Save(songSingerEntity);
+        return new ResponseEntity<>(songSingerEntity,HttpStatus.OK);
     }
 }

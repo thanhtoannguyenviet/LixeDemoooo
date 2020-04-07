@@ -5,22 +5,22 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Film", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "film", schema = "public", catalog = "test12345")
 public class FilmEntity {
     private long id;
-    private String filmName;
+    private String filmname;
     private String country;
-    private Long directorid;
-    private Integer yearreleased;
+    private long directorid;
+    private int yearreleased;
     private String uploadsource;
     private String img;
-    private Boolean active;
     private Timestamp createdate;
-    private Integer length;
+    private int length;
     private String info;
-    private Long actorid;
-    private Integer index;
-    private Integer range;
+    private long actorid;
+    private int index;
+    private int range;
+    private Boolean active;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,17 +34,17 @@ public class FilmEntity {
     }
 
     @Basic
-    @Column(name = "filmName", nullable = true, length = 255)
-    public String getFilmName() {
-        return filmName;
+    @Column(name = "filmname", nullable = false, length = 255)
+    public String getFilmname() {
+        return filmname;
     }
 
-    public void setFilmName(String filmName) {
-        this.filmName = filmName;
+    public void setFilmname(String filmname) {
+        this.filmname = filmname;
     }
 
     @Basic
-    @Column(name = "country", nullable = true, length = 255)
+    @Column(name = "country", nullable = false, length = 255)
     public String getCountry() {
         return country;
     }
@@ -54,27 +54,27 @@ public class FilmEntity {
     }
 
     @Basic
-    @Column(name = "directorid", nullable = true)
-    public Long getDirectorid() {
+    @Column(name = "directorid", nullable = false)
+    public long getDirectorid() {
         return directorid;
     }
 
-    public void setDirectorid(Long directorid) {
+    public void setDirectorid(long directorid) {
         this.directorid = directorid;
     }
 
     @Basic
-    @Column(name = "yearreleased", nullable = true)
-    public Integer getYearreleased() {
+    @Column(name = "yearreleased", nullable = false)
+    public int getYearreleased() {
         return yearreleased;
     }
 
-    public void setYearreleased(Integer yearreleased) {
+    public void setYearreleased(int yearreleased) {
         this.yearreleased = yearreleased;
     }
 
     @Basic
-    @Column(name = "uploadsource", nullable = true, length = -1)
+    @Column(name = "uploadsource", nullable = false, length = -1)
     public String getUploadsource() {
         return uploadsource;
     }
@@ -84,13 +84,73 @@ public class FilmEntity {
     }
 
     @Basic
-    @Column(name = "img", nullable = true, length = -1)
+    @Column(name = "img", nullable = false, length = -1)
     public String getImg() {
         return img;
     }
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    @Basic
+    @Column(name = "createdate", nullable = false)
+    public Timestamp getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(Timestamp createdate) {
+        this.createdate = createdate;
+    }
+
+    @Basic
+    @Column(name = "length", nullable = false)
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    @Basic
+    @Column(name = "info", nullable = false, length = -1)
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    @Basic
+    @Column(name = "actorid", nullable = false)
+    public long getActorid() {
+        return actorid;
+    }
+
+    public void setActorid(long actorid) {
+        this.actorid = actorid;
+    }
+
+    @Basic
+    @Column(name = "index", nullable = false)
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    @Basic
+    @Column(name = "range", nullable = false)
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
     }
 
     @Basic
@@ -103,89 +163,29 @@ public class FilmEntity {
         this.active = active;
     }
 
-    @Basic
-    @Column(name = "createdate", nullable = true)
-    public Timestamp getCreatedate() {
-        return createdate;
-    }
-
-    public void setCreatedate(Timestamp createdate) {
-        this.createdate = createdate;
-    }
-
-    @Basic
-    @Column(name = "length", nullable = true)
-    public Integer getLength() {
-        return length;
-    }
-
-    public void setLength(Integer length) {
-        this.length = length;
-    }
-
-    @Basic
-    @Column(name = "info", nullable = true, length = -1)
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    @Basic
-    @Column(name = "actorid", nullable = true)
-    public Long getActorid() {
-        return actorid;
-    }
-
-    public void setActorid(Long actorid) {
-        this.actorid = actorid;
-    }
-
-    @Basic
-    @Column(name = "index", nullable = true)
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    @Basic
-    @Column(name = "range", nullable = true)
-    public Integer getRange() {
-        return range;
-    }
-
-    public void setRange(Integer range) {
-        this.range = range;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FilmEntity that = (FilmEntity) o;
         return id == that.id &&
-                Objects.equals(filmName, that.filmName) &&
+                directorid == that.directorid &&
+                yearreleased == that.yearreleased &&
+                length == that.length &&
+                actorid == that.actorid &&
+                index == that.index &&
+                range == that.range &&
+                Objects.equals(filmname, that.filmname) &&
                 Objects.equals(country, that.country) &&
-                Objects.equals(directorid, that.directorid) &&
-                Objects.equals(yearreleased, that.yearreleased) &&
                 Objects.equals(uploadsource, that.uploadsource) &&
                 Objects.equals(img, that.img) &&
-                Objects.equals(active, that.active) &&
                 Objects.equals(createdate, that.createdate) &&
-                Objects.equals(length, that.length) &&
                 Objects.equals(info, that.info) &&
-                Objects.equals(actorid, that.actorid) &&
-                Objects.equals(index, that.index) &&
-                Objects.equals(range, that.range);
+                Objects.equals(active, that.active);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, filmName, country, directorid, yearreleased, uploadsource, img, active, createdate, length, info, actorid, index, range);
+        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, actorid, index, range, active);
     }
 }

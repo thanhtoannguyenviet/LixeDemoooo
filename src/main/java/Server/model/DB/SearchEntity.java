@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Search", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "search", schema = "public", catalog = "test12345")
 public class SearchEntity {
     private long id;
     private String keyword;
@@ -23,7 +23,7 @@ public class SearchEntity {
     }
 
     @Basic
-    @Column(name = "keyword", nullable = true, length = 255)
+    @Column(name = "keyword", nullable = false, length = 255)
     public String getKeyword() {
         return keyword;
     }
@@ -33,7 +33,7 @@ public class SearchEntity {
     }
 
     @Basic
-    @Column(name = "data", nullable = true, length = -1)
+    @Column(name = "data", nullable = false, length = -1)
     public String getData() {
         return data;
     }
@@ -43,7 +43,7 @@ public class SearchEntity {
     }
 
     @Basic
-    @Column(name = "model", nullable = true, length = 255)
+    @Column(name = "model", nullable = false, length = 255)
     public String getModel() {
         return model;
     }

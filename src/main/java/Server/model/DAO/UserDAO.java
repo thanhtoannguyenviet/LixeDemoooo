@@ -1,20 +1,16 @@
 package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
-import Server.model.DB.ImageEntity;
-import Server.model.DB.RoleEntity;
-import Server.model.DB.UserEntity;
+import Server.model.DB.*;
 import Server.model.DTO.UserDTO;
 import Server.service.*;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
-import javax.management.Query;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class UserDAO {

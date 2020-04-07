@@ -5,14 +5,14 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Comment", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "comment", schema = "public", catalog = "test12345")
 public class CommentEntity {
     private long id;
     private String content;
     private Timestamp commentdate;
     private String model;
-    private Long entryid;
-    private String userNameComment;
+    private long entryid;
+    private String usernamecomment;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class CommentEntity {
     }
 
     @Basic
-    @Column(name = "content", nullable = true, length = 500)
+    @Column(name = "content", nullable = false, length = 500)
     public String getContent() {
         return content;
     }
@@ -36,7 +36,7 @@ public class CommentEntity {
     }
 
     @Basic
-    @Column(name = "commentdate", nullable = true)
+    @Column(name = "commentdate", nullable = false)
     public Timestamp getCommentdate() {
         return commentdate;
     }
@@ -46,7 +46,7 @@ public class CommentEntity {
     }
 
     @Basic
-    @Column(name = "model", nullable = true, length = 255)
+    @Column(name = "model", nullable = false, length = 255)
     public String getModel() {
         return model;
     }
@@ -56,23 +56,23 @@ public class CommentEntity {
     }
 
     @Basic
-    @Column(name = "entryid", nullable = true)
-    public Long getEntryid() {
+    @Column(name = "entryid", nullable = false)
+    public long getEntryid() {
         return entryid;
     }
 
-    public void setEntryid(Long entryid) {
+    public void setEntryid(long entryid) {
         this.entryid = entryid;
     }
 
     @Basic
-    @Column(name = "userNameComment", nullable = true, length = 255)
-    public String getUserNameComment() {
-        return userNameComment;
+    @Column(name = "usernamecomment", nullable = false, length = 255)
+    public String getUsernamecomment() {
+        return usernamecomment;
     }
 
-    public void setUserNameComment(String userNameComment) {
-        this.userNameComment = userNameComment;
+    public void setUsernamecomment(String usernamecomment) {
+        this.usernamecomment = usernamecomment;
     }
 
     @Override
@@ -81,15 +81,15 @@ public class CommentEntity {
         if (o == null || getClass() != o.getClass()) return false;
         CommentEntity that = (CommentEntity) o;
         return id == that.id &&
+                entryid == that.entryid &&
                 Objects.equals(content, that.content) &&
                 Objects.equals(commentdate, that.commentdate) &&
                 Objects.equals(model, that.model) &&
-                Objects.equals(entryid, that.entryid) &&
-                Objects.equals(userNameComment, that.userNameComment);
+                Objects.equals(usernamecomment, that.usernamecomment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, content, commentdate, model, entryid, userNameComment);
+        return Objects.hash(id, content, commentdate, model, entryid, usernamecomment);
     }
 }

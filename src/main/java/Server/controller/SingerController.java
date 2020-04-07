@@ -3,8 +3,6 @@ import Server.model.DAO.*;
 import Server.model.DB.ImageEntity;
 import Server.model.DB.SingerEntity;
 import Server.model.DB.SongSingerEntity;
-import Server.model.DTO.AlbumDTO;
-import Server.model.DTO.Criteria;
 import Server.model.DTO.SingerDTO;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +20,18 @@ public class SingerController {
     SingerDAO singerDAO;
     SongSingerDAO songSingerDAO;
     SongDAO songDAO;
-    ImageEntity imageEntity;
     MusicDAO musicDAO;
-    @RequestMapping(value = "/",
+    @RequestMapping(value = "Post/",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registeAccount(@RequestBody SingerEntity singer){
+    public ResponseEntity<?> post(@RequestBody SingerEntity singer){
         singerDAO.Save(singer);
        return new ResponseEntity<>("Post completed",HttpStatus.CREATED);
     }
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateAccount(@RequestBody SingerEntity singer, @PathVariable Long id){
+    public  ResponseEntity<?> put(@RequestBody SingerEntity singer, @PathVariable Long id){
         if(singerDAO.GetByID(id)!=null)
         {
             singerDAO.Save(singer);
@@ -46,7 +43,7 @@ public class SingerController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
         if(singerDAO.GetByID(id)!=null){
             singerDAO.Delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);

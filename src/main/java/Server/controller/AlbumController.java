@@ -64,25 +64,40 @@ public class AlbumController {
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody AlbumEntity entity){
         albumDAO.Delete(entity.getId());
-        List<AlbumCategoryMusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.GetId("albumid",entity.getId()+"");
-        for(AlbumCategoryMusicEntity item : albumCategoryMusicEntity){
+        List<AlbumCategorymusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.GetId("albumid",entity.getId()+"");
+        for(AlbumCategorymusicEntity item : albumCategoryMusicEntity){
             albumCategoryMusicDAO.Delete(item.getId());
         }
         return new ResponseEntity<>("Delete completed",HttpStatus.OK);
     }
 
-    @RequestMapping(value ="/PostToCategory/{idCategoryMusic}",method = RequestMethod.POST)
+//    @RequestMapping(value ="/PostToCategory/{idCategoryMusic}",method = RequestMethod.POST)
+//    @ResponseBody
+//    public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumDTO entity, @PathVariable("idCategoryMusic") Long id){
+//        List<AlbumCategorymusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.GetId("categoryid",id+"");
+//        for ( AlbumCategorymusicEntity item : albumCategoryMusicEntity) {
+//            if(item.getAlbumid()!=entity.getAlbumEntity().getId()){
+//                AlbumCategorymusicEntity newItem = new AlbumCategorymusicEntity();
+//                newItem.setAlbumid(entity.getAlbumEntity().getId());
+//                newItem.setCatagoryid(id);
+//                albumCategoryMusicDAO.Save(newItem);
+//            }
+//        }
+//        return new ResponseEntity<>("Update Completed",HttpStatus.OK);
+//    }
+@RequestMapping(value ="/PostToCategory/{idCategoryMusic}",method = RequestMethod.POST)
+@ResponseBody
+public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @PathVariable("idCategoryMusic") Long id){
+    AlbumCategorymusicEntity albumCategorymusicEntity = new AlbumCategorymusicEntity();
+    albumCategorymusicEntity.setAlbumid(entity.getId());
+    albumCategorymusicEntity.setCatagoryid(id);
+    albumCategoryMusicDAO.Save(albumCategorymusicEntity);
+    return new ResponseEntity<>("Update Completed",HttpStatus.OK);
+}
+    @RequestMapping(value ="/DeleteToCategory/{idCategoryMusic}",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumDTO entity, @PathVariable("idCategoryMusic") Long id){
-        List<AlbumCategoryMusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.GetId("categoryid",id+"");
-        for ( AlbumCategoryMusicEntity item : albumCategoryMusicEntity) {
-            if(item.getAlbumid()!=entity.getAlbumEntity().getId()){
-                AlbumCategoryMusicEntity newItem = new AlbumCategoryMusicEntity();
-                newItem.setAlbumid(entity.getAlbumEntity().getId());
-                newItem.setCatagoryid(id);
-                albumCategoryMusicDAO.Save(newItem);
-            }
-        }
+    public ResponseEntity<?>updateToCategoryMusic(@PathVariable("idCategoryMusic") Long id){
+        albumCategoryMusicDAO.Delete(id);
         return new ResponseEntity<>("Update Completed",HttpStatus.OK);
     }
     @RequestMapping(value ="/Count/{id}", method = RequestMethod.GET)

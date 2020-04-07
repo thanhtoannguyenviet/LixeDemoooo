@@ -15,7 +15,7 @@ public class GrantedAuthoritys {
     private String[] setRoles(){
         ArrayList<String> roleArray = new ArrayList<String>();
         for(RoleEntity lsrole : roleDAO.getAll()){
-            roleArray.add(lsrole.getRoleName());
+            roleArray.add(lsrole.getRolename());
         }
         return (String[])roleArray.toArray();
     }

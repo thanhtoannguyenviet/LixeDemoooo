@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Song_CategorySong", schema = "public", catalog = "ProjectMusicFilm")
-public class SongCategorySongEntity {
+@Table(name = "song_categorysong", schema = "public", catalog = "test12345")
+public class SongCategorysongEntity {
     private long id;
-    private Long songid;
-    private Long categoryid;
+    private long songid;
+    private long categoryid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class SongCategorySongEntity {
     }
 
     @Basic
-    @Column(name = "songid", nullable = true)
-    public Long getSongid() {
+    @Column(name = "songid", nullable = false)
+    public long getSongid() {
         return songid;
     }
 
-    public void setSongid(Long songid) {
+    public void setSongid(long songid) {
         this.songid = songid;
     }
 
     @Basic
-    @Column(name = "categoryid", nullable = true)
-    public Long getCategoryid() {
+    @Column(name = "categoryid", nullable = false)
+    public long getCategoryid() {
         return categoryid;
     }
 
-    public void setCategoryid(Long categoryid) {
+    public void setCategoryid(long categoryid) {
         this.categoryid = categoryid;
     }
 
@@ -45,10 +45,10 @@ public class SongCategorySongEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SongCategorySongEntity that = (SongCategorySongEntity) o;
+        SongCategorysongEntity that = (SongCategorysongEntity) o;
         return id == that.id &&
-                Objects.equals(songid, that.songid) &&
-                Objects.equals(categoryid, that.categoryid);
+                songid == that.songid &&
+                categoryid == that.categoryid;
     }
 
     @Override

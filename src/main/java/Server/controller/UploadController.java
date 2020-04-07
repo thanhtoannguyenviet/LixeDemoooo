@@ -1,8 +1,6 @@
 package Server.controller;
 
-import Server.model.DAO.ImageDAO;
 import Server.model.DAO.UploadDAO;
-import Server.model.DB.ImageEntity;
 import Server.model.DB.UploadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

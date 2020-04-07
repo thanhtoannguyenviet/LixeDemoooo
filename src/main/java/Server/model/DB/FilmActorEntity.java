@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Film_Actor", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "film_actor", schema = "public", catalog = "test12345")
 public class FilmActorEntity {
     private long id;
-    private Long actorid;
-    private Long filmid;
+    private long actorid;
+    private long filmid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class FilmActorEntity {
     }
 
     @Basic
-    @Column(name = "actorid", nullable = true)
-    public Long getActorid() {
+    @Column(name = "actorid", nullable = false)
+    public long getActorid() {
         return actorid;
     }
 
-    public void setActorid(Long actorid) {
+    public void setActorid(long actorid) {
         this.actorid = actorid;
     }
 
     @Basic
-    @Column(name = "filmid", nullable = true)
-    public Long getFilmid() {
+    @Column(name = "filmid", nullable = false)
+    public long getFilmid() {
         return filmid;
     }
 
-    public void setFilmid(Long filmid) {
+    public void setFilmid(long filmid) {
         this.filmid = filmid;
     }
 
@@ -47,8 +47,8 @@ public class FilmActorEntity {
         if (o == null || getClass() != o.getClass()) return false;
         FilmActorEntity that = (FilmActorEntity) o;
         return id == that.id &&
-                Objects.equals(actorid, that.actorid) &&
-                Objects.equals(filmid, that.filmid);
+                actorid == that.actorid &&
+                filmid == that.filmid;
     }
 
     @Override

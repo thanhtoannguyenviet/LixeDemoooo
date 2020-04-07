@@ -1,11 +1,7 @@
 package Server.service;
 
-import Server.common.CUSTOM_QUERY;
-import Server.model.DB.ImageEntity;
-import Server.model.DB.RoleEntity;
 import Server.model.DB.UserEntity;
 import Server.model.DTO.Criteria;
-import Server.model.DTO.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
@@ -15,8 +11,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DBUtil {
@@ -98,6 +92,7 @@ public class DBUtil {
             ex.printStackTrace();
             return null;
         }
+
     }
 
     public static <K> K convertToOBject(Object object, Class<K> clazz) {
@@ -111,7 +106,7 @@ public class DBUtil {
         Session session = factory.getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
-            SQLQuery q = session.createSQLQuery(query); // bỏ custom SQL vào
+            SQLQuery q = session.createSQLQuery(query);
             q.setResultTransformer((org.hibernate.Criteria.ALIAS_TO_ENTITY_MAP));
 
             List<T> data = (List<T>) q.list();

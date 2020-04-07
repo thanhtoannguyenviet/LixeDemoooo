@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "APIAccount", schema = "public", catalog = "ProjectMusicFilm")
-public class ApiAccountEntity {
+@Table(name = "apiaccount", schema = "public", catalog = "test12345")
+public class ApiaccountEntity {
     private long id;
     private String token;
-    private Integer type;
+    private int type;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class ApiAccountEntity {
     }
 
     @Basic
-    @Column(name = "token", nullable = true, length = 35)
+    @Column(name = "token", nullable = false, length = 35)
     public String getToken() {
         return token;
     }
@@ -32,12 +32,12 @@ public class ApiAccountEntity {
     }
 
     @Basic
-    @Column(name = "type", nullable = true)
-    public Integer getType() {
+    @Column(name = "type", nullable = false)
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -45,10 +45,10 @@ public class ApiAccountEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ApiAccountEntity that = (ApiAccountEntity) o;
+        ApiaccountEntity that = (ApiaccountEntity) o;
         return id == that.id &&
-                Objects.equals(token, that.token) &&
-                Objects.equals(type, that.type);
+                type == that.type &&
+                Objects.equals(token, that.token);
     }
 
     @Override

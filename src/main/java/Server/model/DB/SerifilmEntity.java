@@ -4,13 +4,13 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "SeriFilm", schema = "public", catalog = "ProjectMusicFilm")
-public class SeriFilmEntity {
+@Table(name = "serifilm", schema = "public", catalog = "test12345")
+public class SerifilmEntity {
     private long id;
     private String listfilm;
     private String ext;
-    private Long index;
-    private Long range;
+    private long index;
+    private long range;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class SeriFilmEntity {
     }
 
     @Basic
-    @Column(name = "listfilm", nullable = true, length = -1)
+    @Column(name = "listfilm", nullable = false, length = -1)
     public String getListfilm() {
         return listfilm;
     }
@@ -34,7 +34,7 @@ public class SeriFilmEntity {
     }
 
     @Basic
-    @Column(name = "ext", nullable = true, length = -1)
+    @Column(name = "ext", nullable = false, length = -1)
     public String getExt() {
         return ext;
     }
@@ -44,22 +44,22 @@ public class SeriFilmEntity {
     }
 
     @Basic
-    @Column(name = "index", nullable = true)
-    public Long getIndex() {
+    @Column(name = "index", nullable = false)
+    public long getIndex() {
         return index;
     }
 
-    public void setIndex(Long index) {
+    public void setIndex(long index) {
         this.index = index;
     }
 
     @Basic
-    @Column(name = "range", nullable = true)
-    public Long getRange() {
+    @Column(name = "range", nullable = false)
+    public long getRange() {
         return range;
     }
 
-    public void setRange(Long range) {
+    public void setRange(long range) {
         this.range = range;
     }
 
@@ -67,12 +67,12 @@ public class SeriFilmEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SeriFilmEntity that = (SeriFilmEntity) o;
+        SerifilmEntity that = (SerifilmEntity) o;
         return id == that.id &&
+                index == that.index &&
+                range == that.range &&
                 Objects.equals(listfilm, that.listfilm) &&
-                Objects.equals(ext, that.ext) &&
-                Objects.equals(index, that.index) &&
-                Objects.equals(range, that.range);
+                Objects.equals(ext, that.ext);
     }
 
     @Override

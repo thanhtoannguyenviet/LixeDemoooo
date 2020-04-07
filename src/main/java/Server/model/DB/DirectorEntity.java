@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Director", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "director", schema = "public", catalog = "test12345")
 public class DirectorEntity {
     private long id;
     private String name;
@@ -22,7 +22,7 @@ public class DirectorEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 255)
+    @Column(name = "name", nullable = false, length = 255)
     public String getName() {
         return name;
     }
@@ -32,7 +32,7 @@ public class DirectorEntity {
     }
 
     @Basic
-    @Column(name = "ext", nullable = true, length = -1)
+    @Column(name = "ext", nullable = false, length = -1)
     public String getExt() {
         return ext;
     }

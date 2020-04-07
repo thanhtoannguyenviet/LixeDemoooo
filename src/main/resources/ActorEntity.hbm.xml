@@ -1,19 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="Server.model.DB.ActorEntity" table="Actor" schema="public" catalog="ProjectMusicFilm">
+    <class name="Server.model.DB.ActorEntity" table="actor" schema="public" catalog="test12345">
         <id name="id">
             <column name="id" sql-type="bigint"/>
             <generator class="identity"/>
         </id>
-        <property name="actorName">
-            <column name="actorName" sql-type="varchar(255)" not-null="true"/>
+        <property name="actorname">
+            <column name="actorname" sql-type="varchar(255)"/>
         </property>
         <property name="ext">
-            <column name="ext" sql-type="text" not-null="true"/>
+            <column name="ext" sql-type="text"/>
         </property>
     </class>
 </hibernate-mapping>

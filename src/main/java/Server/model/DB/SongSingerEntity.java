@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Song_Singer", schema = "public", catalog = "ProjectMusicFilm")
+@Table(name = "song_singer", schema = "public", catalog = "test12345")
 public class SongSingerEntity {
     private long id;
-    private Long songid;
-    private Long singerid;
+    private long songid;
+    private long singerid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class SongSingerEntity {
     }
 
     @Basic
-    @Column(name = "songid", nullable = true)
-    public Long getSongid() {
+    @Column(name = "songid", nullable = false)
+    public long getSongid() {
         return songid;
     }
 
-    public void setSongid(Long songid) {
+    public void setSongid(long songid) {
         this.songid = songid;
     }
 
     @Basic
-    @Column(name = "singerid", nullable = true)
-    public Long getSingerid() {
+    @Column(name = "singerid", nullable = false)
+    public long getSingerid() {
         return singerid;
     }
 
-    public void setSingerid(Long singerid) {
+    public void setSingerid(long singerid) {
         this.singerid = singerid;
     }
 
@@ -47,8 +47,8 @@ public class SongSingerEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SongSingerEntity that = (SongSingerEntity) o;
         return id == that.id &&
-                Objects.equals(songid, that.songid) &&
-                Objects.equals(singerid, that.singerid);
+                songid == that.songid &&
+                singerid == that.singerid;
     }
 
     @Override
