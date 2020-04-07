@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class FilmController {
     @Autowired
     FilmDAO filmDAO;
+    @Autowired
     FilmActorDAO filmActorDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
