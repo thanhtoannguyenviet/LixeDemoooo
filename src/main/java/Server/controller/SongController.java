@@ -64,7 +64,7 @@ public class SongController {
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody SongEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update (@RequestBody SongEntity entity, @PathVariable("id") Long id){
         if(songDAO.GetByID(id)!=null)
         {
             songDAO.Save(entity);
@@ -76,7 +76,7 @@ public class SongController {
     @RequestMapping(value = "Remove/{id}",
             method = RequestMethod.DELETE)
     @ResponseBody
-    public  ResponseEntity<?> remove (@PathVariable Long id){
+    public  ResponseEntity<?> remove (@PathVariable("id") Long id){
         SongEntity entity=songDAO.GetByID(id);
         if(entity!=null)
         {
@@ -89,7 +89,7 @@ public class SongController {
     @RequestMapping(value = "Recover/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> recover ( @PathVariable Long id){
+    public  ResponseEntity<?> recover ( @PathVariable("id") Long id){
         SongEntity entity=songDAO.GetByID(id);
         if(entity!=null)
         {
@@ -124,7 +124,7 @@ public class SongController {
     @RequestMapping(value = "PostSinger/{idSong}",method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public ResponseEntity<?> postSinger(@PathVariable Long idsong,@RequestBody SingerEntity singerEntity){
+    public ResponseEntity<?> postSinger(@PathVariable("id") Long idsong,@RequestBody SingerEntity singerEntity){
         SongSingerEntity songSingerEntity = new SongSingerEntity();
         songSingerEntity.setSingerid(singerEntity.getId());
         songSingerEntity.setSongid(idsong);

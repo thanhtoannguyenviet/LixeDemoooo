@@ -23,7 +23,7 @@ public class SeriFilmController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateAccount(@RequestBody SerifilmEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> updateAccount(@RequestBody SerifilmEntity entity, @PathVariable("id") Long id){
         if(seriFilmDAO.GetByID(id)!=null)
         {
             seriFilmDAO.Save(entity);

@@ -28,7 +28,7 @@ public class DirectorController {
     @RequestMapping(value = "Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody DirectorEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update (@RequestBody DirectorEntity entity, @PathVariable("id") Long id){
         if(directorDAO.GetByID(id)!=null)
         {
             directorDAO.Save(entity);

@@ -1,5 +1,7 @@
 package Server.service;
 
+import Server.model.DAO.LogDAO;
+import Server.model.DB.LogEntity;
 import Server.model.DB.UserEntity;
 import Server.model.DTO.Criteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class DBUtil {
+
+
     public static <T> List<T> loadAllData(Class<T> type, Session session) {
         session.beginTransaction();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -52,7 +56,9 @@ public class DBUtil {
             tx = session.beginTransaction();
             session.saveOrUpdate(newItem);
             tx.commit();
-        } catch (HibernateException ex) {
+        } catch (Exception ex) {
+            LogEntity log = new LogEntity(ex);
+            new LogDAO().Save(log);
             if (tx != null) tx.rollback();
             ex.printStackTrace();
 
@@ -73,6 +79,8 @@ public class DBUtil {
             tx.commit();
 
         } catch (HibernateException ex) {
+            LogEntity log = new LogEntity(ex);
+            new LogDAO().Save(log);
             if (tx != null) tx.rollback();
             ex.printStackTrace();
         } finally {
@@ -88,6 +96,8 @@ public class DBUtil {
             tx.commit();
             return item;
         } catch (HibernateException ex) {
+            LogEntity log = new LogEntity(ex);
+            new LogDAO().Save(log);
             if (tx != null) tx.rollback();
             ex.printStackTrace();
             return null;
@@ -112,6 +122,8 @@ public class DBUtil {
             List<T> data = (List<T>) q.list();
             return data;
         } catch (HibernateException ex) {
+            LogEntity log = new LogEntity(ex);
+            new LogDAO().Save(log);
             if (tx != null) tx.rollback();
             ex.printStackTrace();
         } finally {

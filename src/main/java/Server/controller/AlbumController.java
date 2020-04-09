@@ -23,6 +23,7 @@ public class AlbumController {
     AlbumCategoryMusicDAO albumCategoryMusicDAO;
     SongSingerDAO songSingerDAO;
     SingerDAO singerDAO;
+    SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -33,7 +34,7 @@ public class AlbumController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> put(@RequestBody AlbumEntity entity,@PathVariable long id){
+    public ResponseEntity<?> put(@RequestBody AlbumEntity entity,@PathVariable("id") long id){
         if(id==entity.getId())
        albumDAO.Save(entity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
@@ -41,23 +42,8 @@ public class AlbumController {
     @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> get(@PathVariable Long id){
-        AlbumEntity albumEntity = albumDAO.GetByID(id);
-        String[] arr = albumEntity.getListsongid().split(",");
-        List<SongEntity> songDTOList = new ArrayList<>();
-
-        for(String item : arr){
-            if(item!=null)
-                songDTOList.add(songDAO.GetByID(Long.parseLong(item)));
-        }
-        List<SongSingerEntity> lsSongSingerEntity =
-                songSingerDAO.GetId("songid",songDTOList.get(0).getId()+"" );
-        List<SingerEntity> singerEntityList = new ArrayList<>();
-        for (SongSingerEntity item : lsSongSingerEntity) {
-            singerEntityList.add(singerDAO.GetByID(item.getSingerid()));
-        }
-        AlbumDTO albumDTO = new AlbumDTO(albumEntity,songDTOList,singerEntityList,new Criteria());
-        return new ResponseEntity<>(albumDTO,HttpStatus.OK);
+    public ResponseEntity<?> get(@PathVariable("id") Long id){
+        return new ResponseEntity<>(albumDAO.GetByID(id),HttpStatus.OK);
     }
     @RequestMapping(value = "/Delete/",
             method = RequestMethod.DELETE)
@@ -107,10 +93,10 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
     }
     @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
         Criteria criteria = new Criteria();
         criteria.setClazz(AlbumDTO.class);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(criteria,HttpStatus.OK);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
     }
 }
