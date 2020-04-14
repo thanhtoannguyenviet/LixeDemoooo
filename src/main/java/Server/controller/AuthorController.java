@@ -58,7 +58,7 @@ public class AuthorController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateActor (@RequestBody AuthorEntity actor, @PathVariable Long id){
+    public  ResponseEntity<?> updateActor (@RequestBody AuthorEntity actor, @PathVariable("id") Long id){
         if(id==actor.getId())
         {
             authorDAO.Save(actor);
@@ -69,7 +69,7 @@ public class AuthorController {
     @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> updateActor (@PathVariable Long id){
+    public  ResponseEntity<?> updateActor (@PathVariable("id") Long id){
         return new ResponseEntity<>(authorDAO.GetByID(id),HttpStatus.OK);
     }
 }

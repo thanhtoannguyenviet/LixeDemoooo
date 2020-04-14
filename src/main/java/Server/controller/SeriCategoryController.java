@@ -26,7 +26,7 @@ public class SeriCategoryController {
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody SeriCategoryfilmEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update (@RequestBody SeriCategoryfilmEntity entity, @PathVariable("id") Long id){
         if(seriCategoryFilmDAO.GetByID(id)!=null)
         {
             seriCategoryFilmDAO.Save(entity);

@@ -43,13 +43,13 @@ public class CategorySongController {
     }
     @RequestMapping(value = "/GetDetail/{id}" , method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getDetail(@PathVariable Long id)
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id)
     {
         return new ResponseEntity<>(categorySongDAO.GetByID(id),HttpStatus.OK);
     }
     @RequestMapping(value = "/GetAll/" , method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getAll(@PathVariable Long id)
+    public ResponseEntity<?> getAll()
     {
         return new ResponseEntity<>(categorySongDAO.getAll(),HttpStatus.OK);
     }

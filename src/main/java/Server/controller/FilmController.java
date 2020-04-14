@@ -29,7 +29,7 @@ public class FilmController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody FilmEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update (@RequestBody FilmEntity entity, @PathVariable("id") Long id){
         if(filmDAO.GetByID(id)!=null)
         {
             filmDAO.Save(entity);

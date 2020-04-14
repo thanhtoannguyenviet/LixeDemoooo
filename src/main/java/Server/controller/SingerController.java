@@ -31,7 +31,7 @@ public class SingerController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> put(@RequestBody SingerEntity singer, @PathVariable Long id){
+    public  ResponseEntity<?> put(@RequestBody SingerEntity singer, @PathVariable("id") Long id){
         if(singerDAO.GetByID(id)!=null)
         {
             singerDAO.Save(singer);
@@ -52,7 +52,7 @@ public class SingerController {
     }
     @RequestMapping(value = "/Get/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> get(@PathVariable Long id){
+    public ResponseEntity<?> get(@PathVariable("id") Long id){
         SingerEntity singerEntity = singerDAO.GetByID(id);
         List<SongSingerEntity>lsSongEntity = songSingerDAO.GetId("singerid",id+"");
         List<SongDTO> lsSongDTO = new ArrayList<>();

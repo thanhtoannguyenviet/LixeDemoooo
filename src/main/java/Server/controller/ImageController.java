@@ -23,7 +23,7 @@ public class ImageController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update(@RequestBody ImageEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> update(@RequestBody ImageEntity entity, @PathVariable("id") Long id){
         if(id==entity.getId())
         {imageDAO.Save(entity);
         return new ResponseEntity<>("Update completed",HttpStatus.OK);

@@ -1,5 +1,7 @@
 package Server.model.DB;
 
+import org.hibernate.HibernateException;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -7,10 +9,16 @@ import java.util.Objects;
 @Table(name = "log", schema = "public", catalog = "test12345")
 public class LogEntity {
     private long id;
-    private String messageError;
+    private String messageerror;
     private String codeerror;
     private String nameapierror;
 
+    public LogEntity(){}
+    public LogEntity(Exception ex){
+        messageerror=ex.getCause().getMessage().replace("\n","");
+        codeerror= ex.getMessage();
+        nameapierror=ex.getClass().getName();
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -23,13 +31,13 @@ public class LogEntity {
     }
 
     @Basic
-    @Column(name = "messageError", nullable = true, length = -1)
+    @Column(name = "messageerror", nullable = true, length = -1)
     public String getMessageError() {
-        return messageError;
+        return messageerror;
     }
 
     public void setMessageError(String messageError) {
-        this.messageError = messageError;
+        this.messageerror = messageError;
     }
 
     @Basic
@@ -58,13 +66,13 @@ public class LogEntity {
         if (o == null || getClass() != o.getClass()) return false;
         LogEntity logEntity = (LogEntity) o;
         return id == logEntity.id &&
-                Objects.equals(messageError, logEntity.messageError) &&
+                Objects.equals(messageerror, logEntity.messageerror) &&
                 Objects.equals(codeerror, logEntity.codeerror) &&
                 Objects.equals(nameapierror, logEntity.nameapierror);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, messageError, codeerror, nameapierror);
+        return Objects.hash(id, messageerror, codeerror, nameapierror);
     }
 }

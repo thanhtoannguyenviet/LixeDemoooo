@@ -42,7 +42,7 @@ public class RatingController {
     @RequestMapping(value = "VoteLike/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> increase (@RequestBody RatingEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> increase (@RequestBody RatingEntity entity, @PathVariable("id") Long id){
         if(ratingDAO.GetByID(id)!=null)
         {
             entity.setVotelike(1+entity.getVotedislike());
@@ -55,7 +55,7 @@ public class RatingController {
     @RequestMapping(value = "VoteDissLike/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> decrease (@RequestBody RatingEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> decrease (@RequestBody RatingEntity entity, @PathVariable("id") Long id){
         if(ratingDAO.GetByID(id)!=null)
         {
             entity.setVotedislike(1+entity.getVotedislike());

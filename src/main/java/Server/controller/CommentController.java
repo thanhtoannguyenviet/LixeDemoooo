@@ -22,7 +22,7 @@ public class CommentController {
     @RequestMapping(value = "Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateCategorySong (@RequestBody CommentEntity entity, @PathVariable Long id){
+    public  ResponseEntity<?> updateCategorySong (@RequestBody CommentEntity entity, @PathVariable("id") Long id){
         if(entity.getId()==id)
         {
             commentDAO.Save(entity);

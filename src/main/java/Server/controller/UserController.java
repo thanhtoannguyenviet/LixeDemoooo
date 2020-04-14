@@ -31,11 +31,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<?> registerAPI(@RequestBody UserEntity user){
        userDAO.Save(user);
-        HttpHeaders responseHeader=new HttpHeaders();
-        URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-        responseHeader.setLocation(newAccounUrl);
-
-        return new ResponseEntity<>("",responseHeader,HttpStatus.CREATED);
+        return new ResponseEntity<>("",HttpStatus.CREATED);
     }
 
 

@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.ActorDAO;
 import Server.model.DAO.FilmActorDAO;
+import Server.model.DAO.LogDAO;
 import Server.model.DB.*;
 import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
@@ -22,6 +23,7 @@ public class ActorController {
     @Autowired
     ActorDAO actorDAO;
     FilmActorDAO filmActorDAO;
+    LogDAO logDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -32,7 +34,7 @@ public class ActorController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateActor (@RequestBody ActorEntity actor, @PathVariable Long id){
+    public  ResponseEntity<?> updateActor (@RequestBody ActorEntity actor, @PathVariable("id") Long id){
         if(id==actor.getId())
         {
             actorDAO.Save(actor);
@@ -54,13 +56,13 @@ public class ActorController {
     @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> get(@PathVariable Long id){
+    public ResponseEntity<?> get(@PathVariable("id") Long id){
         return new ResponseEntity<>(actorDAO.GetByID(id),HttpStatus.OK);
     }
     @RequestMapping(value = "/PostToFilm/{id}",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> posttofilm(@PathVariable Long id,@RequestBody ActorEntity actor){
+    public ResponseEntity<?> posttofilm(@PathVariable("id") Long id,@RequestBody ActorEntity actor){
         FilmActorEntity filmActorEntity = new FilmActorEntity();
         filmActorEntity.setFilmid(id);
         filmActorEntity.setActorid(actor.getId());
@@ -70,7 +72,7 @@ public class ActorController {
     @RequestMapping(value = "/PutToFilm/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> putToFilm(@PathVariable Long id,@RequestBody FilmActorEntity entity){
+    public ResponseEntity<?> putToFilm(@PathVariable("id") Long id,@RequestBody FilmActorEntity entity){
         FilmActorEntity filmActorEntity = filmActorDAO.GetByID(id);
         if(filmActorEntity.getFilmid()==entity.getId())
         filmActorDAO.Save(entity);
@@ -79,7 +81,7 @@ public class ActorController {
     @RequestMapping(value = "/RemoveToFilm/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> putToFilm(@PathVariable Long id){
+    public ResponseEntity<?> putToFilm(@PathVariable("id") Long id){
         filmActorDAO.Delete(id);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }

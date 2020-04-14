@@ -21,15 +21,12 @@ public class UploadController {
     @ResponseBody
     public ResponseEntity<?> postImage(@RequestBody UploadEntity entity){
         uploadDAO.Save(entity);
-        HttpHeaders responseHeader=new HttpHeaders();
-        URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
-        responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>("Post Completed",responseHeader, HttpStatus.CREATED);
+        return new ResponseEntity<>("Post Completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateAccount(@RequestBody UploadEntity entity, @PathVariable Long id ){
+    public  ResponseEntity<?> updateAccount(@RequestBody UploadEntity entity, @PathVariable("id") Long id ){
         if(uploadDAO.GetByID(id)!=null)
             uploadDAO.Save(entity);
         return new ResponseEntity<>("Update Completed",HttpStatus.OK);
@@ -41,5 +38,13 @@ public class UploadController {
     public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id){
         uploadDAO.Delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @RequestMapping(value = "/Get/{id}",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> get(@PathVariable("id") Long id){
+
+        return new ResponseEntity<>( uploadDAO.GetByID(id),HttpStatus.OK);
     }
 }
