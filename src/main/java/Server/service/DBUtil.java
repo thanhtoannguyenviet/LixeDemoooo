@@ -65,7 +65,9 @@ public class DBUtil {
         return count;
     }
 
-    public static <T> T addData(T newItem, Session session) {
+    public static <T> T addData(T newItem, Class clazz) {
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(clazz).buildSessionFactory();
+        Session session = factory.getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
@@ -81,7 +83,9 @@ public class DBUtil {
         }
     }
 
-    public static <T, K> void deleteData(T primaryID, Class<K> cl, Session session) {
+    public static <T, K> void deleteData(T primaryID, Class<K> cl, Class clazz) {
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(clazz).buildSessionFactory();
+        Session session = factory.getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
@@ -99,7 +103,9 @@ public class DBUtil {
         }
     }
 
-    public static <T, K> K GetDataByID(T primaryID, Class<K> cl, Session session) {
+    public static <T, K> K GetDataByID(T primaryID, Class<K> cl, Class clazz) {
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(clazz).buildSessionFactory();
+        Session session = factory.getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
