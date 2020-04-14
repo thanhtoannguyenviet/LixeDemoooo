@@ -5,12 +5,10 @@ public class Criteria {
     private boolean ascending;
     private int itemPerPage = 20;
     private String keyword = "";
-    private int currentPage = 1;
+    private int currentPage = -1;
     private long categoryId = -1;
-    //1 la lay tat ca
-    private int top = -1; // Get theo range
+    private int top = -1;
     private Class clazz;
-
 
     public Criteria(boolean ascending, int itemPerPage, String keyword, int currentPage, long categoryId, int top, Class clazz) {
         this.ascending = ascending;

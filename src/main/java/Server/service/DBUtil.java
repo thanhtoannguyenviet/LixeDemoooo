@@ -1,7 +1,11 @@
 package Server.service;
 
+import Server.common.CUSTOM_QUERY;
+import Server.model.DB.ImageEntity;
+import Server.model.DB.RoleEntity;
 import Server.model.DB.UserEntity;
 import Server.model.DTO.Criteria;
+import Server.model.DTO.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
@@ -11,6 +15,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DBUtil {
@@ -25,7 +31,7 @@ public class DBUtil {
     }
 
     public static <T> List<T> loadDataPagination(Class<T> type, Criteria criter) {
-        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserEntity.class).buildSessionFactory();
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(type).buildSessionFactory();
         Session session = factory.getCurrentSession();
         session.beginTransaction();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -46,13 +52,26 @@ public class DBUtil {
         return data;
     }
 
+    public static <T> long countData(Class<T> type, Criteria criter){
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(type).buildSessionFactory();
+        Session session = factory.getCurrentSession();
+        session.beginTransaction();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<T> from = criteriaQuery.from(type);
+        CriteriaQuery<Long> select = criteriaQuery.select(builder.count(from));
+        TypedQuery<Long> typedQuery = session.createQuery(select);
+        long count = typedQuery.getSingleResult();
+        return count;
+    }
+
     public static <T> T addData(T newItem, Session session) {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             session.saveOrUpdate(newItem);
             tx.commit();
-        } catch (HibernateException ex) {
+        } catch (Exception ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
 
@@ -90,9 +109,8 @@ public class DBUtil {
         } catch (HibernateException ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
-            return null;
         }
-
+        return null;
     }
 
     public static <K> K convertToOBject(Object object, Class<K> clazz) {
@@ -106,7 +124,7 @@ public class DBUtil {
         Session session = factory.getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
-            SQLQuery q = session.createSQLQuery(query);
+            SQLQuery q = session.createSQLQuery(query); // bỏ custom SQL vào
             q.setResultTransformer((org.hibernate.Criteria.ALIAS_TO_ENTITY_MAP));
 
             List<T> data = (List<T>) q.list();
