@@ -17,13 +17,13 @@ public class AlbumCategoryMusicDAO {
         List<AlbumCategorymusicEntity> ls = DBUtil.loadAllData(AlbumCategorymusicEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(AlbumCategorymusicEntity entity){
+    public AlbumCategorymusicEntity Save(AlbumCategorymusicEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();
-        DBUtil.deleteData(id,AlbumCategorymusicEntity.class,s);
+        DBUtil.deleteData(id,AlbumCategorymusicEntity.class);
     }
     public AlbumCategorymusicEntity GetByID(Long id){
         Session s = factory.getCurrentSession();
@@ -35,7 +35,6 @@ public class AlbumCategoryMusicDAO {
         Session s = factory.getCurrentSession();
         Transaction tx = s.beginTransaction();
         try {
-            //sql = select * from User_ where userName = '?'
             String sql = CUSTOM_QUERY.sqlGetId("album_categorymusic",conditionColumn,condition);
             SQLQuery q = s.createSQLQuery(sql);
             q.addEntity(AlbumCategorymusicEntity.class);

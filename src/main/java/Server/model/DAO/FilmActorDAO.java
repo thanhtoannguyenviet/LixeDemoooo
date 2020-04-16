@@ -17,9 +17,9 @@ public class FilmActorDAO {
         List<FilmActorEntity> ls = DBUtil.loadAllData(FilmActorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(FilmActorEntity entity){
+    public FilmActorEntity Save(FilmActorEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

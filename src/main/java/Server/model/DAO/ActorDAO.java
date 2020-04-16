@@ -17,9 +17,9 @@ public class ActorDAO {
         List<ActorEntity> ls = DBUtil.loadAllData(ActorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(ActorEntity entity){
+    public ActorEntity Save(ActorEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

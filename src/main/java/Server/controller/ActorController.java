@@ -3,6 +3,7 @@ package Server.controller;
 import Server.model.DAO.ActorDAO;
 import Server.model.DAO.FilmActorDAO;
 import Server.model.DAO.LogDAO;
+import Server.model.DAO.SignalDAO;
 import Server.model.DB.*;
 import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
@@ -23,7 +24,7 @@ public class ActorController {
     @Autowired
     ActorDAO actorDAO;
     FilmActorDAO filmActorDAO;
-    LogDAO logDAO;
+    SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -85,6 +86,19 @@ public class ActorController {
         filmActorDAO.Delete(id);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }
-
+    @RequestMapping(value ="/GetTop10/", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getTop10 () {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(ActorEntity.class);
+            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
 }
 

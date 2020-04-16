@@ -1,8 +1,7 @@
 package Server.controller;
 import Server.model.DAO.*;
-import Server.model.DB.ImageEntity;
-import Server.model.DB.SingerEntity;
-import Server.model.DB.SongSingerEntity;
+import Server.model.DB.*;
+import Server.model.DTO.Criteria;
 import Server.model.DTO.SingerDTO;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ public class SingerController {
     SingerDAO singerDAO;
     SongSingerDAO songSingerDAO;
     SongDAO songDAO;
+    SignalDAO signalDAO;
     MusicDAO musicDAO;
     @RequestMapping(value = "Post/",
             method = RequestMethod.POST)
@@ -50,7 +50,7 @@ public class SingerController {
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/Get/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/GetDetail/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         SingerEntity singerEntity = singerDAO.GetByID(id);
@@ -61,5 +61,37 @@ public class SingerController {
         }
         SingerDTO singerDTO = new SingerDTO(singerEntity,lsSongDTO);
         return  new ResponseEntity<>(singerDTO,HttpStatus.OK);
+    }
+    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getTop10()
+    {
+        try{
+        Criteria criteria = new Criteria();
+        criteria.setClazz(SingerEntity.class);
+        criteria.setTop(10);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+        try{
+        Criteria criteria = new Criteria();
+        criteria.setClazz(SingerEntity.class);
+        criteria.setCurrentPage(page);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        }
+        catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
     }
 }

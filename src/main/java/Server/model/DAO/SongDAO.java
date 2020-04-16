@@ -17,9 +17,9 @@ public class SongDAO {
         List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(SongEntity entity){
+    public SongEntity Save(SongEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(long id){
         Session s= factory.getCurrentSession();

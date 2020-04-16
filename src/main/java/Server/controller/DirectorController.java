@@ -1,7 +1,12 @@
 package Server.controller;
 
 import Server.model.DAO.DirectorDAO;
+import Server.model.DAO.LogDAO;
+import Server.model.DAO.SignalDAO;
+import Server.model.DB.CategorysongEntity;
 import Server.model.DB.DirectorEntity;
+import Server.model.DB.LogEntity;
+import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import java.net.URI;
 public class DirectorController {
     @Autowired
     DirectorDAO directorDAO;
+    SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -54,5 +60,35 @@ public class DirectorController {
     public ResponseEntity<?> get (@PathVariable("id") Long id){
      return  new ResponseEntity<>(directorDAO.GetByID(id),HttpStatus.OK);
     }
-
+    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getTop10()
+    {
+        try{
+        Criteria criteria = new Criteria();
+        criteria.setClazz(DirectorEntity.class);
+        criteria.setTop(10);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+        try{
+        Criteria criteria = new Criteria();
+        criteria.setClazz(DirectorEntity.class);
+        criteria.setCurrentPage(page);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
 }

@@ -13,7 +13,7 @@
             <column name="songname" sql-type="varchar(255)"/>
         </property>
         <property name="authorid">
-            <column name="authorid" sql-type="bigint"/>
+            <column name="authorid" sql-type="bigint" not-null="false"/>
         </property>
         <property name="createdate">
             <column name="createdate" sql-type="timestamp"/>
@@ -31,7 +31,7 @@
             <column name="img" sql-type="text"/>
         </property>
         <property name="albumid">
-            <column name="albumid" sql-type="bigint"/>
+            <column name="albumid" sql-type="bigint" not-null="false"/>
         </property>
         <property name="range">
             <column name="range" sql-type="integer"/>

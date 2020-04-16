@@ -101,7 +101,7 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "albumid", nullable = false)
+    @Column(name = "albumid", nullable = true)
     public long getAlbumid() {
         return albumid;
     }

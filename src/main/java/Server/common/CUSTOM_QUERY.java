@@ -1,8 +1,8 @@
 package Server.common;
 
+import Server.model.DB.FilmEntity;
 import Server.model.DB.SongEntity;
 import Server.model.DTO.Criteria;
-
 public class CUSTOM_QUERY {
     public static String GetROLEByUsername =" from ROLE_ r, USER_ where roleId = ?";
     public static String GetUserByUsername = "select * from User_ u where userName like '?' limit 1";
@@ -37,6 +37,9 @@ public class CUSTOM_QUERY {
         String model = "";
         if(criteria.getClazz().equals(SongEntity.class)){
             model = "Song";
+        }
+        if(criteria.getClazz().equals(FilmEntity.class)){
+            model = "Film";
         }
         String sql = "SELECT * FROM " + model + " ORDER BY range desc LIMIT " + criteria.getTop();
         return sql;

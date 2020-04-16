@@ -17,9 +17,9 @@ public class RoleDAO {
         List<RoleEntity> ls = DBUtil.loadAllData(RoleEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(RoleEntity entity){
+    public RoleEntity Save(RoleEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(int id){
         Session s= factory.getCurrentSession();

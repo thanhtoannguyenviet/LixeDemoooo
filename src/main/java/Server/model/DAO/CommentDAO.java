@@ -17,9 +17,9 @@ public class CommentDAO {
         List<CommentEntity> ls = DBUtil.loadAllData(CommentEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(CommentEntity entity){
+    public CommentEntity Save(CommentEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

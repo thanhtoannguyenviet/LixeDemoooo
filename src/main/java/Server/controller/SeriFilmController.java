@@ -1,7 +1,12 @@
 package Server.controller;
 
+import Server.model.DAO.LogDAO;
 import Server.model.DAO.SeriFilmDAO;
+import Server.model.DAO.SignalDAO;
+import Server.model.DB.DirectorEntity;
+import Server.model.DB.LogEntity;
 import Server.model.DB.SerifilmEntity;
+import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class SeriFilmController {
     @Autowired
-    private SeriFilmDAO seriFilmDAO;
-
+     SeriFilmDAO seriFilmDAO;
+     SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -43,5 +48,41 @@ public class SeriFilmController {
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-
+    @RequestMapping(value = "/GetDetail/{id}",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id){
+       return  new ResponseEntity<>(seriFilmDAO.GetByID(id),HttpStatus.BAD_REQUEST);
+    }
+    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getTop10() {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(SerifilmEntity.class);
+            criteria.setTop(10);
+            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+        try{
+        Criteria criteria = new Criteria();
+        criteria.setClazz(SerifilmEntity.class);
+        criteria.setCurrentPage(page);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
 }

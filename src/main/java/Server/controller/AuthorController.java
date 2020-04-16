@@ -1,7 +1,11 @@
 package Server.controller;
 
 import Server.model.DAO.AuthorDAO;
+import Server.model.DAO.LogDAO;
+import Server.model.DAO.SignalDAO;
 import Server.model.DB.AuthorEntity;
+import Server.model.DB.LogEntity;
+import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorController {
     @Autowired
     AuthorDAO authorDAO;
+    SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -40,14 +45,6 @@ public class AuthorController {
         return new ResponseEntity<>(authorDAO.getAll(),HttpStatus.OK);
     }
 
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
-    @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable int page){
-        Criteria criteria = new Criteria();
-        criteria.setClazz(AuthorEntity.class);
-        criteria.setCurrentPage(page);
-        return new ResponseEntity<>(criteria,HttpStatus.OK);
-    }
     @RequestMapping(value = "/Count",
             method = RequestMethod.GET
     )
@@ -69,7 +66,37 @@ public class AuthorController {
     @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> updateActor (@PathVariable("id") Long id){
+    public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
         return new ResponseEntity<>(authorDAO.GetByID(id),HttpStatus.OK);
+    }
+    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page) {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(AuthorEntity.class);
+            criteria.setCurrentPage(page);
+            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/GetTop10/", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getTop (){
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(AuthorEntity.class);
+            criteria.setTop(10);
+            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
+
+import static Server.service.DBUtil.addData;
+
 @Repository
 public class CategorySongDAO {
     SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(CategorysongEntity.class).buildSessionFactory();
@@ -17,9 +20,9 @@ public class CategorySongDAO {
         List<CategorysongEntity> ls = DBUtil.loadAllData(CategorysongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(CategorysongEntity entity){
+    public CategorysongEntity Save(CategorysongEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

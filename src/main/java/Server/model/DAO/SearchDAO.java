@@ -17,9 +17,9 @@ public class SearchDAO {
         List<SearchEntity> ls = DBUtil.loadAllData(SearchEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(SearchEntity entity){
+    public SearchEntity Save(SearchEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(int id){
         Session s= factory.getCurrentSession();

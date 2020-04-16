@@ -17,9 +17,9 @@ public class RatingDAO {
         List<RatingEntity> ls = DBUtil.loadAllData(RatingEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(RatingEntity entity){
+    public RatingEntity Save(RatingEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(long id){
         Session s= factory.getCurrentSession();

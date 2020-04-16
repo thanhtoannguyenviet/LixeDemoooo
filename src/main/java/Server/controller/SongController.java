@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.*;
 import Server.model.DB.*;
+import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class SongController {
     SongDAO songDAO;
     MusicDAO musicDAO;
     SongSingerDAO songSingerDAO;
+    SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -40,26 +42,41 @@ public class SongController {
         SongDTO entity = musicDAO.GetSongDTO(id);
         return new ResponseEntity<>(entity,HttpStatus.ACCEPTED);
     }
-    @RequestMapping(value = "/SelectTop10",
+    @RequestMapping(value = "/GetTop10",
             method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> getTop10 (){
+        try{
         Criteria criteria = new Criteria();
         criteria.setClazz(SongEntity.class);
         criteria.setTop(10);
         //SongDTO entity = musicDAO.GetSongDTO(id);
         return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.ACCEPTED);
+        }
+        catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @RequestMapping(value = "/GetSongPage/{page}",
+    @RequestMapping(value = "/GetAllHasPage/{page}",
             method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+        try{
         Criteria criteria = new Criteria();
         criteria.setClazz(SongEntity.class);
         criteria.setCurrentPage(page-1);
         //SongDTO entity = musicDAO.GetSongDTO(id);
         return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
     }
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
@@ -115,11 +132,18 @@ public class SongController {
             method = RequestMethod.GET, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public ResponseEntity<?> getAccount(){
-        Criteria criteria = new Criteria();
-        criteria.setTop(10);
-        criteria.setClazz(SongEntity.class);
-        return new ResponseEntity<>(SignalDAO.findData(criteria), HttpStatus.OK);
+    public ResponseEntity<?> getSong() {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setTop(10);
+            criteria.setClazz(SongEntity.class);
+            return new ResponseEntity<>(SignalDAO.findData(criteria), HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
+        }
     }
     @RequestMapping(value = "PostSinger/{idSong}",method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -131,4 +155,14 @@ public class SongController {
         songSingerDAO.Save(songSingerEntity);
         return new ResponseEntity<>(songSingerEntity,HttpStatus.OK);
     }
+
+        @RequestMapping(value = "/test2", //
+                method = RequestMethod.GET, //
+                produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+        @ResponseBody
+        public ResponseEntity<?> getSongTest() {
+        SongDAO songDAO = new SongDAO();
+            return new ResponseEntity<>(songDAO.getAll(), HttpStatus.OK);
+        }
+
 }

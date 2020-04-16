@@ -17,9 +17,9 @@ public class DirectorDAO {
         List<DirectorEntity> ls = DBUtil.loadAllData(DirectorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public void Save(DirectorEntity entity){
+    public DirectorEntity Save(DirectorEntity entity){
         Session s = factory.getCurrentSession();
-        DBUtil.addData(entity,s);
+        return DBUtil.addData(entity,s);
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();

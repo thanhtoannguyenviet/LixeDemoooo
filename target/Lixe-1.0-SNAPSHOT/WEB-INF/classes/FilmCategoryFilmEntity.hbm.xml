@@ -1,20 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="Server.model.DB.FilmCategoryFilmEntity" table="Film_CategoryFilm" schema="public"
-           catalog="ProjectMusicFilm">
+    <class name="Server.model.DB.FilmCategoryfilmEntity" table="film_categoryfilm" schema="public" catalog="test12345">
         <id name="id">
             <column name="id" sql-type="bigint"/>
             <generator class="identity"/>
         </id>
         <property name="filmid">
-            <column name="filmid" sql-type="bigint" not-null="true"/>
+            <column name="filmid" sql-type="bigint"/>
         </property>
         <property name="categoryid">
-            <column name="categoryid" sql-type="bigint" not-null="true"/>
+            <column name="categoryid" sql-type="bigint"/>
         </property>
     </class>
 </hibernate-mapping>

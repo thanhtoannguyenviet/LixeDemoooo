@@ -2,8 +2,13 @@ package Server.controller;
 
 import Server.model.DAO.FilmActorDAO;
 import Server.model.DAO.FilmDAO;
+import Server.model.DAO.LogDAO;
+import Server.model.DAO.SignalDAO;
+import Server.model.DB.DirectorEntity;
 import Server.model.DB.FilmActorEntity;
 import Server.model.DB.FilmEntity;
+import Server.model.DB.LogEntity;
+import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class FilmController {
     @Autowired
     FilmDAO filmDAO;
+    SignalDAO signalDAO;
     @Autowired
     FilmActorDAO filmActorDAO;
     @RequestMapping(value = "/Post",
@@ -53,5 +59,36 @@ public class FilmController {
     @ResponseBody
     public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
         return new ResponseEntity<>(filmDAO.GetByID(id),HttpStatus.OK);
+    }
+    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getTop10()
+    {
+        try{
+            Criteria criteria = new Criteria();
+            criteria.setClazz(FilmEntity.class);
+            criteria.setTop(10);
+            return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+        try{
+        Criteria criteria = new Criteria();
+        criteria.setClazz(FilmEntity.class);
+        criteria.setCurrentPage(page);
+        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        }catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
