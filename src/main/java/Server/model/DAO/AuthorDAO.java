@@ -1,7 +1,9 @@
 package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
+import Server.model.DB.AlbumEntity;
 import Server.model.DB.AuthorEntity;
+import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
@@ -48,5 +50,14 @@ public class AuthorDAO {
         } finally {
             s.close();
         }
+    }
+    public long count(){
+        Session s =factory.getCurrentSession();
+        return DBUtil.countData(s, AuthorEntity.class);
+    }
+    public List<AuthorEntity> loadDataPagination(Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<AuthorEntity> ls = DBUtil.loadDataPagination( s,criteria);
+        return Collections.unmodifiableList(ls);
     }
 }

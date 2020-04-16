@@ -20,7 +20,6 @@ public class SongController {
     SongDAO songDAO;
     MusicDAO musicDAO;
     SongSingerDAO songSingerDAO;
-    SignalDAO signalDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -45,19 +44,18 @@ public class SongController {
     @RequestMapping(value = "/GetTop10",
             method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getTop10 (){
-        try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(SongEntity.class);
-        criteria.setTop(10);
-        //SongDTO entity = musicDAO.GetSongDTO(id);
-        return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.ACCEPTED);
+    public  ResponseEntity<?> getTop10 () {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(SongEntity.class);
+            criteria.setTop(10);
+            return new ResponseEntity<>(songDAO.GetTop10(criteria), HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +68,7 @@ public class SongController {
         criteria.setClazz(SongEntity.class);
         criteria.setCurrentPage(page-1);
         //SongDTO entity = musicDAO.GetSongDTO(id);
-        return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(songDAO.loadDataPagination(criteria),HttpStatus.ACCEPTED);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
@@ -128,23 +126,6 @@ public class SongController {
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/test", //
-            method = RequestMethod.GET, //
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    @ResponseBody
-    public ResponseEntity<?> getSong() {
-        try {
-            Criteria criteria = new Criteria();
-            criteria.setTop(10);
-            criteria.setClazz(SongEntity.class);
-            return new ResponseEntity<>(SignalDAO.findData(criteria), HttpStatus.OK);
-        } catch (Exception e) {
-            LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
-            e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
-        }
-    }
     @RequestMapping(value = "PostSinger/{idSong}",method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
@@ -155,14 +136,15 @@ public class SongController {
         songSingerDAO.Save(songSingerEntity);
         return new ResponseEntity<>(songSingerEntity,HttpStatus.OK);
     }
-
-        @RequestMapping(value = "/test2", //
-                method = RequestMethod.GET, //
-                produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+        @RequestMapping(value ="/Count", method = RequestMethod.GET)
         @ResponseBody
-        public ResponseEntity<?> getSongTest() {
-        SongDAO songDAO = new SongDAO();
-            return new ResponseEntity<>(songDAO.getAll(), HttpStatus.OK);
+        public  ResponseEntity<?> count (){
+            try {
+                return new ResponseEntity<>(songDAO.count(), HttpStatus.OK);
+            } catch (Exception e) {
+                new LogDAO().Save(new LogEntity(e));
+                e.printStackTrace();
+                return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            }
         }
-
 }

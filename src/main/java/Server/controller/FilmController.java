@@ -60,7 +60,7 @@ public class FilmController {
     public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
         return new ResponseEntity<>(filmDAO.GetByID(id),HttpStatus.OK);
     }
-    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop10" , method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getTop10()
     {
@@ -68,7 +68,7 @@ public class FilmController {
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
             criteria.setTop(10);
-            return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+            return new ResponseEntity<>(filmDAO.GetTop10(criteria),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
@@ -83,12 +83,23 @@ public class FilmController {
         Criteria criteria = new Criteria();
         criteria.setClazz(FilmEntity.class);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(filmDAO.loadDataPagination(criteria),HttpStatus.OK);
         }catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> count (){
+        try {
+            return new ResponseEntity<>(filmDAO.count(), HttpStatus.OK);
+        } catch (Exception e) {
+            new LogDAO().Save(new LogEntity(e));
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
 }

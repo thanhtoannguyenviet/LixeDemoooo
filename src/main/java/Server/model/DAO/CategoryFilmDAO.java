@@ -1,6 +1,8 @@
 package Server.model.DAO;
 
+import Server.model.DB.AlbumEntity;
 import Server.model.DB.CategoryfilmEntity;
+import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,5 +31,19 @@ public class CategoryFilmDAO {
         Session s = factory.getCurrentSession();
         CategoryfilmEntity entity = DBUtil.GetDataByID(id,CategoryfilmEntity.class,s);
         return entity;
+    }
+    public long count(){
+        Session s =factory.getCurrentSession();
+        return DBUtil.countData(s, CategoryfilmEntity.class);
+    }
+    public List<CategoryfilmEntity> loadDataPagination(Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<CategoryfilmEntity> ls = DBUtil.loadDataPagination( s,criteria);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<CategoryfilmEntity> GetTop10(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<CategoryfilmEntity> ls = DBUtil.GetTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
     }
 }

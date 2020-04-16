@@ -1,7 +1,10 @@
 package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
+import Server.model.DB.AlbumEntity;
+import Server.model.DB.SingerEntity;
 import Server.model.DB.SongEntity;
+import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
@@ -48,5 +51,19 @@ public class SongDAO {
         } finally {
             s.close();
         }
+    }
+    public List<SongEntity> loadDataPagination(Server.model.DTO.Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<SongEntity> ls = DBUtil.loadDataPagination( s,criteria);
+        return Collections.unmodifiableList(ls);
+    }
+    public long count(){
+        Session s = factory.getCurrentSession();
+        return DBUtil.countDataWithCondition(s,SongEntity.class);
+    }
+    public List<SongEntity> GetTop10(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<SongEntity> ls = DBUtil.GetTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
     }
 }

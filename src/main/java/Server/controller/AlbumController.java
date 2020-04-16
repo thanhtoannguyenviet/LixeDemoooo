@@ -45,7 +45,7 @@ public class AlbumController {
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         return new ResponseEntity<>(albumDAO.GetByID(id),HttpStatus.OK);
     }
-    @RequestMapping(value = "/Delete/",
+    @RequestMapping(value = "/Delete",
             method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody AlbumEntity entity){
@@ -86,10 +86,10 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
         albumCategoryMusicDAO.Delete(id);
         return new ResponseEntity<>("Update Completed",HttpStatus.OK);
     }
-    @RequestMapping(value ="/Count/{id}", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> count (@PathVariable("id") Long id){
-        return new ResponseEntity<>(HttpStatus.OK);
+    public  ResponseEntity<?> count (){
+        return new ResponseEntity<>(albumDAO.count(),HttpStatus.OK);
     }
     @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
     @ResponseBody
@@ -98,7 +98,7 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
         Criteria criteria = new Criteria();
         criteria.setClazz(AlbumEntity.class);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(albumDAO.loadDataPagination(criteria),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
@@ -106,14 +106,14 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop10/", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetTop10", method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> getTop (){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(AlbumEntity.class);
         criteria.setTop(10);
-        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(albumDAO.GetTop10(criteria),HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);

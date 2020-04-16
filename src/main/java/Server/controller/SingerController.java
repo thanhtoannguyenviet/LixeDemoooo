@@ -62,7 +62,7 @@ public class SingerController {
         SingerDTO singerDTO = new SingerDTO(singerEntity,lsSongDTO);
         return  new ResponseEntity<>(singerDTO,HttpStatus.OK);
     }
-    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop10" , method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getTop10()
     {
@@ -70,7 +70,7 @@ public class SingerController {
         Criteria criteria = new Criteria();
         criteria.setClazz(SingerEntity.class);
         criteria.setTop(10);
-        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(singerDAO.GetTop10(criteria),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
@@ -85,7 +85,7 @@ public class SingerController {
         Criteria criteria = new Criteria();
         criteria.setClazz(SingerEntity.class);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(singerDAO.loadDataPagination(criteria),HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
@@ -94,4 +94,16 @@ public class SingerController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
+    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> count (){
+        try {
+            return new ResponseEntity<>(singerDAO.count(), HttpStatus.OK);
+        } catch (Exception e) {
+            new LogDAO().Save(new LogEntity(e));
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

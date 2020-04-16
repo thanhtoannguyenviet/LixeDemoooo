@@ -1,6 +1,8 @@
 package Server.model.DAO;
 
+import Server.model.DB.CategorysongEntity;
 import Server.model.DB.DirectorEntity;
+import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,4 +32,14 @@ public class DirectorDAO {
         DirectorEntity entity = DBUtil.GetDataByID(id,DirectorEntity.class,s);
         return entity;
     }
+    public long count(){
+        Session s =factory.getCurrentSession();
+        return DBUtil.countData(s, DirectorEntity.class);
+    }
+    public List<DirectorEntity> loadDataPagination(Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<DirectorEntity> ls = DBUtil.loadDataPagination( s,criteria);
+        return Collections.unmodifiableList(ls);
+    }
+
 }

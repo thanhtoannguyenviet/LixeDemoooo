@@ -23,7 +23,7 @@ public class AlbumCategoryMusicDAO {
     }
     public void Delete(Long id){
         Session s= factory.getCurrentSession();
-        DBUtil.deleteData(id,AlbumCategorymusicEntity.class);
+        DBUtil.deleteData(id,AlbumCategorymusicEntity.class,s);
     }
     public AlbumCategorymusicEntity GetByID(Long id){
         Session s = factory.getCurrentSession();

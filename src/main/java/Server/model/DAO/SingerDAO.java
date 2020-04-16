@@ -1,6 +1,8 @@
 package Server.model.DAO;
 
+import Server.model.DB.SerifilmEntity;
 import Server.model.DB.SingerEntity;
+import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,4 +32,19 @@ public class SingerDAO {
         SingerEntity entity = DBUtil.GetDataByID(id,SingerEntity.class,s);
         return entity;
     }
+    public List<SingerEntity> loadDataPagination(Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<SingerEntity> ls = DBUtil.loadDataPagination( s,criteria);
+        return Collections.unmodifiableList(ls);
+    }
+    public long count(){
+        Session s = factory.getCurrentSession();
+        return DBUtil.countDataWithCondition(s,SingerEntity.class);
+    }
+    public List<SingerEntity> GetTop10(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<SingerEntity> ls = DBUtil.GetTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
 }
+

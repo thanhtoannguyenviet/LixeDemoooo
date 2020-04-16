@@ -1,6 +1,7 @@
 package Server.model.DAO;
 
 import Server.model.DB.ActorEntity;
+import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,4 +31,18 @@ public class ActorDAO {
         ActorEntity entity = DBUtil.GetDataByID(id,ActorEntity.class,s);
         return entity;
     }
+    public List<ActorEntity> loadDataPagination(Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<ActorEntity> ls = DBUtil.loadDataPagination( s,criteria);
+            return Collections.unmodifiableList(ls);
+    }
+    public long count(){
+        Session s = factory.getCurrentSession();
+        return DBUtil.countData(s,ActorEntity.class);
+    }
+//    public List<ActorEntity> GetTop10(Criteria criteria){
+//        Session s = factory.getCurrentSession();
+//        List<ActorEntity> ls = DBUtil.GetTop10(criteria,s);
+//        return Collections.unmodifiableList(ls);
+//    }
 }

@@ -45,13 +45,6 @@ public class AuthorController {
         return new ResponseEntity<>(authorDAO.getAll(),HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/Count",
-            method = RequestMethod.GET
-    )
-    @ResponseBody
-    public ResponseEntity<?> count (){
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
@@ -76,7 +69,7 @@ public class AuthorController {
             Criteria criteria = new Criteria();
             criteria.setClazz(AuthorEntity.class);
             criteria.setCurrentPage(page);
-            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+            return new ResponseEntity<>(authorDAO.loadDataPagination(criteria), HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
@@ -84,14 +77,11 @@ public class AuthorController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop10/", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getTop (){
+    public  ResponseEntity<?> count (){
         try {
-            Criteria criteria = new Criteria();
-            criteria.setClazz(AuthorEntity.class);
-            criteria.setTop(10);
-            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+            return new ResponseEntity<>(authorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);

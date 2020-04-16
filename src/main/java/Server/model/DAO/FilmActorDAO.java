@@ -30,4 +30,5 @@ public class FilmActorDAO {
         FilmActorEntity entity = DBUtil.GetDataByID(id,FilmActorEntity.class,s);
         return entity;
     }
+
 }

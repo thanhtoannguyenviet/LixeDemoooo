@@ -78,7 +78,7 @@ public class CategoryFilmController {
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
             criteria.setCurrentPage(page);
-            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
+            return new ResponseEntity<>(categoryFilmDAO.loadDataPagination(criteria), HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
@@ -94,11 +94,22 @@ public class CategoryFilmController {
         Criteria criteria = new Criteria();
         criteria.setClazz(CategoryfilmEntity.class);
         criteria.setTop(10);
-        return new ResponseEntity<>(signalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(categoryFilmDAO.GetTop10(criteria),HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).Save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> count (){
+        try {
+            return new ResponseEntity<>(categoryFilmDAO.count(), HttpStatus.OK);
+        } catch (Exception e) {
+            new LogDAO().Save(new LogEntity(e));
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }

@@ -86,19 +86,20 @@ public class ActorController {
         filmActorDAO.Delete(id);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }
-    @RequestMapping(value ="/GetTop10/", method = RequestMethod.GET)
-    @ResponseBody
-    public  ResponseEntity<?> getTop10 () {
-        try {
-            Criteria criteria = new Criteria();
-            criteria.setClazz(ActorEntity.class);
-            return new ResponseEntity<>(signalDAO.findData(criteria), HttpStatus.OK);
-        } catch (Exception e) {
-            LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
-            e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
-        }
+@RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+@ResponseBody
+public  ResponseEntity<?> getTop10 (@PathVariable("page") int page) {
+    try {
+        Criteria criteria = new Criteria();
+        criteria.setClazz(ActorEntity.class);
+        criteria.setCurrentPage(page);
+        return new ResponseEntity<>(actorDAO.loadDataPagination(criteria), HttpStatus.OK);
+    } catch (Exception e) {
+        LogEntity log = new LogEntity(e);
+        (new LogDAO()).Save(log);
+        e.printStackTrace();
+        return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
     }
+}
 }
 
