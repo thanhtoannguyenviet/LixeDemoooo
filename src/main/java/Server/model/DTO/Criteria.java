@@ -1,5 +1,7 @@
 package Server.model.DTO;
 
+import java.util.Date;
+
 public class Criteria {
 
     private boolean ascending;
@@ -9,8 +11,13 @@ public class Criteria {
     private long categoryId = -1;
     private int top = -1;
     private Class clazz;
+    private Date startDate; // Ngày bắt đầu dùng để láy ngày bắt đầu theo một số trường hợp
+    private Date endDate; // Ngày kết thúc dùng để láy ngày bắt đầu theo một số trường hợp
 
-    public Criteria(boolean ascending, int itemPerPage, String keyword, int currentPage, long categoryId, int top, Class clazz) {
+    public Criteria() {
+    }
+
+    public Criteria(boolean ascending, int itemPerPage, String keyword, int currentPage, long categoryId, int top, Class clazz, Date startDate, Date endDate) {
         this.ascending = ascending;
         this.itemPerPage = itemPerPage;
         this.keyword = keyword;
@@ -18,9 +25,8 @@ public class Criteria {
         this.categoryId = categoryId;
         this.top = top;
         this.clazz = clazz;
-    }
-
-    public Criteria() {
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public boolean isAscending() {
@@ -77,5 +83,21 @@ public class Criteria {
 
     public void setClazz(Class clazz) {
         this.clazz = clazz;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

@@ -13,12 +13,11 @@ public class SongDTO {
     private List<SingerEntity> singerEntityList = new ArrayList<>();
     private List<UploadEntity> uploadEntityList = new ArrayList<>();
     private List<CategorysongEntity> categorySongEntityList = new ArrayList<>();
-    private List<CommentEntity> commentEntityList = new ArrayList<>();
-    private Criteria criteria = new Criteria();
 
     public SongDTO() {
     }
-    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorysongEntity> categorySongEntityList, List<CommentEntity> commentEntityList) {
+
+    public SongDTO(SongEntity songEntity, AlbumEntity albumEntity, AuthorEntity authorEntity, ImageEntity imageEntity, List<SingerEntity> singerEntityList, List<UploadEntity> uploadEntityList, List<CategorysongEntity> categorySongEntityList) {
         this.songEntity = songEntity;
         this.albumEntity = albumEntity;
         this.authorEntity = authorEntity;
@@ -26,7 +25,6 @@ public class SongDTO {
         this.singerEntityList = singerEntityList;
         this.uploadEntityList = uploadEntityList;
         this.categorySongEntityList = categorySongEntityList;
-        this.commentEntityList = commentEntityList;
     }
 
 
@@ -38,9 +36,8 @@ public class SongDTO {
         this.singerEntityList = singerEntityList;
         this.uploadEntityList = uploadEntityList;
         this.categorySongEntityList = categorySongEntityList;
-        this.commentEntityList = commentEntityList;
-        this.criteria = criteria;
     }
+
     public AlbumEntity getAlbumEntity() {
         return albumEntity;
     }
@@ -48,6 +45,7 @@ public class SongDTO {
     public void setAlbumEntity(AlbumEntity albumEntity) {
         this.albumEntity = albumEntity;
     }
+
     public SongEntity getSongEntity() {
         return songEntity;
     }
@@ -96,19 +94,4 @@ public class SongDTO {
         this.categorySongEntityList = categorySongEntityList;
     }
 
-    public List<CommentEntity> getCommentEntityList() {
-        return commentEntityList;
-    }
-
-    public void setCommentEntityList(List<CommentEntity> commentEntityList) {
-        this.commentEntityList = commentEntityList;
-    }
-
-    public Criteria getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(Criteria criteria) {
-        this.criteria = criteria;
-    }
 }

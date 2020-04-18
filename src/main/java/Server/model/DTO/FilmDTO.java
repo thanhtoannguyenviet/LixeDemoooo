@@ -13,13 +13,11 @@ public class FilmDTO {
     private List<UploadEntity> uploadEntityList = new ArrayList<>();
     private List<CategoryfilmEntity> categoryFilmEntityList = new ArrayList<>();
     private SerifilmEntity seriCategoryFilmEntity = new SerifilmEntity();
-    private List<CommentEntity> commentEntityList = new ArrayList<>();
-    private Criteria criteria = new Criteria();
 
     public FilmDTO() {
     }
 
-    public FilmDTO(FilmEntity filmEntity, DirectorEntity directorEntity, List<ActorEntity> actorEntityList, List<ImageEntity> imageEntity, List<UploadEntity> uploadEntityList, List<CategoryfilmEntity> categoryFilmEntityList, SerifilmEntity seriCategoryFilmEntity, List<CommentEntity> commentEntityList, Criteria criteria) {
+    public FilmDTO(FilmEntity filmEntity, DirectorEntity directorEntity, List<ActorEntity> actorEntityList, List<ImageEntity> imageEntity, List<UploadEntity> uploadEntityList, List<CategoryfilmEntity> categoryFilmEntityList, SerifilmEntity seriCategoryFilmEntity) {
         this.filmEntity = filmEntity;
         this.directorEntity = directorEntity;
         this.actorEntityList = actorEntityList;
@@ -27,8 +25,6 @@ public class FilmDTO {
         this.uploadEntityList = uploadEntityList;
         this.categoryFilmEntityList = categoryFilmEntityList;
         this.seriCategoryFilmEntity = seriCategoryFilmEntity;
-        this.commentEntityList = commentEntityList;
-        this.criteria = criteria;
     }
 
     public FilmEntity getFilmEntity() {
@@ -87,19 +83,4 @@ public class FilmDTO {
         this.seriCategoryFilmEntity = seriCategoryFilmEntity;
     }
 
-    public List<CommentEntity> getCommentEntityList() {
-        return commentEntityList;
-    }
-
-    public void setCommentEntityList(List<CommentEntity> commentEntityList) {
-        this.commentEntityList = commentEntityList;
-    }
-
-    public Criteria getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(Criteria criteria) {
-        this.criteria = criteria;
-    }
 }

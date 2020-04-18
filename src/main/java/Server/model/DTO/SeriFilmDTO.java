@@ -1,6 +1,6 @@
 package Server.model.DTO;
 
-import Server.model.DB.*;
+import Server.model.DB.SerifilmEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 public class SeriFilmDTO {
     private SerifilmEntity seriFilmEntity = new SerifilmEntity();
     private List<FilmDTO> filmDTOList = new ArrayList<>();
-    private Criteria criteria = new Criteria();
-    public SeriFilmDTO(){}
 
-    public SeriFilmDTO(SerifilmEntity seriFilmEntity, List<FilmDTO> filmDTOList, Criteria criteria) {
+    public SeriFilmDTO() {
+    }
+
+    public SeriFilmDTO(SerifilmEntity seriFilmEntity, List<FilmDTO> filmDTOList) {
         this.seriFilmEntity = seriFilmEntity;
         this.filmDTOList = filmDTOList;
-        this.criteria = criteria;
     }
 
     public SerifilmEntity getSeriFilmEntity() {
@@ -33,11 +33,4 @@ public class SeriFilmDTO {
         this.filmDTOList = filmDTOList;
     }
 
-    public Criteria getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(Criteria criteria) {
-        this.criteria = criteria;
-    }
 }

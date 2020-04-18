@@ -1,6 +1,8 @@
 package Server.model.DTO;
 
-import Server.model.DB.*;
+import Server.model.DB.AlbumEntity;
+import Server.model.DB.SingerEntity;
+import Server.model.DB.SongEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +10,15 @@ import java.util.List;
 public class AlbumDTO {
     private AlbumEntity albumEntity = new AlbumEntity();
     private List<SongEntity> songDTOList = new ArrayList<>();
-     private List<SingerEntity> singerEntity = new ArrayList<>();
-    private Criteria criteria = new Criteria();
-    public  AlbumDTO(){}
+    private List<SingerEntity> singerEntity = new ArrayList<>();
 
-    public AlbumDTO(AlbumEntity albumEntity, List<SongEntity> songDTOList, List<SingerEntity> singerEntity, Criteria criteria) {
+    public AlbumDTO() {
+    }
+
+    public AlbumDTO(AlbumEntity albumEntity, List<SongEntity> songDTOList, List<SingerEntity> singerEntity) {
         this.albumEntity = albumEntity;
         this.songDTOList = songDTOList;
-       this.singerEntity = singerEntity;
-        this.criteria = criteria;
+        this.singerEntity = singerEntity;
     }
 
     public AlbumEntity getAlbumEntity() {
@@ -43,11 +45,4 @@ public class AlbumDTO {
         this.singerEntity = singerEntity;
     }
 
-    public Criteria getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(Criteria criteria) {
-        this.criteria = criteria;
-    }
 }

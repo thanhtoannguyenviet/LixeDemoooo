@@ -1,6 +1,8 @@
 package Server.model.DTO;
 
-import Server.model.DB.*;
+import Server.model.DB.ImageEntity;
+import Server.model.DB.RoleEntity;
+import Server.model.DB.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +11,14 @@ public class UserDTO {
     private UserEntity userEntity = new UserEntity();
     private RoleEntity roleEntity = new RoleEntity();
     private List<ImageEntity> imageEntity = new ArrayList<>();
-    private Criteria criteria = new Criteria();
 
-    public UserDTO(){
+    public UserDTO() {
     }
 
-    public UserDTO(UserEntity userEntity, RoleEntity roleEntity, List<ImageEntity> imageEntity, Criteria criteria) {
+    public UserDTO(UserEntity userEntity, RoleEntity roleEntity, List<ImageEntity> imageEntity) {
         this.userEntity = userEntity;
         this.roleEntity = roleEntity;
         this.imageEntity = imageEntity;
-        this.criteria = criteria;
     }
 
     public UserEntity getUserEntity() {
@@ -46,11 +46,4 @@ public class UserDTO {
         this.imageEntity = imageEntity;
     }
 
-    public Criteria getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(Criteria criteria) {
-        this.criteria = criteria;
-    }
 }
