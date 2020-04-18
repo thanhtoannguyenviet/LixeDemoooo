@@ -23,12 +23,12 @@ public class AlbumController {
     AlbumCategoryMusicDAO albumCategoryMusicDAO;
     SongSingerDAO songSingerDAO;
     SingerDAO singerDAO;
-    SignalDAO signalDAO;
+    AlbumSingerDAO albumSingerDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody AlbumEntity entity){
-       albumDAO.Save(entity);
+       albumDAO.save(entity);
        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/Put/{id}",
@@ -36,23 +36,23 @@ public class AlbumController {
     @ResponseBody
     public ResponseEntity<?> put(@RequestBody AlbumEntity entity,@PathVariable("id") long id){
         if(id==entity.getId())
-       albumDAO.Save(entity);
+       albumDAO.save(entity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
-        return new ResponseEntity<>(albumDAO.GetByID(id),HttpStatus.OK);
+        return new ResponseEntity<>(albumDAO.getByID(id),HttpStatus.OK);
     }
     @RequestMapping(value = "/Delete",
             method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody AlbumEntity entity){
-        albumDAO.Delete(entity.getId());
-        List<AlbumCategorymusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.GetId("albumid",entity.getId()+"");
+        albumDAO.delete(entity.getId());
+        List<AlbumCategorymusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.getId("albumid",entity.getId()+"");
         for(AlbumCategorymusicEntity item : albumCategoryMusicEntity){
-            albumCategoryMusicDAO.Delete(item.getId());
+            albumCategoryMusicDAO.delete(item.getId());
         }
         return new ResponseEntity<>("Delete completed",HttpStatus.OK);
     }
@@ -77,13 +77,13 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
     AlbumCategorymusicEntity albumCategorymusicEntity = new AlbumCategorymusicEntity();
     albumCategorymusicEntity.setAlbumid(entity.getId());
     albumCategorymusicEntity.setCatagoryid(id);
-    albumCategoryMusicDAO.Save(albumCategorymusicEntity);
+    albumCategoryMusicDAO.save(albumCategorymusicEntity);
     return new ResponseEntity<>("Update Completed",HttpStatus.OK);
 }
     @RequestMapping(value ="/DeleteToCategory/{idCategoryMusic}",method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?>updateToCategoryMusic(@PathVariable("idCategoryMusic") Long id){
-        albumCategoryMusicDAO.Delete(id);
+        albumCategoryMusicDAO.delete(id);
         return new ResponseEntity<>("Update Completed",HttpStatus.OK);
     }
     @RequestMapping(value ="/Count", method = RequestMethod.GET)
@@ -91,35 +91,58 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
     public  ResponseEntity<?> count (){
         return new ResponseEntity<>(albumDAO.count(),HttpStatus.OK);
     }
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnpage}/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnpage") int itemOnpage){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(AlbumEntity.class);
+        criteria.setItemPerPage(itemOnpage);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(albumDAO.loadDataPagination(criteria),HttpStatus.OK);
+        List<AlbumEntity> albumEntityList = albumDAO.loadDataPagination(criteria);
+        List<AlbumDTO> albumDTOList = new ArrayList<>();
+            for ( AlbumEntity a : albumEntityList
+                 ) {
+                albumDTOList.add(getAlbumDTO(a));
+            }
+        return new ResponseEntity<>(albumDTOList,HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop10", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetTop{item}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getTop (){
+    public  ResponseEntity<?> getTop (@PathVariable("item") int item){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(AlbumEntity.class);
-        criteria.setTop(10);
-        return new ResponseEntity<>(albumDAO.GetTop10(criteria),HttpStatus.OK);
+        criteria.setTop(item);
+        return new ResponseEntity<>(albumDAO.getTop10(criteria),HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
+    }
+    private AlbumDTO getAlbumDTO(AlbumEntity albumEntity){
+        String[] lsSong = albumEntity.getListsongid().split(",");
+        List<SongEntity> songEntityList = new ArrayList<>();
+        for ( String item : lsSong) {
+            if(!item.isEmpty()&&!item.isBlank()){
+                songEntityList.add(songDAO.getByID(Long.parseLong(item)));
+            }
+        }
+        List<SingerEntity> singerEntityList = new ArrayList<>();
+        List<AlbumSingerEntity> albumSingerEntityList = albumSingerDAO.getId("albumid",albumEntity.getId()+"");
+        for(AlbumSingerEntity item : albumSingerEntityList){
+            singerEntityList.add(singerDAO.getByID(item.getSingerid()));
+        }
+        AlbumDTO albumDTO = new AlbumDTO(albumEntity,songEntityList,singerEntityList);
+        return albumDTO;
     }
 }

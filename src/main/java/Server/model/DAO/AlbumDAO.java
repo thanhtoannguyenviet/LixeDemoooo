@@ -19,17 +19,17 @@ public class AlbumDAO {
         List<AlbumEntity> ls = DBUtil.loadAllData(AlbumEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public AlbumEntity Save(AlbumEntity entity){
+    public AlbumEntity save(AlbumEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,AlbumEntity.class,s);
     }
-    public AlbumEntity GetByID(Long id){
+    public AlbumEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        AlbumEntity entity = DBUtil.GetDataByID(id,AlbumEntity.class,s);
+        AlbumEntity entity = DBUtil.getDataByID(id,AlbumEntity.class,s);
         return entity;
     }
     public long count(){
@@ -41,9 +41,20 @@ public class AlbumDAO {
         List<AlbumEntity> ls = DBUtil.loadDataPagination( s,criteria);
         return Collections.unmodifiableList(ls);
     }
-    public List<AlbumEntity> GetTop10(Criteria criteria){
+    public List<AlbumEntity> getTop10(Criteria criteria){
         Session s = factory.getCurrentSession();
-        List<AlbumEntity> ls = DBUtil.GetTop10(criteria,s);
+        List<AlbumEntity> ls = DBUtil.getTop10(criteria,s);
         return Collections.unmodifiableList(ls);
     }
+    public List<AlbumEntity> getTopRandom(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<AlbumEntity> ls = DBUtil.getTopRandom(criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<AlbumEntity> getTopNew(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<AlbumEntity> ls = DBUtil.getTop10New("datereleased",criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+
 }

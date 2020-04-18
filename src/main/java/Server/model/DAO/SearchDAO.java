@@ -27,7 +27,7 @@ public class SearchDAO {
     }
     public SearchEntity GetByID(int id){
         Session s = factory.getCurrentSession();
-        SearchEntity entity = DBUtil.GetDataByID(id,SearchEntity.class,s);
+        SearchEntity entity = DBUtil.getDataByID(id,SearchEntity.class,s);
         return entity;
     }
 }

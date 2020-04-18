@@ -20,16 +20,16 @@ public class SeriCategoryController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SeriCategoryfilmEntity entity){
-        seriCategoryFilmDAO.Save(entity);
+        seriCategoryFilmDAO.save(entity);
        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> update (@RequestBody SeriCategoryfilmEntity entity, @PathVariable("id") Long id){
-        if(seriCategoryFilmDAO.GetByID(id)!=null)
+        if(seriCategoryFilmDAO.getByID(id)!=null)
         {
-            seriCategoryFilmDAO.Save(entity);
+            seriCategoryFilmDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -39,8 +39,8 @@ public class SeriCategoryController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(seriCategoryFilmDAO.GetByID(id)!=null){
-            seriCategoryFilmDAO.Delete(id);
+        if(seriCategoryFilmDAO.getByID(id)!=null){
+            seriCategoryFilmDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);

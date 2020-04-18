@@ -17,17 +17,17 @@ public class RoleDAO {
         List<RoleEntity> ls = DBUtil.loadAllData(RoleEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public RoleEntity Save(RoleEntity entity){
+    public RoleEntity save(RoleEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(int id){
+    public void delete(int id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,RoleEntity.class,s);
     }
-    public RoleEntity GetByID(Long id){
+    public RoleEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        RoleEntity entity = DBUtil.GetDataByID(id,RoleEntity.class,s);
+        RoleEntity entity = DBUtil.getDataByID(id,RoleEntity.class,s);
         return entity;
     }
 }

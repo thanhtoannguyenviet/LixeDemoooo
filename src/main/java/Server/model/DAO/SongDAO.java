@@ -20,38 +20,38 @@ public class SongDAO {
         List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public SongEntity Save(SongEntity entity){
+    public SongEntity save(SongEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(long id){
+    public void delete(long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,SongEntity.class,s);
     }
-    public SongEntity GetByID(long id){
+    public SongEntity getByID(long id){
         Session s = factory.getCurrentSession();
-        SongEntity entity = DBUtil.GetDataByID(id,SongEntity.class,s);
+        SongEntity entity = DBUtil.getDataByID(id,SongEntity.class,s);
         return entity;
     }
-    public long GetId(String conditionColumn,String condition ){
-
-        Session s = factory.getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        try {
-            //sql = select * from User_ where userName = '?'
-            String sql = CUSTOM_QUERY.sqlGetId("Song",conditionColumn,condition);
-            SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(SongEntity.class);
-            SongEntity entity =(SongEntity) q.uniqueResult() ;
-            return entity.getId();
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            ex.printStackTrace();
-            return 0;
-        } finally {
-            s.close();
-        }
-    }
+//    public long GetId(String conditionColumn,String condition ){
+//
+//        Session s = factory.getCurrentSession();
+//        Transaction tx = s.beginTransaction();
+//        try {
+//            //sql = select * from User_ where userName = '?'
+//            String sql = CUSTOM_QUERY.sqlGetId("Song",conditionColumn,condition);
+//            SQLQuery q = s.createSQLQuery(sql);
+//            q.addEntity(SongEntity.class);
+//            SongEntity entity =(SongEntity) q.uniqueResult() ;
+//            return entity.getId();
+//        }catch (HibernateException ex) {
+//            if (tx != null) tx.rollback();
+//            ex.printStackTrace();
+//            return 0;
+//        } finally {
+//            s.close();
+//        }
+//    }
     public List<SongEntity> loadDataPagination(Server.model.DTO.Criteria criteria) {
         Session s = factory.getCurrentSession();
         List<SongEntity> ls = DBUtil.loadDataPagination( s,criteria);
@@ -61,9 +61,14 @@ public class SongDAO {
         Session s = factory.getCurrentSession();
         return DBUtil.countDataWithCondition(s,SongEntity.class);
     }
-    public List<SongEntity> GetTop10(Criteria criteria){
+    public List<SongEntity> getTop10(Criteria criteria){
         Session s = factory.getCurrentSession();
-        List<SongEntity> ls = DBUtil.GetTop10(criteria,s);
+        List<SongEntity> ls = DBUtil.getTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<SongEntity> getTop10New(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<SongEntity> ls = DBUtil.getTop10New("modifieddate",criteria,s);
         return Collections.unmodifiableList(ls);
     }
 }

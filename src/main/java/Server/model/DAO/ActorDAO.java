@@ -18,17 +18,17 @@ public class ActorDAO {
         List<ActorEntity> ls = DBUtil.loadAllData(ActorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public ActorEntity Save(ActorEntity entity){
+    public ActorEntity save(ActorEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,ActorEntity.class,s);
     }
-    public ActorEntity GetByID(Long id){
+    public ActorEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        ActorEntity entity = DBUtil.GetDataByID(id,ActorEntity.class,s);
+        ActorEntity entity = DBUtil.getDataByID(id,ActorEntity.class,s);
         return entity;
     }
     public List<ActorEntity> loadDataPagination(Criteria criteria) {
@@ -36,13 +36,13 @@ public class ActorDAO {
         List<ActorEntity> ls = DBUtil.loadDataPagination( s,criteria);
             return Collections.unmodifiableList(ls);
     }
+    public List<ActorEntity> loadTopRandom(Criteria criteria) {
+        Session s = factory.getCurrentSession();
+        List<ActorEntity> ls = DBUtil.getTopRandom(criteria, s);
+        return Collections.unmodifiableList(ls);
+    }
     public long count(){
         Session s = factory.getCurrentSession();
         return DBUtil.countData(s,ActorEntity.class);
     }
-//    public List<ActorEntity> GetTop10(Criteria criteria){
-//        Session s = factory.getCurrentSession();
-//        List<ActorEntity> ls = DBUtil.GetTop10(criteria,s);
-//        return Collections.unmodifiableList(ls);
-//    }
 }

@@ -1,5 +1,6 @@
 package Server.model.DAO;
 
+import Server.model.DB.ImageEntity;
 import Server.model.DB.UploadEntity;
 import Server.service.DBUtil;
 import org.hibernate.Session;
@@ -17,17 +18,22 @@ public class UploadDAO {
         List<UploadEntity> ls = DBUtil.loadAllData(UploadEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public UploadEntity Save(UploadEntity entity){
+    public UploadEntity save(UploadEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,UploadEntity.class,s);
     }
-    public UploadEntity GetByID(Long id){
+    public UploadEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        UploadEntity entity = DBUtil.GetDataByID(id,UploadEntity.class,s);
+        UploadEntity entity = DBUtil.getDataByID(id,UploadEntity.class,s);
         return entity;
+    }
+    public List<UploadEntity> getId(String model, long entryId ){
+        Session s = factory.getCurrentSession();
+        List<UploadEntity> ls = DBUtil.getImageOrResource("Upload",model,entryId,UploadEntity.class,s);
+        return Collections.unmodifiableList(ls);
     }
 }

@@ -17,34 +17,22 @@ public class AlbumCategoryMusicDAO {
         List<AlbumCategorymusicEntity> ls = DBUtil.loadAllData(AlbumCategorymusicEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public AlbumCategorymusicEntity Save(AlbumCategorymusicEntity entity){
+    public AlbumCategorymusicEntity save(AlbumCategorymusicEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,AlbumCategorymusicEntity.class,s);
     }
-    public AlbumCategorymusicEntity GetByID(Long id){
+    public AlbumCategorymusicEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        AlbumCategorymusicEntity entity = DBUtil.GetDataByID(id,AlbumCategorymusicEntity.class,s);
+        AlbumCategorymusicEntity entity = DBUtil.getDataByID(id,AlbumCategorymusicEntity.class,s);
         return entity;
     }
-    public List<AlbumCategorymusicEntity> GetId(String conditionColumn,String condition ){
-
+    public List<AlbumCategorymusicEntity> getId(String conditionColumn,String condition ){
         Session s = factory.getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        try {
-            String sql = CUSTOM_QUERY.sqlGetId("album_categorymusic",conditionColumn,condition);
-            SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(AlbumCategorymusicEntity.class);
-            return q.getResultList();
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            ex.printStackTrace();
-            return null;
-        } finally {
-            s.close();
-        }
+        List<AlbumCategorymusicEntity> entity = DBUtil.getListHasCondition("album_categorymusic",conditionColumn,condition,AlbumCategorymusicEntity.class,s);
+        return Collections.unmodifiableList(entity);
     }
 }

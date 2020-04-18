@@ -17,7 +17,7 @@ public class LogController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody LogEntity logEntity){
-        logDAO.Save(logEntity);
+        logDAO.save(logEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
 }

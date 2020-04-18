@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorController {
     @Autowired
     AuthorDAO authorDAO;
-    SignalDAO signalDAO;
+
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody AuthorEntity entity){
-        entity =authorDAO.Save(entity);
+        entity =authorDAO.save(entity);
         return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
     }
     @RequestMapping(value = "/Delete/{id}",
@@ -30,8 +30,8 @@ public class AuthorController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(authorDAO.GetByID(id)!=null){
-            authorDAO.Delete(id);
+        if(authorDAO.getByID(id)!=null){
+            authorDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
@@ -51,7 +51,7 @@ public class AuthorController {
     public  ResponseEntity<?> updateActor (@RequestBody AuthorEntity actor, @PathVariable("id") Long id){
         if(id==actor.getId())
         {
-            authorDAO.Save(actor);
+            authorDAO.save(actor);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -60,7 +60,7 @@ public class AuthorController {
             method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
-        return new ResponseEntity<>(authorDAO.GetByID(id),HttpStatus.OK);
+        return new ResponseEntity<>(authorDAO.getByID(id),HttpStatus.OK);
     }
     @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
     @ResponseBody
@@ -72,7 +72,7 @@ public class AuthorController {
             return new ResponseEntity<>(authorDAO.loadDataPagination(criteria), HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
@@ -84,7 +84,7 @@ public class AuthorController {
             return new ResponseEntity<>(authorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }

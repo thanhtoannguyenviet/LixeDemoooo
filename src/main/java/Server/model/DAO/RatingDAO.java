@@ -17,17 +17,17 @@ public class RatingDAO {
         List<RatingEntity> ls = DBUtil.loadAllData(RatingEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public RatingEntity Save(RatingEntity entity){
+    public RatingEntity save(RatingEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(long id){
+    public void delete(long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,RatingEntity.class,s);
     }
-    public RatingEntity GetByID(long id){
+    public RatingEntity getByID(long id){
         Session s = factory.getCurrentSession();
-        RatingEntity entity = DBUtil.GetDataByID(id,RatingEntity.class,s);
+        RatingEntity entity = DBUtil.getDataByID(id,RatingEntity.class,s);
         return entity;
     }
 }

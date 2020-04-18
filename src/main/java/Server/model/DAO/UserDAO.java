@@ -23,7 +23,7 @@ public class UserDAO {
         for (UserEntity userEntity: ls
         ) {
             s = factory.getCurrentSession();
-            RoleEntity role = DBUtil.GetDataByID(userEntity.getRoleid(),RoleEntity.class,s);
+            RoleEntity role = DBUtil.getDataByID(userEntity.getRoleid(),RoleEntity.class,s);
             UserDTO user = new UserDTO();
             user.setRoleEntity(role);
             user.setUserEntity(userEntity);
@@ -79,13 +79,13 @@ public class UserDAO {
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,UserEntity.class,s);
     }
-    public UserEntity GetByID(Long id){
+    public UserEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        UserEntity entity = DBUtil.GetDataByID(id,UserEntity.class,s);
+        UserEntity entity = DBUtil.getDataByID(id,UserEntity.class,s);
         return entity;
     }
 
-    public  UserEntity GetUserByUsername(String userName){
+    public  UserEntity getUserByUsername(String userName){
         Session s = factory.getCurrentSession();
         Transaction tx = s.beginTransaction();
         try {
@@ -111,7 +111,7 @@ public class UserDAO {
         List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, null);
         for (UserEntity userEntity: ls) {
             s = factory.getCurrentSession();
-            RoleEntity role = DBUtil.GetDataByID(userEntity.getRoleid(),RoleEntity.class,s);
+            RoleEntity role = DBUtil.getDataByID(userEntity.getRoleid(),RoleEntity.class,s);
             UserDTO user = new UserDTO();
             user.setRoleEntity(role);
             user.setUserEntity(userEntity);
@@ -136,7 +136,7 @@ public class UserDAO {
         }
         return Collections.unmodifiableList(userList);
     }
-    public void CreateAccount(UserEntity acc){
+    public void createAccount(UserEntity acc){
         Session s = factory.getCurrentSession();
         DBUtil.addData(acc,s);
     }
@@ -147,10 +147,10 @@ public class UserDAO {
     public UserDTO GetAccountByID(long id){
         Session s = factory.getCurrentSession();
         UserDTO user = new UserDTO();
-        UserEntity acc = DBUtil.GetDataByID(id,UserEntity.class,s);
+        UserEntity acc = DBUtil.getDataByID(id,UserEntity.class,s);
         user.setUserEntity(acc);
         s = factory.getCurrentSession();
-        RoleEntity role = DBUtil.GetDataByID(acc.getRoleid(),RoleEntity.class,s);
+        RoleEntity role = DBUtil.getDataByID(acc.getRoleid(),RoleEntity.class,s);
         user.setRoleEntity(role);
         s = factory.getCurrentSession();
         SQLQuery q = s.createSQLQuery(CUSTOM_QUERY.sqlImg(UserDTO.class.getName(), acc.getId()));

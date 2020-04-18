@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@RequestMapping("Relationship/FilmCategory/")
+@RequestMapping("Relationship/FilmCategory")
 @RestController
 public class FilmCategoryController {
     @Autowired
@@ -20,7 +20,7 @@ public class FilmCategoryController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody FilmCategoryfilmEntity entity){
-        filmCategoryFilmDAO.Save(entity);
+        filmCategoryFilmDAO.save(entity);
         HttpHeaders responseHeader=new HttpHeaders();
         URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         responseHeader.setLocation(newAccounUrl);
@@ -30,9 +30,9 @@ public class FilmCategoryController {
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> update (@RequestBody FilmCategoryfilmEntity entity, @PathVariable("id") Long id){
-        if(filmCategoryFilmDAO.GetByID(id)!=null)
+        if(filmCategoryFilmDAO.getByID(id)!=null)
         {
-            filmCategoryFilmDAO.Save(entity);
+            filmCategoryFilmDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -42,8 +42,8 @@ public class FilmCategoryController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(filmCategoryFilmDAO.GetByID(id)!=null){
-            filmCategoryFilmDAO.Delete(id);
+        if(filmCategoryFilmDAO.getByID(id)!=null){
+            filmCategoryFilmDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);

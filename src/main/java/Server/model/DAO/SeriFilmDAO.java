@@ -19,17 +19,17 @@ public class SeriFilmDAO {
         List<SerifilmEntity> ls = DBUtil.loadAllData(SerifilmEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public SerifilmEntity Save(SerifilmEntity entity){
+    public SerifilmEntity save(SerifilmEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(long id){
+    public void delete(long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,SerifilmEntity.class,s);
     }
-    public SerifilmEntity GetByID(long id){
+    public SerifilmEntity getByID(long id){
         Session s = factory.getCurrentSession();
-        SerifilmEntity entity = DBUtil.GetDataByID(id,SerifilmEntity.class,s);
+        SerifilmEntity entity = DBUtil.getDataByID(id,SerifilmEntity.class,s);
         return entity;
     }
     public List<SerifilmEntity> loadDataPagination(Criteria criteria) {
@@ -41,9 +41,14 @@ public class SeriFilmDAO {
         Session s = factory.getCurrentSession();
         return DBUtil.countData(s,SerifilmEntity.class);
     }
-    public List<SerifilmEntity> GetTop10(Criteria criteria){
+    public List<SerifilmEntity> getTop10(Criteria criteria){
         Session s = factory.getCurrentSession();
-        List<SerifilmEntity> ls = DBUtil.GetTop10(criteria,s);
+        List<SerifilmEntity> ls = DBUtil.getTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<SerifilmEntity> getTopRandom(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<SerifilmEntity> ls = DBUtil.getTopRandom(criteria,s);
         return Collections.unmodifiableList(ls);
     }
 }

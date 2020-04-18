@@ -19,17 +19,17 @@ public class DirectorDAO {
         List<DirectorEntity> ls = DBUtil.loadAllData(DirectorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public DirectorEntity Save(DirectorEntity entity){
+    public DirectorEntity save(DirectorEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,DirectorEntity.class,s);
     }
-    public DirectorEntity GetByID(Long id){
+    public DirectorEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        DirectorEntity entity = DBUtil.GetDataByID(id,DirectorEntity.class,s);
+        DirectorEntity entity = DBUtil.getDataByID(id,DirectorEntity.class,s);
         return entity;
     }
     public long count(){
@@ -41,5 +41,4 @@ public class DirectorDAO {
         List<DirectorEntity> ls = DBUtil.loadDataPagination( s,criteria);
         return Collections.unmodifiableList(ls);
     }
-
 }

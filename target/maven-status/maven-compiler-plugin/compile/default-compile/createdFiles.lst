@@ -1,6 +1,7 @@
 Server\model\DAO\UploadDAO.class
 Server\config\WebConfig.class
 Server\controller\UserController.class
+Server\model\DAO\AlbumSingerDAO.class
 Server\model\DB\FilmActorEntity.class
 Server\model\DAO\AlbumCategoryMusicDAO.class
 Server\controller\SingerController.class
@@ -22,6 +23,7 @@ Server\model\DB\AlbumCategorymusicEntity.class
 Server\common\CommonUtil.class
 Server\model\DAO\SongDAO.class
 Server\model\DTO\AlbumDTO.class
+Server\model\DTO\ActorDTO.class
 Server\controller\AuthorController.class
 Server\controller\FilmController.class
 Server\model\DB\FilmEntity.class
@@ -30,6 +32,8 @@ Server\model\DAO\SignalDAO.class
 Server\model\DAO\UserDAO.class
 Server\model\DB\RatingEntity.class
 Server\model\DTO\FilmDTO.class
+Server\model\DAO\FilmSiteDAO.class
+Server\model\DB\AlbumSingerEntity.class
 Server\model\DB\CommentEntity.class
 Server\model\DB\UserEntity.class
 Server\model\DB\ActorEntity.class
@@ -77,7 +81,6 @@ Server\model\DB\SearchEntity.class
 Server\model\DAO\CategoryFilmDAO.class
 Server\model\DB\ImageEntity.class
 Server\model\DB\RoleEntity.class
-Server\model\DAO\MusicDAO.class
 Server\model\DB\SerifilmEntity.class
 Server\model\DAO\SongCategorySongDAO.class
 Server\controller\UploadController.class

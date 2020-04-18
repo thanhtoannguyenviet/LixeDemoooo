@@ -17,7 +17,7 @@ public class ImageController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody ImageEntity entity){
-        imageDAO.Save(entity);
+        imageDAO.save(entity);
         return new ResponseEntity<>("Post Completed",HttpStatus.CREATED);
     }
     @RequestMapping(value = "/Put/{id}",
@@ -25,7 +25,7 @@ public class ImageController {
     @ResponseBody
     public  ResponseEntity<?> update(@RequestBody ImageEntity entity, @PathVariable("id") Long id){
         if(id==entity.getId())
-        {imageDAO.Save(entity);
+        {imageDAO.save(entity);
         return new ResponseEntity<>("Update completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -35,8 +35,8 @@ public class ImageController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(imageDAO.GetByID(id)!=null){
-            imageDAO.Delete(id);
+        if(imageDAO.getByID(id)!=null){
+            imageDAO.delete(id);
             return new ResponseEntity<>("Deleted completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Deleted Fail",HttpStatus.BAD_REQUEST);

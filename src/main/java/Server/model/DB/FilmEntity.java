@@ -17,7 +17,7 @@ public class FilmEntity {
     private Timestamp createdate;
     private int length;
     private String info;
-    private long actorid;
+    private long seriid;
     private int index;
     private int range;
     private Boolean active;
@@ -124,13 +124,13 @@ public class FilmEntity {
     }
 
     @Basic
-    @Column(name = "actorid", nullable = false)
-    public long getActorid() {
-        return actorid;
+    @Column(name = "seriid", nullable = false)
+    public long getSeriid() {
+        return seriid;
     }
 
-    public void setActorid(long actorid) {
-        this.actorid = actorid;
+    public void setSeriid(long actorid) {
+        this.seriid = actorid;
     }
 
     @Basic
@@ -172,7 +172,7 @@ public class FilmEntity {
                 directorid == that.directorid &&
                 yearreleased == that.yearreleased &&
                 length == that.length &&
-                actorid == that.actorid &&
+                seriid == that.seriid &&
                 index == that.index &&
                 range == that.range &&
                 Objects.equals(filmname, that.filmname) &&
@@ -186,6 +186,6 @@ public class FilmEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, actorid, index, range, active);
+        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, seriid, index, range, active);
     }
 }

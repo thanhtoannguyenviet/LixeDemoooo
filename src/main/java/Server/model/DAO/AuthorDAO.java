@@ -19,37 +19,18 @@ public class AuthorDAO {
         List<AuthorEntity> ls = DBUtil.loadAllData(AuthorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public AuthorEntity Save(AuthorEntity entity){
+    public AuthorEntity save(AuthorEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,AuthorEntity.class,s);
     }
-    public AuthorEntity GetByID(Long id){
+    public AuthorEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        AuthorEntity entity = DBUtil.GetDataByID(id,AuthorEntity.class,s);
+        AuthorEntity entity = DBUtil.getDataByID(id,AuthorEntity.class,s);
         return entity;
-    }
-    public long GetId(String conditionColumn,String condition ){
-
-        Session s = factory.getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        try {
-            //sql = select * from User_ where userName = '?'
-            String sql = CUSTOM_QUERY.sqlGetId("Author",conditionColumn,condition);
-            SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(AuthorEntity.class);
-            AuthorEntity authorEntity =(AuthorEntity) q.uniqueResult() ;
-            return authorEntity.getId();
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            ex.printStackTrace();
-            return 0;
-        } finally {
-            s.close();
-        }
     }
     public long count(){
         Session s =factory.getCurrentSession();

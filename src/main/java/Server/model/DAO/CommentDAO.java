@@ -17,20 +17,20 @@ public class CommentDAO {
         List<CommentEntity> ls = DBUtil.loadAllData(CommentEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public CommentEntity Save(CommentEntity entity){
+    public CommentEntity save(CommentEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,CommentEntity.class,s);
     }
-    public CommentEntity GetByID(Long id){
+    public CommentEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        CommentEntity entity = DBUtil.GetDataByID(id,CommentEntity.class,s);
+        CommentEntity entity = DBUtil.getDataByID(id,CommentEntity.class,s);
         return entity;
     }
-    public List<CommentEntity> GetId(String model,long entryId ){
+    public List<CommentEntity> getId(String model,long entryId ){
 
         Session s = factory.getCurrentSession();
         Transaction tx = s.beginTransaction();

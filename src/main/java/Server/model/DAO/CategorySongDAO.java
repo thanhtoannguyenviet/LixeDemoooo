@@ -22,17 +22,17 @@ public class CategorySongDAO {
         List<CategorysongEntity> ls = DBUtil.loadAllData(CategorysongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public CategorysongEntity Save(CategorysongEntity entity){
+    public CategorysongEntity save(CategorysongEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,CategorysongEntity.class,s);
     }
-    public CategorysongEntity GetByID(Long id){
+    public CategorysongEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        CategorysongEntity entity = DBUtil.GetDataByID(id,CategorysongEntity.class,s);
+        CategorysongEntity entity = DBUtil.getDataByID(id,CategorysongEntity.class,s);
         return entity;
     }
     public long count(){
@@ -44,9 +44,14 @@ public class CategorySongDAO {
         List<CategorysongEntity> ls = DBUtil.loadDataPagination( s,criteria);
         return Collections.unmodifiableList(ls);
     }
-    public List<CategorysongEntity> GetTop10(Criteria criteria){
+    public List<CategorysongEntity> getTop10(Criteria criteria){
         Session s = factory.getCurrentSession();
-        List<CategorysongEntity> ls = DBUtil.GetTop10(criteria,s);
+        List<CategorysongEntity> ls = DBUtil.getTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<CategorysongEntity> getTopRandom(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<CategorysongEntity> ls = DBUtil.getTopRandom(criteria,s);
         return Collections.unmodifiableList(ls);
     }
 }

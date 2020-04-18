@@ -20,15 +20,15 @@ public class UploadController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> postImage(@RequestBody UploadEntity entity){
-        uploadDAO.Save(entity);
+        uploadDAO.save(entity);
         return new ResponseEntity<>("Post Completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> updateAccount(@RequestBody UploadEntity entity, @PathVariable("id") Long id ){
-        if(uploadDAO.GetByID(id)!=null)
-            uploadDAO.Save(entity);
+        if(uploadDAO.getByID(id)!=null)
+            uploadDAO.save(entity);
         return new ResponseEntity<>("Update Completed",HttpStatus.OK);
     }
     @RequestMapping(value = "/Delete/{id}",
@@ -36,7 +36,7 @@ public class UploadController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id){
-        uploadDAO.Delete(id);
+        uploadDAO.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @RequestMapping(value = "/Get/{id}",
@@ -45,6 +45,6 @@ public class UploadController {
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
 
-        return new ResponseEntity<>( uploadDAO.GetByID(id),HttpStatus.OK);
+        return new ResponseEntity<>( uploadDAO.getByID(id),HttpStatus.OK);
     }
 }

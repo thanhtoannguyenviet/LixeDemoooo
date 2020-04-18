@@ -25,7 +25,7 @@ public class DirectorController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody DirectorEntity entity){
-        directorDAO.Save(entity);
+        directorDAO.save(entity);
         HttpHeaders responseHeader=new HttpHeaders();
         URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         responseHeader.setLocation(newAccounUrl);
@@ -35,9 +35,9 @@ public class DirectorController {
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> update (@RequestBody DirectorEntity entity, @PathVariable("id") Long id){
-        if(directorDAO.GetByID(id)!=null)
+        if(directorDAO.getByID(id)!=null)
         {
-            directorDAO.Save(entity);
+            directorDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -47,8 +47,8 @@ public class DirectorController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(directorDAO.GetByID(id)!=null){
-            directorDAO.Delete(id);
+        if(directorDAO.getByID(id)!=null){
+            directorDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
@@ -58,7 +58,7 @@ public class DirectorController {
     )
     @ResponseBody
     public ResponseEntity<?> get (@PathVariable("id") Long id){
-     return  new ResponseEntity<>(directorDAO.GetByID(id),HttpStatus.OK);
+     return  new ResponseEntity<>(directorDAO.getByID(id),HttpStatus.OK);
     }
 
     @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
@@ -71,7 +71,7 @@ public class DirectorController {
         return new ResponseEntity<>(directorDAO.loadDataPagination(criteria),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
@@ -82,7 +82,7 @@ public class DirectorController {
         try {
             return new ResponseEntity<>(directorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
-            new LogDAO().Save(new LogEntity(e));
+            new LogDAO().save(new LogEntity(e));
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }

@@ -24,12 +24,12 @@ public class CUSTOM_QUERY {
         String sql = "select userName,password,roleName from User_, Role_ where User_.roleId=Role_.id and userName ='"+s+"'";
         return sql;
     }
-    public static String sqlGetId(String model,String conditionColumn,String condition ){
-        String sql = "Select * from"+ model + "Where" + conditionColumn + "='"+condition+"'";
+    public static String sqlGetId(String table,String conditionColumn,String condition ){
+        String sql = "Select * from "+ table + " Where " + conditionColumn + " ='"+condition+"'";
         return sql;
     }
     public static String sqlGetIdFromImageOrResource(String table,String model,long entryId ){
-        String sql = "Select * from"+ table + "Where model ='" + model + "'and entryId='"+entryId+"'";
+        String sql = "Select * from "+ table + " Where model ='" + model + "'and entryId='"+entryId+"'";
         return sql;
     }
 

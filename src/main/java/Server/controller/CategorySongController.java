@@ -22,7 +22,7 @@ public class CategorySongController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> postCategorySong(@RequestBody CategorysongEntity categorySongEntity){
-        categorySongDAO.Save(categorySongEntity);
+        categorySongDAO.save(categorySongEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "Put/{id}",
@@ -31,7 +31,7 @@ public class CategorySongController {
     public  ResponseEntity<?> updateCategorySong (@RequestBody CategorysongEntity singer, @PathVariable Long id){
         if(id==singer.getId())
         {
-            categorySongDAO.Save(singer);
+            categorySongDAO.save(singer);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -41,8 +41,8 @@ public class CategorySongController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(categorySongDAO.GetByID(id)!=null){
-            categorySongDAO.Delete(id);
+        if(categorySongDAO.getByID(id)!=null){
+            categorySongDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
@@ -51,7 +51,7 @@ public class CategorySongController {
     @ResponseBody
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id)
     {
-        return new ResponseEntity<>(categorySongDAO.GetByID(id),HttpStatus.OK);
+        return new ResponseEntity<>(categorySongDAO.getByID(id),HttpStatus.OK);
     }
     @RequestMapping(value = "/GetAll/" , method = RequestMethod.GET)
     @ResponseBody
@@ -67,10 +67,10 @@ public class CategorySongController {
         Criteria criteria = new Criteria();
         criteria.setClazz(CategorysongEntity.class);
         criteria.setTop(10);
-        return new ResponseEntity<>(categorySongDAO.GetTop10(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(categorySongDAO.getTop10(criteria),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
@@ -85,7 +85,7 @@ public class CategorySongController {
         return new ResponseEntity<>(categorySongDAO.loadDataPagination(criteria),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
@@ -96,7 +96,7 @@ public class CategorySongController {
         try {
             return new ResponseEntity<>(categorySongDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
-            new LogDAO().Save(new LogEntity(e));
+            new LogDAO().save(new LogEntity(e));
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }

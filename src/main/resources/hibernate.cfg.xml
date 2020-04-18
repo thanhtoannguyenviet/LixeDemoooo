@@ -10,6 +10,7 @@
     <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
     <property name="connection.username">postgres</property>
     <property name="connection.password">123456</property>
+    <property name="hibernate.c3p0.max_size">120</property>
     <!-- Enable Hibernate's automatic session context management -->
     <property name="current_session_context_class">thread</property>
     <property name="hibernate.connection.autoReconnect">true</property>
@@ -69,9 +70,11 @@
     <mapping resource="UploadEntity.hbm.xml"/>
     <mapping class="Server.model.DB.UserEntity"/>
     <mapping resource="UserEntity.hbm.xml"/>
+      <mapping resource="AlbumSingerEntity.hbm.xml"/>
+      <mapping class="Server.model.DB.AlbumSingerEntity"/>
 
 
-    <!-- Drop and re-create the database schema on startup -->
+      <!-- Drop and re-create the database schema on startup -->
 
 
 

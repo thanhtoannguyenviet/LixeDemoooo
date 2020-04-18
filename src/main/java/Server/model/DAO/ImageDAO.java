@@ -17,36 +17,22 @@ public class ImageDAO {
         List<ImageEntity> ls = DBUtil.loadAllData(ImageEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public ImageEntity Save(ImageEntity entity){
+    public ImageEntity save(ImageEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,ImageEntity.class,s);
     }
-    public ImageEntity GetByID(Long id){
+    public ImageEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        ImageEntity entity = DBUtil.GetDataByID(id,ImageEntity.class,s);
+        ImageEntity entity = DBUtil.getDataByID(id,ImageEntity.class,s);
         return entity;
     }
-    public List<ImageEntity> GetId(String model,long entryId ){
-
+    public List<ImageEntity> getId(String model,long entryId ){
         Session s = factory.getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        try {
-            //sql = select * from User_ where userName = '?'
-            String sql = CUSTOM_QUERY.sqlGetIdFromImageOrResource("Image",model,entryId);
-            SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(ImageEntity.class);
-            ImageEntity imageEntity =(ImageEntity) q.uniqueResult() ;
-            return q.getResultList();
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            ex.printStackTrace();
-            return null;
-        } finally {
-            s.close();
-        }
+        List<ImageEntity> ls = DBUtil.getImageOrResource("Image",model,entryId,ImageEntity.class,s);
+        return Collections.unmodifiableList(ls);
     }
 }

@@ -1,6 +1,7 @@
 package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
+import Server.model.DB.SeriCategoryfilmEntity;
 import Server.model.DB.SongCategorysongEntity;
 import Server.service.DBUtil;
 import org.hibernate.*;
@@ -17,35 +18,22 @@ public class SongCategorySongDAO {
         List<SongCategorysongEntity> ls = DBUtil.loadAllData(SongCategorysongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public SongCategorysongEntity Save(SongCategorysongEntity entity){
+    public SongCategorysongEntity save(SongCategorysongEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(long id){
+    public void delete(long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,SongCategorysongEntity.class,s);
     }
-    public SongCategorysongEntity GetByID(long id){
+    public SongCategorysongEntity getByID(long id){
         Session s = factory.getCurrentSession();
-        SongCategorysongEntity entity = DBUtil.GetDataByID(id,SongCategorysongEntity.class,s);
+        SongCategorysongEntity entity = DBUtil.getDataByID(id,SongCategorysongEntity.class,s);
         return entity;
     }
-    public List<SongCategorysongEntity> GetId(String conditionColumn, String condition ){
-
-        Session s = factory.getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        try {
-            //sql = select * from User_ where userName = '?'
-            String sql = CUSTOM_QUERY.sqlGetId("Song_CategorySong",conditionColumn,condition);
-            SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(Server.model.DB.SongCategorysongEntity.class);
-            return  q.getResultList() ;
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            ex.printStackTrace();
-            return null;
-        } finally {
-            s.close();
-        }
+    public List<SongCategorysongEntity> getId(String conditionColumn, String condition ){
+            Session s = factory.getCurrentSession();
+            List<SongCategorysongEntity> entity = DBUtil.getListHasCondition("song_categorysong",conditionColumn,condition,SongCategorysongEntity.class,s);
+            return Collections.unmodifiableList(entity);
     }
 }

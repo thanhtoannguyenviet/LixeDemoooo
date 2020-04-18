@@ -22,7 +22,7 @@ public class RatingController {
     public ResponseEntity<?> post(@RequestBody RatingEntity entity){
         entity.setVotedislike(0);
         entity.setVotelike(0);;
-        ratingDAO.Save(entity);
+        ratingDAO.save(entity);
         HttpHeaders responseHeader=new HttpHeaders();
         URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         responseHeader.setLocation(newAccounUrl);
@@ -32,9 +32,9 @@ public class RatingController {
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> update (@RequestBody RatingEntity entity, @PathVariable Long id){
-        if(ratingDAO.GetByID(id)!=null)
+        if(ratingDAO.getByID(id)!=null)
         {
-            ratingDAO.Save(entity);
+            ratingDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -43,10 +43,10 @@ public class RatingController {
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> increase (@RequestBody RatingEntity entity, @PathVariable("id") Long id){
-        if(ratingDAO.GetByID(id)!=null)
+        if(ratingDAO.getByID(id)!=null)
         {
             entity.setVotelike(1+entity.getVotedislike());
-            ratingDAO.Save(entity);
+            ratingDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -56,10 +56,10 @@ public class RatingController {
             method = RequestMethod.PUT)
     @ResponseBody
     public  ResponseEntity<?> decrease (@RequestBody RatingEntity entity, @PathVariable("id") Long id){
-        if(ratingDAO.GetByID(id)!=null)
+        if(ratingDAO.getByID(id)!=null)
         {
             entity.setVotedislike(1+entity.getVotedislike());
-            ratingDAO.Save(entity);
+            ratingDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -69,8 +69,8 @@ public class RatingController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(ratingDAO.GetByID(id)!=null){
-            ratingDAO.Delete(id);
+        if(ratingDAO.getByID(id)!=null){
+            ratingDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);

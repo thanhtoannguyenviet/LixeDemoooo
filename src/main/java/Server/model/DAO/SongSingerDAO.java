@@ -1,6 +1,7 @@
 package Server.model.DAO;
 
 import Server.common.CUSTOM_QUERY;
+import Server.model.DB.SongCategorysongEntity;
 import Server.model.DB.SongSingerEntity;
 import Server.service.DBUtil;
 import org.hibernate.*;
@@ -17,36 +18,22 @@ public class SongSingerDAO {
         List<SongSingerEntity> ls = DBUtil.loadAllData(SongSingerEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public SongSingerEntity Save(SongSingerEntity entity){
+    public SongSingerEntity save(SongSingerEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(long id){
+    public void delete(long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,SongSingerEntity.class,s);
     }
-    public SongSingerEntity GetByID(long id){
+    public SongSingerEntity getByID(long id){
         Session s = factory.getCurrentSession();
-        SongSingerEntity entity = DBUtil.GetDataByID(id,SongSingerEntity.class,s);
+        SongSingerEntity entity = DBUtil.getDataByID(id,SongSingerEntity.class,s);
         return entity;
     }
-    public List<SongSingerEntity> GetId(String conditionColumn, String condition ){
-
-        Session s = factory.getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        try {
-            //sql = select * from User_ where userName = '?'
-            String sql = CUSTOM_QUERY.sqlGetId("Song_Singer",conditionColumn,condition);
-            SQLQuery q = s.createSQLQuery(sql);
-            q.addEntity(SongSingerEntity .class);
-            return  q.getResultList() ;
-
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            ex.printStackTrace();
-            return null;
-        } finally {
-            s.close();
-        }
+    public List<SongSingerEntity> getId(String conditionColumn, String condition ){
+            Session s = factory.getCurrentSession();
+            List<SongSingerEntity> entity = DBUtil.getListHasCondition("song_singer",conditionColumn,condition,SongSingerEntity.class,s);
+            return Collections.unmodifiableList(entity);
     }
 }

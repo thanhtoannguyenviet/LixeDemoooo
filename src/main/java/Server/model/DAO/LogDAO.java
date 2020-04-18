@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public class LogDAO {
     SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(LogEntity.class).buildSessionFactory();
-    public void Save(LogEntity entity){
+    public void save(LogEntity entity){
         Session s = factory.getCurrentSession();
         DBUtil.addData(entity,s);
     }

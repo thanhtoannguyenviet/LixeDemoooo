@@ -19,17 +19,17 @@ public class SingerDAO {
         List<SingerEntity> ls = DBUtil.loadAllData(SingerEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public SingerEntity Save(SingerEntity entity){
+    public SingerEntity save(SingerEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,SingerEntity.class,s);
     }
-    public SingerEntity GetByID(Long id){
+    public SingerEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        SingerEntity entity = DBUtil.GetDataByID(id,SingerEntity.class,s);
+        SingerEntity entity = DBUtil.getDataByID(id,SingerEntity.class,s);
         return entity;
     }
     public List<SingerEntity> loadDataPagination(Criteria criteria) {
@@ -41,9 +41,14 @@ public class SingerDAO {
         Session s = factory.getCurrentSession();
         return DBUtil.countDataWithCondition(s,SingerEntity.class);
     }
-    public List<SingerEntity> GetTop10(Criteria criteria){
+    public List<SingerEntity> getTop10(Criteria criteria){
         Session s = factory.getCurrentSession();
-        List<SingerEntity> ls = DBUtil.GetTop10(criteria,s);
+        List<SingerEntity> ls = DBUtil.getTop10(criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<SingerEntity> getTopRandom(Criteria criteria){
+        Session s = factory.getCurrentSession();
+        List<SingerEntity> ls = DBUtil.getTopRandom(criteria,s);
         return Collections.unmodifiableList(ls);
     }
 }

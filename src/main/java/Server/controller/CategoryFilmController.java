@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Server.model.DAO.ActorDAO;
 import Server.model.DAO.CategoryFilmDAO;
 import Server.model.DAO.LogDAO;
 import Server.model.DAO.SignalDAO;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryFilmController {
     @Autowired
     CategoryFilmDAO categoryFilmDAO;
-    SignalDAO signalDAO;
+    ActorDAO actorDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody CategoryfilmEntity categorySongEntity){
-        categoryFilmDAO.Save(categorySongEntity);
+        categoryFilmDAO.save(categorySongEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "Put/{id}",
@@ -31,7 +32,7 @@ public class CategoryFilmController {
     public  ResponseEntity<?> update (@RequestBody CategoryfilmEntity entity, @PathVariable("id") Long id){
         if(id==entity.getId())
         {
-            categoryFilmDAO.Save(entity);
+            categoryFilmDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -41,8 +42,8 @@ public class CategoryFilmController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(categoryFilmDAO.GetByID(id)!=null){
-            categoryFilmDAO.Delete(id);
+        if(categoryFilmDAO.getByID(id)!=null){
+            categoryFilmDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
@@ -53,7 +54,7 @@ public class CategoryFilmController {
     @ResponseBody
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id){
 
-        return new ResponseEntity<>(categoryFilmDAO.GetByID(id),HttpStatus.OK);
+        return new ResponseEntity<>(categoryFilmDAO.getByID(id),HttpStatus.OK);
     }
     @RequestMapping(value = "/GetAll/",
             method = RequestMethod.GET
@@ -63,10 +64,10 @@ public class CategoryFilmController {
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(CategoryfilmEntity.class);
-        return new ResponseEntity<>(SignalDAO.findData(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(actorDAO.getAll(),HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
@@ -82,7 +83,7 @@ public class CategoryFilmController {
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
@@ -94,11 +95,11 @@ public class CategoryFilmController {
         Criteria criteria = new Criteria();
         criteria.setClazz(CategoryfilmEntity.class);
         criteria.setTop(10);
-        return new ResponseEntity<>(categoryFilmDAO.GetTop10(criteria),HttpStatus.OK);
+        return new ResponseEntity<>(categoryFilmDAO.getTop10(criteria),HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
-            (new LogDAO()).Save(log);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
@@ -109,7 +110,7 @@ public class CategoryFilmController {
         try {
             return new ResponseEntity<>(categoryFilmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
-            new LogDAO().Save(new LogEntity(e));
+            new LogDAO().save(new LogEntity(e));
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }

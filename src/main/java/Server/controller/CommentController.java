@@ -16,7 +16,7 @@ public class CommentController {
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> postCategorySong(@RequestBody CommentEntity entity){
-        commentDAO.Save(entity);
+        commentDAO.save(entity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "Put/{id}",
@@ -25,7 +25,7 @@ public class CommentController {
     public  ResponseEntity<?> updateCategorySong (@RequestBody CommentEntity entity, @PathVariable("id") Long id){
         if(entity.getId()==id)
         {
-            commentDAO.Save(entity);
+            commentDAO.save(entity);
             return new ResponseEntity<>("Update Completed",HttpStatus.OK);
         }
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
@@ -35,8 +35,8 @@ public class CommentController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(commentDAO.GetByID(id)!=null){
-            commentDAO.Delete(id);
+        if(commentDAO.getByID(id)!=null){
+            commentDAO.delete(id);
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);

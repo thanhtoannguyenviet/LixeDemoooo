@@ -1,5 +1,6 @@
 package Server.model.DAO;
 
+import Server.model.DB.AlbumCategorymusicEntity;
 import Server.model.DB.FilmActorEntity;
 import Server.service.DBUtil;
 import org.hibernate.Session;
@@ -17,18 +18,22 @@ public class FilmActorDAO {
         List<FilmActorEntity> ls = DBUtil.loadAllData(FilmActorEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public FilmActorEntity Save(FilmActorEntity entity){
+    public FilmActorEntity save(FilmActorEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,FilmActorEntity.class,s);
     }
-    public FilmActorEntity GetByID(Long id){
+    public FilmActorEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        FilmActorEntity entity = DBUtil.GetDataByID(id,FilmActorEntity.class,s);
+        FilmActorEntity entity = DBUtil.getDataByID(id,FilmActorEntity.class,s);
         return entity;
     }
-
+    public List<FilmActorEntity> getListHasCondition(String conditionColumn, String condition ){
+        Session s = factory.getCurrentSession();
+        List<FilmActorEntity> entity = DBUtil.getListHasCondition("film_actor",conditionColumn,condition,FilmActorEntity.class,s);
+        return entity;
+    }
 }

@@ -36,8 +36,8 @@
         <property name="info">
             <column name="info" sql-type="text"/>
         </property>
-        <property name="actorid">
-            <column name="actorid" sql-type="bigint"/>
+        <property name="seriid">
+            <column name="seriid" sql-type="bigint"/>
         </property>
         <property name="index">
             <column name="index" sql-type="integer"/>

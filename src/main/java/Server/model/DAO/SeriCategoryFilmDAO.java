@@ -1,5 +1,6 @@
 package Server.model.DAO;
 
+import Server.model.DB.FilmCategoryfilmEntity;
 import Server.model.DB.SeriCategoryfilmEntity;
 import Server.service.DBUtil;
 import org.hibernate.Session;
@@ -17,17 +18,22 @@ public class SeriCategoryFilmDAO {
         List<SeriCategoryfilmEntity> ls = DBUtil.loadAllData(SeriCategoryfilmEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-    public SeriCategoryfilmEntity Save(SeriCategoryfilmEntity entity){
+    public SeriCategoryfilmEntity save(SeriCategoryfilmEntity entity){
         Session s = factory.getCurrentSession();
         return DBUtil.addData(entity,s);
     }
-    public void Delete(Long id){
+    public void delete(Long id){
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,SeriCategoryfilmEntity.class,s);
     }
-    public SeriCategoryfilmEntity GetByID(Long id){
+    public SeriCategoryfilmEntity getByID(Long id){
         Session s = factory.getCurrentSession();
-        SeriCategoryfilmEntity entity = DBUtil.GetDataByID(id,SeriCategoryfilmEntity.class,s);
+        SeriCategoryfilmEntity entity = DBUtil.getDataByID(id,SeriCategoryfilmEntity.class,s);
         return entity;
+    }
+    public List<SeriCategoryfilmEntity> getId(String conditionColumn, String condition ){
+        Session s = factory.getCurrentSession();
+        List<SeriCategoryfilmEntity> entity = DBUtil.getListHasCondition("seri_categoryfilm",conditionColumn,condition,SeriCategoryfilmEntity.class,s);
+        return Collections.unmodifiableList(entity);
     }
 }
