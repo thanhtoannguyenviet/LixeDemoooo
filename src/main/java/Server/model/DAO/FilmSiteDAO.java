@@ -3,30 +3,23 @@ package Server.model.DAO;
 import Server.model.DB.*;
 import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Repository
 public class FilmSiteDAO {
-    @Autowired
-    FilmDAO filmDAO;
-    @Autowired
-    DirectorDAO directorDAO;
-    @Autowired
-    ActorDAO actorDAO;
-    @Autowired
-    ImageDAO imageDAO;
-    @Autowired
-    UploadDAO uploadDAO;
-    @Autowired
-    CategoryFilmDAO categoryFilmDAO;
-    @Autowired
-    SeriFilmDAO seriFilmDAO;
-    @Autowired
-    FilmActorDAO filmActorDAO;
-    @Autowired
-    FilmCategoryFilmDAO filmCategoryFilmDAO;
+    FilmDAO filmDAO = new FilmDAO() ;
+    DirectorDAO directorDAO = new DirectorDAO();
+    ActorDAO actorDAO = new ActorDAO();
+    ImageDAO imageDAO = new ImageDAO();
+    UploadDAO uploadDAO = new UploadDAO();
+    CategoryFilmDAO categoryFilmDAO = new CategoryFilmDAO();
+    SeriFilmDAO seriFilmDAO = new SeriFilmDAO();
+    FilmActorDAO filmActorDAO = new FilmActorDAO();
+    FilmCategoryFilmDAO filmCategoryFilmDAO = new FilmCategoryFilmDAO();
     public FilmDTO getFilmDTOById(long id){
         FilmEntity filmEntity = filmDAO.getByID(id);
         DirectorEntity directorEntity = directorDAO.getByID(filmEntity.getDirectorid());

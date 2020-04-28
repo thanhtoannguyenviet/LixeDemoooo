@@ -2,10 +2,8 @@ package Server.controller;
 
 import Server.model.DAO.AuthorDAO;
 import Server.model.DAO.LogDAO;
-import Server.model.DAO.SignalDAO;
 import Server.model.DB.AuthorEntity;
 import Server.model.DB.LogEntity;
-import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

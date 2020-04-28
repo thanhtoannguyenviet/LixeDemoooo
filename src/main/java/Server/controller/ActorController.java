@@ -23,8 +23,7 @@ import java.util.List;
 public class ActorController {
     @Autowired
     ActorDAO actorDAO;
-    @Autowired
-    FilmActorDAO filmActorDAO;
+    FilmActorDAO filmActorDAO = new FilmActorDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody

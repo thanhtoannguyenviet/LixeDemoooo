@@ -1,6 +1,5 @@
 package Server.model.DAO;
 
-import Server.common.CUSTOM_QUERY;
 import Server.model.DB.ImageEntity;
 import Server.service.DBUtil;
 import org.hibernate.*;

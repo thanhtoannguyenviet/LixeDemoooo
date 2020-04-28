@@ -3,14 +3,10 @@ package Server.controller;
 import Server.model.DAO.UserDAO;
 import Server.model.DB.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 public class UserController {
@@ -23,14 +19,14 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<?> getAccount(){
 
-        return new ResponseEntity<>(userDAO.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.OK);
 
     }
     @RequestMapping(value = "/RegisterAPI/",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> registerAPI(@RequestBody UserEntity user){
-       userDAO.Save(user);
+//       userDAO.Save(user);
         return new ResponseEntity<>("",HttpStatus.CREATED);
     }
 

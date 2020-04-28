@@ -7,7 +7,6 @@
     <class name="Server.model.DB.SeriCategoryfilmEntity" table="seri_categoryfilm" schema="public" catalog="test12345">
         <id name="id">
             <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
         </id>
         <property name="categoryid">
             <column name="categoryid" sql-type="bigint"/>

@@ -1,6 +1,5 @@
 package Server.model.DAO;
 
-import Server.model.DB.SerifilmEntity;
 import Server.model.DB.SingerEntity;
 import Server.model.DTO.Criteria;
 import Server.service.DBUtil;

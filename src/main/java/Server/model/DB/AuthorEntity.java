@@ -8,7 +8,6 @@ import java.util.Objects;
 public class AuthorEntity {
     private long id;
     private String name;
-    private String listsongid;
     private String info;
 
     @Id
@@ -33,16 +32,6 @@ public class AuthorEntity {
     }
 
     @Basic
-    @Column(name = "listsongid", nullable = false, length = -1)
-    public String getListsongid() {
-        return listsongid;
-    }
-
-    public void setListsongid(String listsongid) {
-        this.listsongid = listsongid;
-    }
-
-    @Basic
     @Column(name = "info", nullable = false, length = -1)
     public String getInfo() {
         return info;
@@ -59,12 +48,11 @@ public class AuthorEntity {
         AuthorEntity that = (AuthorEntity) o;
         return id == that.id &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(listsongid, that.listsongid) &&
                 Objects.equals(info, that.info);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, listsongid, info);
+        return Objects.hash(id, name, info);
     }
 }

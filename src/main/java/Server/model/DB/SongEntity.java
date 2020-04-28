@@ -9,13 +9,12 @@ import java.util.Objects;
 public class SongEntity {
     private long id;
     private String songname;
-    private long authorid;
+    private Long authorid;
     private Timestamp createdate;
     private String modifieduser;
     private Timestamp modifieddate;
     private String uploadsource;
     private String img;
-    private long albumid;
     private int range;
     private Boolean active;
 
@@ -41,12 +40,12 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "authorid", nullable = false)
-    public long getAuthorid() {
+    @Column(name = "authorid", nullable = true)
+    public Long getAuthorid() {
         return authorid;
     }
 
-    public void setAuthorid(long authorid) {
+    public void setAuthorid(Long authorid) {
         this.authorid = authorid;
     }
 
@@ -101,16 +100,6 @@ public class SongEntity {
     }
 
     @Basic
-    @Column(name = "albumid", nullable = true)
-    public long getAlbumid() {
-        return albumid;
-    }
-
-    public void setAlbumid(long albumid) {
-        this.albumid = albumid;
-    }
-
-    @Basic
     @Column(name = "range", nullable = false)
     public int getRange() {
         return range;
@@ -136,10 +125,9 @@ public class SongEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SongEntity that = (SongEntity) o;
         return id == that.id &&
-                authorid == that.authorid &&
-                albumid == that.albumid &&
                 range == that.range &&
                 Objects.equals(songname, that.songname) &&
+                Objects.equals(authorid, that.authorid) &&
                 Objects.equals(createdate, that.createdate) &&
                 Objects.equals(modifieduser, that.modifieduser) &&
                 Objects.equals(modifieddate, that.modifieddate) &&
@@ -150,6 +138,6 @@ public class SongEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, songname, authorid, createdate, modifieduser, modifieddate, uploadsource, img, albumid, range, active);
+        return Objects.hash(id, songname, authorid, createdate, modifieduser, modifieddate, uploadsource, img, range, active);
     }
 }

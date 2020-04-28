@@ -4,7 +4,6 @@ import Server.model.DAO.FilmSiteDAO;
 import Server.model.DAO.LogDAO;
 import Server.model.DAO.SeriFilmDAO;
 import Server.model.DAO.SignalDAO;
-import Server.model.DB.DirectorEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DB.SerifilmEntity;
 import Server.model.DTO.Criteria;
@@ -102,17 +101,5 @@ public class SeriFilmController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
-    }
-    private SeriFilmDTO getSerifilm(SerifilmEntity serifilmEntity){
-        String[] arrayListfilm = serifilmEntity.getListfilm().split(",");
-        FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
-        List<FilmDTO> filmDTOList= new ArrayList<>();
-        for ( String item : arrayListfilm) {
-            if(!item.isBlank()&&!item.isEmpty()){
-                 FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(Long.parseLong(item));
-                 filmDTOList.add(filmDTO);
-            }
-        }
-        return new SeriFilmDTO(serifilmEntity, Collections.unmodifiableList(filmDTOList));
     }
 }

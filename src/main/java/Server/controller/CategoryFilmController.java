@@ -3,8 +3,6 @@ package Server.controller;
 import Server.model.DAO.ActorDAO;
 import Server.model.DAO.CategoryFilmDAO;
 import Server.model.DAO.LogDAO;
-import Server.model.DAO.SignalDAO;
-import Server.model.DB.AuthorEntity;
 import Server.model.DB.CategoryfilmEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DTO.Criteria;

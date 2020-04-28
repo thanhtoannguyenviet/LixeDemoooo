@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8" addBOMForNewFiles="with BOM">
-    <file url="file://$PROJECT_DIR$/src/main/java/Server/common/CommonUtil.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/Server/controller/LogController.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/AlbumSingerDAO.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/FilmSiteDAO.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/LogDAO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/AlbumSongDAO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/ActorEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AlbumCategorymusicEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AlbumEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AlbumSingerEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AlbumSongEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/ApiaccountEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AuthorEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AuthorSongEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/BannerEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/CategoryfilmEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/CategorysongEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/CommentEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/DirectorEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/DirectorFilmEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/FilmActorEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/FilmCategoryfilmEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/FilmEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/ImageEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/LogEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/PlayListEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/PlaylistCategoryEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/PlaylistSongEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/RatingEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/RoleEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SearchEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SeriCategoryfilmEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SerifilmEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SerifilmFilmEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SingerEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SongCategorysongEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SongEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SongSingerEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/UploadEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/UserEntity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/ActorDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/service/HibernateUtil.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

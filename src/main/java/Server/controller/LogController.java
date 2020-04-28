@@ -1,7 +1,6 @@
 package Server.controller;
 
 import Server.model.DAO.LogDAO;
-import Server.model.DB.ActorEntity;
 import Server.model.DB.LogEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

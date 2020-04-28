@@ -1,6 +1,5 @@
 package Server.model.DAO;
 
-import Server.model.DB.DirectorEntity;
 import Server.model.DB.FilmEntity;
 import Server.model.DTO.Criteria;
 import Server.service.DBUtil;

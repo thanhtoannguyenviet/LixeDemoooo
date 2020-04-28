@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.UserEntity" table="user_" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="username">
             <column name="username" sql-type="varchar(255)"/>

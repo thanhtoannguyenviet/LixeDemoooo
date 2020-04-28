@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
     "-//Hibernate/Hibernate Configuration DTD//EN"
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
@@ -6,11 +6,10 @@
   <session-factory>
     <property name="connection.url">jdbc:postgresql://103.1.239.243:5432/test12345</property>
     <property name="connection.driver_class">org.postgresql.Driver</property>
-    <property name="connection.pool_size">1</property>
+    <property name="connection.pool_size">10</property>
     <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
     <property name="connection.username">postgres</property>
     <property name="connection.password">123456</property>
-    <property name="hibernate.c3p0.max_size">120</property>
     <!-- Enable Hibernate's automatic session context management -->
     <property name="current_session_context_class">thread</property>
     <property name="hibernate.connection.autoReconnect">true</property>
@@ -24,10 +23,16 @@
     <mapping resource="AlbumEntity.hbm.xml"/>
     <mapping class="Server.model.DB.AlbumCategorymusicEntity"/>
     <mapping resource="AlbumCategorymusicEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.AlbumSingerEntity"/>
+    <mapping resource="AlbumSingerEntity.hbm.xml"/>
+    <mapping resource="AlbumSongEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.AlbumSongEntity"/>
     <mapping class="Server.model.DB.ApiaccountEntity"/>
     <mapping resource="ApiaccountEntity.hbm.xml"/>
-    <mapping class="Server.model.DB.AuthorEntity"/>
     <mapping resource="AuthorEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.AuthorEntity"/>
+    <mapping class="Server.model.DB.AuthorSongEntity"/>
+    <mapping resource="AuthorSongEntity.hbm.xml"/>
     <mapping class="Server.model.DB.BannerEntity"/>
     <mapping resource="BannerEntity.hbm.xml"/>
     <mapping class="Server.model.DB.CategoryfilmEntity"/>
@@ -38,6 +43,8 @@
     <mapping resource="CommentEntity.hbm.xml"/>
     <mapping class="Server.model.DB.DirectorEntity"/>
     <mapping resource="DirectorEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.DirectorFilmEntity"/>
+    <mapping resource="DirectorFilmEntity.hbm.xml"/>
     <mapping class="Server.model.DB.FilmEntity"/>
     <mapping resource="FilmEntity.hbm.xml"/>
     <mapping class="Server.model.DB.FilmActorEntity"/>
@@ -48,16 +55,24 @@
     <mapping resource="ImageEntity.hbm.xml"/>
     <mapping class="Server.model.DB.LogEntity"/>
     <mapping resource="LogEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.PlayListEntity"/>
+    <mapping resource="PlayListEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.PlaylistCategoryEntity"/>
+    <mapping resource="PlaylistCategoryEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.PlaylistSongEntity"/>
+    <mapping resource="PlaylistSongEntity.hbm.xml"/>
     <mapping class="Server.model.DB.RatingEntity"/>
     <mapping resource="RatingEntity.hbm.xml"/>
     <mapping class="Server.model.DB.RoleEntity"/>
     <mapping resource="RoleEntity.hbm.xml"/>
-    <mapping class="Server.model.DB.SearchEntity"/>
     <mapping resource="SearchEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.SearchEntity"/>
     <mapping class="Server.model.DB.SeriCategoryfilmEntity"/>
     <mapping resource="SeriCategoryfilmEntity.hbm.xml"/>
     <mapping class="Server.model.DB.SerifilmEntity"/>
     <mapping resource="SerifilmEntity.hbm.xml"/>
+    <mapping class="Server.model.DB.SerifilmFilmEntity"/>
+    <mapping resource="SerifilmFilmEntity.hbm.xml"/>
     <mapping class="Server.model.DB.SingerEntity"/>
     <mapping resource="SingerEntity.hbm.xml"/>
     <mapping class="Server.model.DB.SongEntity"/>
@@ -70,14 +85,10 @@
     <mapping resource="UploadEntity.hbm.xml"/>
     <mapping class="Server.model.DB.UserEntity"/>
     <mapping resource="UserEntity.hbm.xml"/>
-      <mapping resource="AlbumSingerEntity.hbm.xml"/>
-      <mapping class="Server.model.DB.AlbumSingerEntity"/>
-
-
-      <!-- Drop and re-create the database schema on startup -->
-
-
+    <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.password"/> -->
 
     <!-- DB schema will be updated if needed -->
+    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>

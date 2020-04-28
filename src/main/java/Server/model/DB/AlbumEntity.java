@@ -9,10 +9,10 @@ import java.util.Objects;
 public class AlbumEntity {
     private long id;
     private String albumname;
-    private String listsongid;
     private Timestamp datereleased;
     private int index;
     private int range;
+    private int singerid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,16 +33,6 @@ public class AlbumEntity {
 
     public void setAlbumname(String albumname) {
         this.albumname = albumname;
-    }
-
-    @Basic
-    @Column(name = "listsongid", nullable = false, length = -1)
-    public String getListsongid() {
-        return listsongid;
-    }
-
-    public void setListsongid(String listsongid) {
-        this.listsongid = listsongid;
     }
 
     @Basic
@@ -75,6 +65,16 @@ public class AlbumEntity {
         this.range = range;
     }
 
+    @Basic
+    @Column(name = "singerid", nullable = false)
+    public int getSingerid() {
+        return singerid;
+    }
+
+    public void setSingerid(int singerid) {
+        this.singerid = singerid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,13 +83,13 @@ public class AlbumEntity {
         return id == that.id &&
                 index == that.index &&
                 range == that.range &&
+                singerid == that.singerid &&
                 Objects.equals(albumname, that.albumname) &&
-                Objects.equals(listsongid, that.listsongid) &&
                 Objects.equals(datereleased, that.datereleased);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, albumname, listsongid, datereleased, index, range);
+        return Objects.hash(id, albumname, datereleased, index, range, singerid);
     }
 }

@@ -8,6 +8,7 @@
         <id name="id">
             <column name="id" sql-type="bigint"/>
             <generator class="identity"/>
+
         </id>
         <property name="actorname">
             <column name="actorname" sql-type="varchar(255)"/>

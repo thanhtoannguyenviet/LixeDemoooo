@@ -17,10 +17,10 @@ public class FilmEntity {
     private Timestamp createdate;
     private int length;
     private String info;
-    private long seriid;
     private int index;
     private int range;
     private Boolean active;
+    private Long actorid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,16 +124,6 @@ public class FilmEntity {
     }
 
     @Basic
-    @Column(name = "seriid", nullable = false)
-    public long getSeriid() {
-        return seriid;
-    }
-
-    public void setSeriid(long actorid) {
-        this.seriid = actorid;
-    }
-
-    @Basic
     @Column(name = "index", nullable = false)
     public int getIndex() {
         return index;
@@ -163,6 +153,16 @@ public class FilmEntity {
         this.active = active;
     }
 
+    @Basic
+    @Column(name = "actorid", nullable = true)
+    public Long getActorid() {
+        return actorid;
+    }
+
+    public void setActorid(Long actorid) {
+        this.actorid = actorid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -172,7 +172,6 @@ public class FilmEntity {
                 directorid == that.directorid &&
                 yearreleased == that.yearreleased &&
                 length == that.length &&
-                seriid == that.seriid &&
                 index == that.index &&
                 range == that.range &&
                 Objects.equals(filmname, that.filmname) &&
@@ -181,11 +180,12 @@ public class FilmEntity {
                 Objects.equals(img, that.img) &&
                 Objects.equals(createdate, that.createdate) &&
                 Objects.equals(info, that.info) &&
-                Objects.equals(active, that.active);
+                Objects.equals(active, that.active) &&
+                Objects.equals(actorid, that.actorid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, seriid, index, range, active);
+        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, index, range, active, actorid);
     }
 }

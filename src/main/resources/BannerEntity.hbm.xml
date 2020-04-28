@@ -6,7 +6,8 @@
 
     <class name="Server.model.DB.BannerEntity" table="banner" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="imagename">
             <column name="imagename" sql-type="text" not-null="true"/>

@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.FilmEntity" table="film" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="filmname">
             <column name="filmname" sql-type="varchar(255)"/>
@@ -36,9 +36,6 @@
         <property name="info">
             <column name="info" sql-type="text"/>
         </property>
-        <property name="seriid">
-            <column name="seriid" sql-type="bigint"/>
-        </property>
         <property name="index">
             <column name="index" sql-type="integer"/>
         </property>
@@ -47,6 +44,9 @@
         </property>
         <property name="active">
             <column name="active" sql-type="boolean" not-null="true"/>
+        </property>
+        <property name="actorid">
+            <column name="actorid" sql-type="bigint" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>

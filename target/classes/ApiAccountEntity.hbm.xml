@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.ApiaccountEntity" table="apiaccount" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="token">
             <column name="token" sql-type="varchar(35)" length="35"/>

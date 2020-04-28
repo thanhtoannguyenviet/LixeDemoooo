@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.AlbumSingerEntity" table="album_singer" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="albumid">
             <column name="albumid" sql-type="bigint" not-null="true"/>

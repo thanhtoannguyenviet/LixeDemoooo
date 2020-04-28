@@ -1,7 +1,5 @@
 package Server.model.DAO;
 
-import Server.common.CUSTOM_QUERY;
-import Server.model.DB.AlbumEntity;
 import Server.model.DB.AuthorEntity;
 import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
@@ -27,7 +25,7 @@ public class AuthorDAO {
         Session s= factory.getCurrentSession();
         DBUtil.deleteData(id,AuthorEntity.class,s);
     }
-    public AuthorEntity getByID(Long id){
+    public  AuthorEntity getByID(Long id){
         Session s = factory.getCurrentSession();
         AuthorEntity entity = DBUtil.getDataByID(id,AuthorEntity.class,s);
         return entity;

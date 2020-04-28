@@ -19,11 +19,11 @@ import java.util.List;
 public class AlbumController {
     @Autowired
     AlbumDAO albumDAO;
-    SongDAO songDAO;
-    AlbumCategoryMusicDAO albumCategoryMusicDAO;
-    SongSingerDAO songSingerDAO;
-    SingerDAO singerDAO;
-    AlbumSingerDAO albumSingerDAO;
+    SongDAO songDAO = new SongDAO();
+    AlbumCategoryMusicDAO albumCategoryMusicDAO = new AlbumCategoryMusicDAO();
+    SongSingerDAO songSingerDAO = new SongSingerDAO();
+    SingerDAO singerDAO = new SingerDAO();
+    AlbumSingerDAO albumSingerDAO = new AlbumSingerDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -43,7 +43,8 @@ public class AlbumController {
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
-        return new ResponseEntity<>(albumDAO.getByID(id),HttpStatus.OK);
+        AlbumEntity albumEntity =  albumDAO.getByID(id);
+        return new ResponseEntity<>(getAlbumDTO(albumEntity),HttpStatus.OK);
     }
     @RequestMapping(value = "/Delete",
             method = RequestMethod.DELETE)
@@ -130,13 +131,13 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
         }
     }
     private AlbumDTO getAlbumDTO(AlbumEntity albumEntity){
-        String[] lsSong = albumEntity.getListsongid().split(",");
+//        String[] lsSong = albumEntity.getListsongid().split(",");
         List<SongEntity> songEntityList = new ArrayList<>();
-        for ( String item : lsSong) {
-            if(!item.isEmpty()&&!item.isBlank()){
-                songEntityList.add(songDAO.getByID(Long.parseLong(item)));
-            }
-        }
+//        for ( String item : lsSong) {
+//            if(!item.isEmpty()&&!item.isBlank()){
+//                songEntityList.add(songDAO.getByID(Long.parseLong(item)));
+//            }
+//        }
         List<SingerEntity> singerEntityList = new ArrayList<>();
         List<AlbumSingerEntity> albumSingerEntityList = albumSingerDAO.getId("albumid",albumEntity.getId()+"");
         for(AlbumSingerEntity item : albumSingerEntityList){

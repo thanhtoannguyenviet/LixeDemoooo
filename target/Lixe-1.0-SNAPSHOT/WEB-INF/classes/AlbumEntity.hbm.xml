@@ -6,14 +6,11 @@
 
     <class name="Server.model.DB.AlbumEntity" table="album" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="albumname">
             <column name="albumname" sql-type="varchar(255)"/>
-        </property>
-        <property name="listsongid">
-            <column name="listsongid" sql-type="text"/>
         </property>
         <property name="datereleased">
             <column name="datereleased" sql-type="timestamp"/>
@@ -23,6 +20,9 @@
         </property>
         <property name="range">
             <column name="range" sql-type="integer"/>
+        </property>
+        <property name="singerid">
+            <column name="singerid" sql-type="integer"/>
         </property>
     </class>
 </hibernate-mapping>

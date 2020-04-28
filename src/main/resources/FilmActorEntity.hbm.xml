@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.FilmActorEntity" table="film_actor" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="actorid">
             <column name="actorid" sql-type="bigint"/>

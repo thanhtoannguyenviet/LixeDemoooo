@@ -1,11 +1,9 @@
 package Server.model.DAO;
 
-import Server.common.CUSTOM_QUERY;
-import Server.model.DB.AlbumEntity;
-import Server.model.DB.SingerEntity;
 import Server.model.DB.SongEntity;
 import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
+import Server.service.HibernateUtil;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
@@ -29,7 +27,7 @@ public class SongDAO {
         DBUtil.deleteData(id,SongEntity.class,s);
     }
     public SongEntity getByID(long id){
-        Session s = factory.getCurrentSession();
+        Session s = factory.openSession();
         SongEntity entity = DBUtil.getDataByID(id,SongEntity.class,s);
         return entity;
     }
@@ -69,6 +67,11 @@ public class SongDAO {
     public List<SongEntity> getTop10New(Criteria criteria){
         Session s = factory.getCurrentSession();
         List<SongEntity> ls = DBUtil.getTop10New("modifieddate",criteria,s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<SongEntity> getAll2() {
+        Session s = HibernateUtil.getSession();
+        List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
 }

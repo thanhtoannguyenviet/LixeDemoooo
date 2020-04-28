@@ -1,6 +1,5 @@
 package Server.model.DAO;
 
-import Server.model.DB.FilmCategoryfilmEntity;
 import Server.model.DB.SeriCategoryfilmEntity;
 import Server.service.DBUtil;
 import org.hibernate.Session;

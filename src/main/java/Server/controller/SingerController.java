@@ -97,15 +97,16 @@ public class SingerController {
         }
     }
     private SingerDTO getSingerDTO(SingerEntity singerEntity){
-        SongController songController = new SongController();
-        List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("singerid",singerEntity.getId()+"");
-        List<SongDTO> songDTOList = new ArrayList<>();
-        for ( SongSingerEntity item : songSingerEntityList
-             ) {
-            songDTOList.add( songController.getSongDTObyID(item.getSongid()));
-        }
-        SingerDTO singerDTO = new SingerDTO(singerEntity,songDTOList);
-        return singerDTO;
+//        SongController songController = new SongController();
+//        List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("singerid",singerEntity.getId()+"");
+//        List<SongDTO> songDTOList = new ArrayList<>();
+//        for ( SongSingerEntity item : songSingerEntityList
+//             ) {
+//            songDTOList.add( songController.getSongDTObyID(item.getSongid()));
+//        }
+//        SingerDTO singerDTO = new SingerDTO(singerEntity,songDTOList);
+//        return singerDTO;
+        return null;
     }
 
 }

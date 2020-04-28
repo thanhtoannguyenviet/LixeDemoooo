@@ -1,7 +1,5 @@
 package Server.model.DB;
 
-import org.hibernate.HibernateException;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -12,7 +10,6 @@ public class LogEntity {
     private String messageerror;
     private String codeerror;
     private String nameapierror;
-
     public LogEntity(){}
     public LogEntity(Exception ex){
         messageerror=ex.getCause().getMessage().replace("\n","");
@@ -20,7 +17,6 @@ public class LogEntity {
         nameapierror=ex.getClass().getName();
     }
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public long getId() {
         return id;
@@ -32,12 +28,12 @@ public class LogEntity {
 
     @Basic
     @Column(name = "messageerror", nullable = true, length = -1)
-    public String getMessageError() {
+    public String getMessageerror() {
         return messageerror;
     }
 
-    public void setMessageError(String messageError) {
-        this.messageerror = messageError;
+    public void setMessageerror(String messageerror) {
+        this.messageerror = messageerror;
     }
 
     @Basic

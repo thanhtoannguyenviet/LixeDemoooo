@@ -9,6 +9,7 @@
         <id name="id">
             <column name="id" sql-type="bigint"/>
             <generator class="identity"/>
+
         </id>
         <property name="albumid">
             <column name="albumid" sql-type="bigint"/>

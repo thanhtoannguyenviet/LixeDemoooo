@@ -2,18 +2,13 @@ package Server.service;
 
 import Server.common.CUSTOM_QUERY;
 import Server.model.DAO.LogDAO;
-import Server.model.DB.AlbumCategorymusicEntity;
 import Server.model.DB.LogEntity;
-import Server.model.DB.UserEntity;
 import Server.model.DTO.Criteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,7 +17,6 @@ import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
 
-@Repository
 public class DBUtil {
     public static <T> List<T> loadAllData(Class<T> type, Session session) {
         session.beginTransaction();
@@ -30,14 +24,16 @@ public class DBUtil {
         CriteriaQuery<T> criteria = builder.createQuery(type);
         criteria.from(type);
         List<T> data = session.createQuery(criteria).getResultList();
+        session.flush();
+        session.clear();
         session.getTransaction().commit();
+        session.close();
         return data;
     }
 
 
     public static <T> T addData(T newItem, Session session) {
         Transaction tx = null;
-
         try {
             tx = session.beginTransaction();
             session.saveOrUpdate(newItem);
@@ -49,21 +45,19 @@ public class DBUtil {
             new LogDAO().save(new LogEntity(ex));
             ex.printStackTrace();//Up server Delete
         } finally {
-            session.close();
+
             return newItem;
         }
     }
 
     public static <T, K> void deleteData(T primaryID, Class<K> cl, Session session) {
         Transaction tx = null;
-
         try {
             tx = session.beginTransaction();
             K item = session.load(cl, (Serializable)primaryID);
             if (item != null) {
                 session.delete(item);
             }
-
             tx.commit();
         } catch (HibernateException ex) {
             if (tx != null) {
@@ -71,17 +65,14 @@ public class DBUtil {
             }
             new LogDAO().save(new LogEntity(ex));
             ex.printStackTrace();
-        } finally {
-            session.close();
         }
-
     }
 
     public static <T, K> K getDataByID(T primaryID, Class<K> cl, Session session) {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            K item = session.get(cl, (Serializable)primaryID);
+            K item = (K) session.get(cl, (Serializable)primaryID);
             tx.commit();
             return item;
         } catch (HibernateException ex) {
@@ -100,43 +91,42 @@ public class DBUtil {
 
     }
     public static <T> List<T> getTop10(Criteria criteria,Session session){
-        session.beginTransaction();
+        Transaction tx = null;
         try{
+            tx= session.beginTransaction();
             org.hibernate.Criteria  q= session.createCriteria(criteria.getClazz()).addOrder(Order.desc("range")).setMaxResults(criteria.getTop());
+            tx.commit();
             return  q.list();
         }catch (HibernateException ex){
             new LogDAO().save(new LogEntity(ex));
-        }finally {
-            session.close();
         }
         return null;
     }
     public static <T> long countDataWithCondition(Session session, Class<T> type){
+        Transaction tx = null;
         try {
-        session.beginTransaction();
+        tx=session.beginTransaction();
         org.hibernate.Criteria q = session.createCriteria(type).
                 add(Restrictions.eq("active",true)).setProjection(Projections.rowCount());
+        tx.commit();
         return (long) q.uniqueResult();
         }catch (Exception ex){
             ex.printStackTrace();
-        }finally {
-            session.close();
         }
         return 0;
     }
     public static <T> long countData(Session session, Class<T> type){
+        Transaction tx = null;
         try{
-        session.beginTransaction();
-        org.hibernate.Criteria q = session.createCriteria(type).
+            tx=session.beginTransaction();
+            org.hibernate.Criteria q = session.createCriteria(type).
                 setProjection(Projections.rowCount());
-        return (long) q.uniqueResult();
+            tx.commit();
+            return (long) q.uniqueResult();
         }
         catch (Exception ex){
             ex.printStackTrace();
             return 0;
-        }
-        finally {
-            session.close();
         }
     }
     public static <T> List<T> loadDataPagination(Session session,Criteria criter ) {
@@ -159,57 +149,61 @@ public class DBUtil {
         return data;
     }
     public static <T> List<T> getTop10New(String condition,Criteria criteria,Session session){
-        session.beginTransaction();
+        Transaction tx = null;
         try{
-            org.hibernate.Criteria  q= session.createCriteria(criteria.getClazz()).addOrder(Order.desc(condition)).setMaxResults(criteria.getTop());
-            return  q.list();
+            tx=session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteriaQuery = builder.createQuery(criteria.getClazz());
+            Root<T> from = criteriaQuery.from(criteria.getClazz());
+            criteriaQuery.select(from).orderBy((javax.persistence.criteria.Order) Order.desc(condition));
+            Query<T> q = session.createQuery(criteriaQuery).setMaxResults(criteria.getTop());
+            tx.commit();
+            return  q.getResultList();
         }catch (HibernateException ex){
             new LogDAO().save(new LogEntity(ex));
-        }finally {
-            session.close();
         }
         return null;
     }
     public static <T> List<T> getTopRandom(Criteria criteria,Session session){
-        session.beginTransaction();
+        Transaction tx = null;
         try{
+            tx=session.beginTransaction();
             org.hibernate.Criteria  q= session.createCriteria(criteria.getClazz()).add(Restrictions.sqlRestriction("order by random()")).setMaxResults(criteria.getTop());
+            tx.commit();
             return  q.list();
         }catch (HibernateException ex){
             new LogDAO().save(new LogEntity(ex));
-        }finally {
-            session.close();
         }
         return null;
     }
     public static <T> List<T> getListHasCondition(String table,String conditionColumn,String condition,Class<T> type,Session session){
-        Transaction tx = session.beginTransaction();
+        Transaction tx = null;
         try {
+            tx =  session.beginTransaction();
             String sql = CUSTOM_QUERY.sqlGetId(table,conditionColumn,condition);
             SQLQuery q = session.createSQLQuery(sql);
            q.addEntity(type);
-            return q.getResultList();
+            tx.commit();
+            return  q.getResultList()  ;
         }catch (HibernateException ex) {
             if (tx != null) tx.rollback();
                 new LogDAO().save(new LogEntity(ex));
             return null;
-        } finally {
-            session.close();
         }
     }
     public static <T> List<T> getImageOrResource(String table,String model,long entryid,Class<T> type,Session session){
-        Transaction tx = session.beginTransaction();
+        Transaction tx = null;
         try {
+            tx= session.beginTransaction();
             String sql = CUSTOM_QUERY.sqlGetIdFromImageOrResource(table,model,entryid);
             SQLQuery q = session.createSQLQuery(sql);
             q.addEntity( type);
+            tx.commit();
             return q.getResultList();
         }catch (HibernateException ex) {
             if (tx != null) tx.rollback();
             new LogDAO().save(new LogEntity(ex));
             return null;
-        } finally {
-            session.close();
         }
     }
 }

@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.SingerEntity" table="singer" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="singername">
             <column name="singername" sql-type="varchar(255)"/>
@@ -19,7 +19,7 @@
             <column name="img" sql-type="text"/>
         </property>
         <property name="active">
-            <column name="active" sql-type="bit"/>
+            <column name="active" sql-type="boolean" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>

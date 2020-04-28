@@ -7,7 +7,6 @@ import java.util.Objects;
 @Table(name = "serifilm", schema = "public", catalog = "test12345")
 public class SerifilmEntity {
     private long id;
-    private String listfilm;
     private String ext;
     private long index;
     private long range;
@@ -21,16 +20,6 @@ public class SerifilmEntity {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "listfilm", nullable = false, length = -1)
-    public String getListfilm() {
-        return listfilm;
-    }
-
-    public void setListfilm(String listfilm) {
-        this.listfilm = listfilm;
     }
 
     @Basic
@@ -71,12 +60,11 @@ public class SerifilmEntity {
         return id == that.id &&
                 index == that.index &&
                 range == that.range &&
-                Objects.equals(listfilm, that.listfilm) &&
                 Objects.equals(ext, that.ext);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, listfilm, ext, index, range);
+        return Objects.hash(id, ext, index, range);
     }
 }

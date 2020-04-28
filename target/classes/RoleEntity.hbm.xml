@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.RoleEntity" table="role_" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="rolename">
             <column name="rolename" sql-type="varchar(255)"/>

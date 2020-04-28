@@ -6,12 +6,9 @@
 
     <class name="Server.model.DB.SerifilmEntity" table="serifilm" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
-        <property name="listfilm">
-            <column name="listfilm" sql-type="text"/>
-        </property>
         <property name="ext">
             <column name="ext" sql-type="text"/>
         </property>

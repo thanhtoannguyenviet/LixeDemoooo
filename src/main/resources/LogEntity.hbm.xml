@@ -6,11 +6,11 @@
 
     <class name="Server.model.DB.LogEntity" table="log" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
-        <property name="messageError">
-            <column name="messageError" sql-type="text" not-null="true"/>
+        <property name="messageerror">
+            <column name="messageerror" sql-type="text" not-null="true"/>
         </property>
         <property name="codeerror">
             <column name="codeerror" sql-type="text" not-null="true"/>

@@ -1,6 +1,5 @@
 package Server.model.DAO;
 
-import Server.model.DB.CategoryfilmEntity;
 import Server.model.DB.CategorysongEntity;
 import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
-
-import static Server.service.DBUtil.addData;
 
 @Repository
 public class CategorySongDAO {

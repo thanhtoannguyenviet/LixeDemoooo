@@ -3,7 +3,6 @@ package Server.controller;
 import Server.model.DAO.DirectorDAO;
 import Server.model.DAO.LogDAO;
 import Server.model.DAO.SignalDAO;
-import Server.model.DB.CategorysongEntity;
 import Server.model.DB.DirectorEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DTO.Criteria;

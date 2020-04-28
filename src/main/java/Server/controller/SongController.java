@@ -18,14 +18,7 @@ import java.util.*;
 public class SongController {
     @Autowired
     SongDAO songDAO;
-    AlbumDAO albumDAO=new AlbumDAO();
-    AuthorDAO authorDAO = new AuthorDAO();
-    SingerDAO singerDAO = new SingerDAO();
-    CategorySongDAO categorySongDAO = new CategorySongDAO();
-    SongCategorySongDAO songCategorySongDAO = new SongCategorySongDAO();
-    SongSingerDAO songSingerDAO = new SongSingerDAO();
-    ImageDAO imageDAO = new ImageDAO();
-    UploadDAO uploadDAO = new UploadDAO();
+
 
         @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
@@ -45,9 +38,10 @@ public class SongController {
             method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> Get (@PathVariable("id") Long id){
-        SongDTO entity =  getSongDTObyID(id);
+        SongEntity entity =  songDAO.getByID(id);
+
         if(entity!=null)
-            return new ResponseEntity<>(entity,HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new SongDTO(entity).getSongDTObyE(entity),HttpStatus.ACCEPTED);
         else
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
     }
@@ -63,9 +57,9 @@ public class SongController {
             List<SongDTO> songDTOList = new ArrayList<>();
             for ( SongEntity item : ls
                  ) {
-                songDTOList.add(getSongDTObyID(item.getId()));
+                songDTOList.add(new SongDTO(item).getSongDTObyE(item));
             }
-            return new ResponseEntity<>(songDTOList, HttpStatus.OK);
+            return new ResponseEntity<>(Collections.unmodifiableList(songDTOList), HttpStatus.OK);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
@@ -165,7 +159,6 @@ public class SongController {
         SongSingerEntity songSingerEntity = new SongSingerEntity();
         songSingerEntity.setSingerid(singerEntity.getId());
         songSingerEntity.setSongid(idsong);
-        songSingerDAO.save(songSingerEntity);
         return new ResponseEntity<>(songSingerEntity,HttpStatus.OK);
     }
     @RequestMapping(value ="/Count", method = RequestMethod.GET)
@@ -179,24 +172,12 @@ public class SongController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
             }
     }
+    @RequestMapping(value = "/GetAll",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public  ResponseEntity<?> getAll (){
+            return new ResponseEntity<>(songDAO.getAll2(),HttpStatus.ACCEPTED);
 
-    public SongDTO getSongDTObyID(Long id ){
-        //Init
-        SongEntity songEntity = songDAO.getByID(id);
-        AuthorEntity authorEntity = authorDAO.getByID(songEntity.getAuthorid());
-        AlbumEntity albumEntity = albumDAO.getByID(songEntity.getAlbumid());
-        List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("songid",id.toString());
-        List<SingerEntity> singerEntityList = new ArrayList<>();
-        for (SongSingerEntity item : songSingerEntityList) {
-            singerEntityList.add(singerDAO.getByID(item.getSingerid()));
-        }
-        List<UploadEntity> uploadEntityList = uploadDAO.getId("Song",songEntity.getId());
-        List<SongCategorysongEntity> songCategorysongEntityList = songCategorySongDAO.getId("songid",id.toString());
-        List<CategorysongEntity> categorysongEntityList = new ArrayList<>();
-        for(SongCategorysongEntity item: songCategorysongEntityList){
-            categorysongEntityList.add(categorySongDAO.getByID(item.getCategoryid()));
-        }
-        SongDTO songDTO = new SongDTO(songEntity,albumEntity,authorEntity,new ImageEntity(),Collections.unmodifiableList(singerEntityList),Collections.unmodifiableList(uploadEntityList),Collections.unmodifiableList(categorysongEntityList));
-        return songDTO;
     }
+
 }

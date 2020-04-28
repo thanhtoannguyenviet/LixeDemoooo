@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.CategorysongEntity" table="categorysong" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="categoryname">
             <column name="categoryname" sql-type="varchar(255)"/>

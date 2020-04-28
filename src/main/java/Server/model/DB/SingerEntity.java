@@ -10,7 +10,7 @@ public class SingerEntity {
     private String singername;
     private String info;
     private String img;
-    private boolean active;
+    private Boolean active;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,12 +54,12 @@ public class SingerEntity {
     }
 
     @Basic
-    @Column(name = "active", nullable = false)
-    public boolean isActive() {
+    @Column(name = "active", nullable = true)
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -69,10 +69,10 @@ public class SingerEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SingerEntity that = (SingerEntity) o;
         return id == that.id &&
-                active == that.active &&
                 Objects.equals(singername, that.singername) &&
                 Objects.equals(info, that.info) &&
-                Objects.equals(img, that.img);
+                Objects.equals(img, that.img) &&
+                Objects.equals(active, that.active);
     }
 
     @Override

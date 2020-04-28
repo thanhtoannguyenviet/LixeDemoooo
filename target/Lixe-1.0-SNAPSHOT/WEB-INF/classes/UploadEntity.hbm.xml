@@ -6,8 +6,8 @@
 
     <class name="Server.model.DB.UploadEntity" table="upload" schema="public" catalog="test12345">
         <id name="id">
-            <column name="id" sql-type="bigint"/>
-            <generator class="identity"/>
+            <column name="id" sql-type="bigint"/><generator class="identity"/>
+
         </id>
         <property name="source">
             <column name="source" sql-type="varchar(500)" length="500"/>
