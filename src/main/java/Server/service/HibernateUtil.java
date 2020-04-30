@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class HibernateUtil {
 
-    public static Map<Class, SessionFactory> mapSession = new HashMap<>();
+    private static Map<Class, SessionFactory> mapSession = new HashMap<>();
 
     static {
         try {
@@ -37,7 +37,7 @@ public class HibernateUtil {
         }
     }
 
-    public static SessionFactory loadSessionFactory(Class clazz) {
+    private static SessionFactory loadSessionFactory(Class clazz) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.addAnnotatedClass(clazz);
@@ -65,7 +65,7 @@ public class HibernateUtil {
         return retSession;
     }
 
-    public static List<Class> findMyTypes(String basePackage) throws IOException, ClassNotFoundException {
+    private static List<Class> findMyTypes(String basePackage) throws IOException, ClassNotFoundException {
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
