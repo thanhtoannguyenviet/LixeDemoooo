@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.SeriCategoryFilmDAO;
 import Server.model.DB.SeriCategoryfilmEntity;
+import Server.model.DTO.SeriCategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

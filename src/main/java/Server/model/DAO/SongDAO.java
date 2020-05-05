@@ -1,5 +1,7 @@
 package Server.model.DAO;
 
+import Server.model.DB.CategorysongEntity;
+import Server.model.DB.SongCategorysongEntity;
 import Server.model.DB.SongEntity;
 import Server.model.DTO.Criteria;
 import Server.service.DBUtil;
@@ -14,63 +16,49 @@ import java.util.List;
 public class SongDAO {
     SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(SongEntity.class).buildSessionFactory();
     public List<SongEntity> getAll() {
-        Session s = factory.getCurrentSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
     public SongEntity save(SongEntity entity){
-        Session s = factory.getCurrentSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         return DBUtil.addData(entity,s);
     }
     public void delete(long id){
-        Session s= factory.getCurrentSession();
+        Session s= HibernateUtil.getSession(SongEntity.class);
         DBUtil.deleteData(id,SongEntity.class,s);
     }
     public SongEntity getByID(long id){
-        Session s = factory.openSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         SongEntity entity = DBUtil.getDataByID(id,SongEntity.class,s);
         return entity;
     }
-//    public long GetId(String conditionColumn,String condition ){
-//
-//        Session s = factory.getCurrentSession();
-//        Transaction tx = s.beginTransaction();
-//        try {
-//            //sql = select * from User_ where userName = '?'
-//            String sql = CUSTOM_QUERY.sqlGetId("Song",conditionColumn,condition);
-//            SQLQuery q = s.createSQLQuery(sql);
-//            q.addEntity(SongEntity.class);
-//            SongEntity entity =(SongEntity) q.uniqueResult() ;
-//            return entity.getId();
-//        }catch (HibernateException ex) {
-//            if (tx != null) tx.rollback();
-//            ex.printStackTrace();
-//            return 0;
-//        } finally {
-//            s.close();
-//        }
-//    }
+    public List<SongEntity> getSongByAuthorId(String conditionColumn,String condition ){
+        Session s = HibernateUtil.getSession(SongEntity.class);
+        List<SongEntity> ls = DBUtil.getListHasCondition("song",conditionColumn,condition,SongEntity.class,s);
+        return Collections.unmodifiableList(ls);
+    }
     public List<SongEntity> loadDataPagination(Server.model.DTO.Criteria criteria) {
-        Session s = factory.getCurrentSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.loadDataPagination( s,criteria);
         return Collections.unmodifiableList(ls);
     }
     public long count(){
-        Session s = factory.getCurrentSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         return DBUtil.countDataWithCondition(s,SongEntity.class);
     }
     public List<SongEntity> getTop10(Criteria criteria){
-        Session s = factory.getCurrentSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.getTop10(criteria,s);
         return Collections.unmodifiableList(ls);
     }
     public List<SongEntity> getTop10New(Criteria criteria){
-        Session s = factory.getCurrentSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.getTop10New("modifieddate",criteria,s);
         return Collections.unmodifiableList(ls);
     }
     public List<SongEntity> getAll2() {
-        Session s = HibernateUtil.getSession();
+        Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);
         return Collections.unmodifiableList(ls);
     }

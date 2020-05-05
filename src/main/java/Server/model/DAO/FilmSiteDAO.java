@@ -20,20 +20,55 @@ public class FilmSiteDAO {
     SeriFilmDAO seriFilmDAO = new SeriFilmDAO();
     FilmActorDAO filmActorDAO = new FilmActorDAO();
     FilmCategoryFilmDAO filmCategoryFilmDAO = new FilmCategoryFilmDAO();
-    public FilmDTO getFilmDTOById(long id){
-        FilmEntity filmEntity = filmDAO.getByID(id);
+    public FilmDTO getFilmDTOById(FilmEntity filmEntity){
         DirectorEntity directorEntity = directorDAO.getByID(filmEntity.getDirectorid());
         List<FilmActorEntity> filmActorEntityList= filmActorDAO.getListHasCondition("filmid",filmEntity.getId()+"");
         List<ActorEntity> actorEntityList= new ArrayList<>();
-        for(FilmActorEntity item : filmActorEntityList){
-            actorEntityList.add(actorDAO.getByID(item.getId()));
+        if(!filmActorEntityList.isEmpty()){
+            for(FilmActorEntity item : filmActorEntityList){
+                ActorEntity actor = actorDAO.getByID(item.getActorid());
+                if(actor!=null)
+                    actorEntityList.add(actor);
+            }
         }
         List<ImageEntity> imageEntityList = imageDAO.getId("film",filmEntity.getId());
         List<UploadEntity> uploadEntityList = uploadDAO.getId("film",filmEntity.getId());
         List<FilmCategoryfilmEntity> filmCategoryfilmEntities = filmCategoryFilmDAO.getId("filmid",filmEntity.getId()+"");
         List<CategoryfilmEntity> categoryfilmEntityList = new ArrayList<>();
-        for (FilmCategoryfilmEntity item : filmCategoryfilmEntities){
-            categoryfilmEntityList.add(categoryFilmDAO.getByID(item.getCategoryid()));
+        if(!filmCategoryfilmEntities.isEmpty()){
+            for (FilmCategoryfilmEntity item : filmCategoryfilmEntities){
+                CategoryfilmEntity catfilm = categoryFilmDAO.getByID(item.getCategoryid());
+                if(catfilm!=null)
+                categoryfilmEntityList.add(catfilm);
+            }
+        }
+        SerifilmEntity serifilmEntity= seriFilmDAO.getByID(filmEntity.getId());
+        FilmDTO filmDTO = new FilmDTO(filmEntity,directorEntity, Collections.unmodifiableList(actorEntityList),Collections.unmodifiableList(imageEntityList),
+                Collections.unmodifiableList(uploadEntityList),Collections.unmodifiableList(categoryfilmEntityList),serifilmEntity);
+        return filmDTO;
+    }
+    public FilmDTO getFilmDTOById(Long id){
+        FilmEntity filmEntity = filmDAO.getByID(id);
+        DirectorEntity directorEntity = directorDAO.getByID(filmEntity.getDirectorid());
+        List<FilmActorEntity> filmActorEntityList= filmActorDAO.getListHasCondition("filmid",filmEntity.getId()+"");
+        List<ActorEntity> actorEntityList= new ArrayList<>();
+        if(!filmActorEntityList.isEmpty()){
+            for(FilmActorEntity item : filmActorEntityList){
+                ActorEntity actor = actorDAO.getByID(item.getActorid());
+                if(actor!=null)
+                    actorEntityList.add(actor);
+            }
+        }
+        List<ImageEntity> imageEntityList = imageDAO.getId("film",filmEntity.getId());
+        List<UploadEntity> uploadEntityList = uploadDAO.getId("film",filmEntity.getId());
+        List<FilmCategoryfilmEntity> filmCategoryfilmEntities = filmCategoryFilmDAO.getId("filmid",filmEntity.getId()+"");
+        List<CategoryfilmEntity> categoryfilmEntityList = new ArrayList<>();
+        if(!filmCategoryfilmEntities.isEmpty()){
+            for (FilmCategoryfilmEntity item : filmCategoryfilmEntities){
+                CategoryfilmEntity catfilm = categoryFilmDAO.getByID(item.getCategoryid());
+                if(catfilm!=null)
+                    categoryfilmEntityList.add(catfilm);
+            }
         }
         SerifilmEntity serifilmEntity= seriFilmDAO.getByID(filmEntity.getId());
         FilmDTO filmDTO = new FilmDTO(filmEntity,directorEntity, Collections.unmodifiableList(actorEntityList),Collections.unmodifiableList(imageEntityList),

@@ -24,10 +24,7 @@ public class DBUtil {
         CriteriaQuery<T> criteria = builder.createQuery(type);
         criteria.from(type);
         List<T> data = session.createQuery(criteria).getResultList();
-        session.flush();
-        session.clear();
         session.getTransaction().commit();
-        session.close();
         return data;
     }
 
@@ -182,12 +179,12 @@ public class DBUtil {
             tx =  session.beginTransaction();
             String sql = CUSTOM_QUERY.sqlGetId(table,conditionColumn,condition);
             SQLQuery q = session.createSQLQuery(sql);
-           q.addEntity(type);
+            q.addEntity(type);
             tx.commit();
             return  q.getResultList()  ;
         }catch (HibernateException ex) {
             if (tx != null) tx.rollback();
-                new LogDAO().save(new LogEntity(ex));
+            new LogDAO().save(new LogEntity(ex));
             return null;
         }
     }

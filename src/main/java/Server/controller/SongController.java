@@ -18,9 +18,9 @@ import java.util.*;
 public class SongController {
     @Autowired
     SongDAO songDAO;
-
-
-        @RequestMapping(value = "/Post",
+    @Autowired
+    SongSiteDAO songSiteDAO;
+    @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SongEntity entity){
@@ -39,9 +39,8 @@ public class SongController {
     @ResponseBody
     public  ResponseEntity<?> Get (@PathVariable("id") Long id){
         SongEntity entity =  songDAO.getByID(id);
-
         if(entity!=null)
-            return new ResponseEntity<>(new SongDTO(entity).getSongDTObyE(entity),HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(songSiteDAO.getSongDTOById(id),HttpStatus.ACCEPTED);
         else
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
     }
@@ -57,7 +56,7 @@ public class SongController {
             List<SongDTO> songDTOList = new ArrayList<>();
             for ( SongEntity item : ls
                  ) {
-                songDTOList.add(new SongDTO(item).getSongDTObyE(item));
+                songDTOList.add(songSiteDAO.getSongDTOById(item));
             }
             return new ResponseEntity<>(Collections.unmodifiableList(songDTOList), HttpStatus.OK);
         }

@@ -1,22 +1,28 @@
 package Server.controller;
 
-import Server.model.DAO.ActorDAO;
-import Server.model.DAO.CategoryFilmDAO;
-import Server.model.DAO.LogDAO;
+import Server.model.DAO.*;
 import Server.model.DB.CategoryfilmEntity;
+import Server.model.DB.FilmCategoryfilmEntity;
+import Server.model.DB.FilmEntity;
 import Server.model.DB.LogEntity;
+import Server.model.DTO.CategoryFilmDTO;
 import Server.model.DTO.Criteria;
+import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequestMapping("api/FilmSite/Category")
 @RestController
 public class CategoryFilmController {
     @Autowired
     CategoryFilmDAO categoryFilmDAO;
-    ActorDAO actorDAO;
+    FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
+    FilmCategoryFilmDAO filmCategoryFilmDAO = new FilmCategoryFilmDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -50,9 +56,13 @@ public class CategoryFilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> getDetail(@PathVariable("id") Long id){
-
-        return new ResponseEntity<>(categoryFilmDAO.getByID(id),HttpStatus.OK);
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
+        CategoryfilmEntity categoryfilmEntity = categoryFilmDAO.getByID(id);
+        if (categoryfilmEntity != null) {
+            CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(categoryfilmEntity);
+            return new ResponseEntity<>(categoryFilmDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetAll/",
             method = RequestMethod.GET
@@ -60,9 +70,18 @@ public class CategoryFilmController {
     @ResponseBody
     public ResponseEntity<?> getAll(){
         try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(CategoryfilmEntity.class);
-        return new ResponseEntity<>(actorDAO.getAll(),HttpStatus.OK);
+            List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getAll();
+            if(!categoryfilmEntityList.isEmpty()){
+                List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
+                for ( CategoryfilmEntity item : categoryfilmEntityList
+                     ) {
+                    CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
+                    if(categoryFilmDTO!=null)
+                        categoryFilmDTOList.add(categoryFilmDTO);
+                }
+                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -70,14 +89,26 @@ public class CategoryFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage ){
         try {
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
             criteria.setCurrentPage(page);
-            return new ResponseEntity<>(categoryFilmDAO.loadDataPagination(criteria), HttpStatus.OK);
+            criteria.setItemPerPage(itemOnPage);
+            List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.loadDataPagination(criteria);
+            if(!categoryfilmEntityList.isEmpty()){
+                List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
+                for ( CategoryfilmEntity item : categoryfilmEntityList
+                ) {
+                    CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
+                    if(categoryFilmDTO!=null)
+                        categoryFilmDTOList.add(categoryFilmDTO);
+                }
+                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
@@ -86,16 +117,55 @@ public class CategoryFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop10/", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetTop{itop}/", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getTop (){
+    public  ResponseEntity<?> getTop (@PathVariable("itop") int itop){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(CategoryfilmEntity.class);
-        criteria.setTop(10);
-        return new ResponseEntity<>(categoryFilmDAO.getTop10(criteria),HttpStatus.OK);
+        criteria.setTop(itop);
+        List<CategoryfilmEntity> categoryfilmEntityList   = categoryFilmDAO.getTop10(criteria);
+        if(!categoryfilmEntityList.isEmpty()){
+                List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
+                for ( CategoryfilmEntity item : categoryfilmEntityList
+                ) {
+                    CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
+                    if(categoryFilmDTO!=null)
+                        categoryFilmDTOList.add(categoryFilmDTO);
+                }
+                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value = "/GetRandom{iRandom}/",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> getRandom(@PathVariable("iRandom") int iRandom){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.setTop(iRandom);
+            criteria.setClazz(CategoryfilmEntity.class);
+            List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getTopRandom(criteria);
+            if(!categoryfilmEntityList.isEmpty()){
+                List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
+                for ( CategoryfilmEntity item : categoryfilmEntityList
+                ) {
+                    CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
+                    if(categoryFilmDTO!=null)
+                        categoryFilmDTOList.add(categoryFilmDTO);
+                }
+                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
@@ -112,5 +182,18 @@ public class CategoryFilmController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
+    }
+    private CategoryFilmDTO getCategoryFilmDTO(CategoryfilmEntity categoryfilmEntity){
+       List<FilmCategoryfilmEntity> filmCategoryfilmEntities = filmCategoryFilmDAO.getId("categoryid",categoryfilmEntity.getId()+"");
+       List<FilmDTO> filmDTOList = new ArrayList<>();
+       if(!filmCategoryfilmEntities.isEmpty()){
+           for (FilmCategoryfilmEntity item : filmCategoryfilmEntities
+                ) {
+               FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getFilmid());
+               if(filmDTO != null)
+                   filmDTOList.add(filmDTO);
+           }
+       }
+       return new CategoryFilmDTO(categoryfilmEntity,filmDTOList);
     }
 }

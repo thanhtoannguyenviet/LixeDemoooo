@@ -2,6 +2,10 @@
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8" addBOMForNewFiles="with BOM">
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/AlbumSongDAO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/AuthorDAO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/DirectorFilmDAO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/SerifilmFilmDAO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DAO/SongSiteDAO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/ActorEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AlbumCategorymusicEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/AlbumEntity.java" charset="UTF-8" />
@@ -36,6 +40,11 @@
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/SongSingerEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/UploadEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/UserEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/AuthorDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/CategoryFilmDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/CategorySongDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/DirectorDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/SeriCategoryDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/service/HibernateUtil.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>

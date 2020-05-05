@@ -19,7 +19,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<?> getAccount(){
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return new ResponseEntity<>(userDAO.getAll(), HttpStatus.OK);
 
     }
     @RequestMapping(value = "/RegisterAPI/",

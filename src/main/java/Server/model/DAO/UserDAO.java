@@ -14,7 +14,11 @@ import java.util.List;
 
 @Repository
 public class UserDAO {
-//    SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserEntity.class).buildSessionFactory();
+    public List<UserEntity> getAll() {
+        Session s = HibernateUtil.getSession(UserEntity.class);
+        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, s);
+        return Collections.unmodifiableList(ls);
+    }
 //    public List<UserDTO> getAll() {
 //        Session s = factory.getCurrentSession();
 //

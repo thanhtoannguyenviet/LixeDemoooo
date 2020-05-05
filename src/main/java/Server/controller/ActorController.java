@@ -9,6 +9,7 @@ import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -54,11 +55,15 @@ public class ActorController {
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         ActorDTO actorDTO = getActorDTO(actorDAO.getByID(id));
-        return new ResponseEntity<>(actorDTO,HttpStatus.OK);
+        if(actorDTO!=null)
+            return new ResponseEntity<>(actorDTO,HttpStatus.OK);
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
     @RequestMapping(value = "/PostToFilm/{id}",
             method = RequestMethod.POST)
@@ -86,7 +91,8 @@ public class ActorController {
         filmActorDAO.delete(id);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }
-@RequestMapping(value ="/GetAllHasPage{item}/{page}", method = RequestMethod.GET)
+@RequestMapping(value ="/GetAllHasPage{item}/{page}", method = RequestMethod.GET,
+        produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 @ResponseBody
 public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVariable("item") int item) {
     try {
@@ -94,7 +100,16 @@ public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVar
         criteria.setClazz(ActorEntity.class);
         criteria.setCurrentPage(page);
         criteria.setItemPerPage(item);
-        return new ResponseEntity<>(actorDAO.loadDataPagination(criteria), HttpStatus.OK);
+        List<ActorEntity> ls =actorDAO.loadDataPagination(criteria);
+        List<ActorDTO> lsResult = new ArrayList<>();
+        if(!ls.isEmpty()) {
+            for (ActorEntity actor : ls
+            ) {
+                lsResult.add(getActorDTO(actor));
+            }
+            return new ResponseEntity<>(lsResult, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     } catch (Exception e) {
         LogEntity log = new LogEntity(e);
         (new LogDAO()).save(log);
@@ -102,7 +117,8 @@ public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVar
         return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
     }
 }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
     public  ResponseEntity<?> count () {
         try {
@@ -114,14 +130,18 @@ public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVar
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetRandom{item}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetRandom{item}", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
     public  ResponseEntity<?> getRandom (@PathVariable("item") int item) {
         try {
             Criteria criteria = new Criteria();
             criteria.setClazz(ActorEntity.class);
             criteria.setTop(item);
-            return new ResponseEntity<>(actorDAO.loadTopRandom(criteria), HttpStatus.OK);
+            List<ActorEntity> actorEntityList = actorDAO.loadTopRandom(criteria);
+            if(!actorEntityList.isEmpty())
+                return new ResponseEntity<>(actorEntityList, HttpStatus.OK);
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -134,7 +154,9 @@ public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVar
         FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
         List<FilmDTO> filmDTOList = new ArrayList<>();
         for ( FilmActorEntity item : filmActorEntityList) {
-            filmDTOList.add(filmSiteDAO.getFilmDTOById(item.getFilmid()));
+            FilmDTO film = filmSiteDAO.getFilmDTOById(item.getFilmid());
+            if(film!=null)
+                filmDTOList.add(film);
         }
         return new ActorDTO(actorEntity, Collections.unmodifiableList(filmDTOList));
     }

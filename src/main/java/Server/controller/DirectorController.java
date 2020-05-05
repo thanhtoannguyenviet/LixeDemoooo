@@ -1,11 +1,12 @@
 package Server.controller;
 
-import Server.model.DAO.DirectorDAO;
-import Server.model.DAO.LogDAO;
-import Server.model.DAO.SignalDAO;
+import Server.model.DAO.*;
 import Server.model.DB.DirectorEntity;
+import Server.model.DB.DirectorFilmEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DTO.Criteria;
+import Server.model.DTO.DirectorDTO;
+import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 @RequestMapping("api/FilmSite/Director")
 @RestController
 public class DirectorController {
     @Autowired
     DirectorDAO directorDAO;
-    SignalDAO signalDAO;
+    DirectorFilmDAO directorFilmDAO = new DirectorFilmDAO();
+    FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -57,17 +62,33 @@ public class DirectorController {
     )
     @ResponseBody
     public ResponseEntity<?> get (@PathVariable("id") Long id){
-     return  new ResponseEntity<>(directorDAO.getByID(id),HttpStatus.OK);
+        DirectorEntity directorEntity = directorDAO.getByID(id);
+        if(directorEntity!=null){
+            return  new ResponseEntity<>(getDirectorDTO(directorEntity),HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(DirectorEntity.class);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(directorDAO.loadDataPagination(criteria),HttpStatus.OK);
+        criteria.setItemPerPage(itemOnPage);
+        List< DirectorEntity > directorEntityList = directorDAO.loadDataPagination(criteria);
+        List<DirectorDTO> directorDTOList = new ArrayList<>();
+            if(!directorEntityList.isEmpty()){
+                for (DirectorEntity item : directorEntityList
+                     ) {
+                    DirectorDTO directorDTO = getDirectorDTO(item);
+                    if(directorDTO!=null)
+                        directorDTOList.add(directorDTO);
+                }
+                return  new ResponseEntity<>(directorDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -85,5 +106,18 @@ public class DirectorController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
+    }
+    private DirectorDTO getDirectorDTO(DirectorEntity directorEntity){
+        List<DirectorFilmEntity> directorFilmEntityList = directorFilmDAO.getID("directorid",directorEntity.getId()+"");
+        List<FilmDTO> filmDTOList = new ArrayList<>();
+        if(!directorFilmEntityList.isEmpty()){
+            for (DirectorFilmEntity item : directorFilmEntityList) {
+                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getId());
+                if(filmDTO!=null){
+                    filmDTOList.add(filmDTO);
+                }
+            }
+        }
+        return new DirectorDTO(directorEntity,filmDTOList);
     }
 }

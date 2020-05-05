@@ -1,22 +1,26 @@
 package Server.controller;
 
-import Server.model.DAO.CategorySongDAO;
-import Server.model.DAO.LogDAO;
-import Server.model.DAO.SignalDAO;
-import Server.model.DB.CategorysongEntity;
-import Server.model.DB.LogEntity;
+import Server.model.DAO.*;
+import Server.model.DB.*;
+import Server.model.DTO.CategoryFilmDTO;
+import Server.model.DTO.CategorySongDTO;
 import Server.model.DTO.Criteria;
+import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequestMapping("api/MusicSite/Category")
 @RestController
 public class CategorySongController {
     @Autowired
     CategorySongDAO categorySongDAO;
-    SignalDAO signalDAO;
+    SongCategorySongDAO songCategorySongDAO = new SongCategorySongDAO();
+    SongSiteDAO songSiteDAO = new SongSiteDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -48,25 +52,45 @@ public class CategorySongController {
     }
     @RequestMapping(value = "/GetDetail/{id}" , method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getDetail(@PathVariable("id") Long id)
-    {
-        return new ResponseEntity<>(categorySongDAO.getByID(id),HttpStatus.OK);
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
+        CategorysongEntity categorysongEntity = categorySongDAO.getByID(id);
+        if (categorysongEntity != null) {
+            CategorySongDTO categorySongDTO = getCategorySongDTO(categorysongEntity);
+            return new ResponseEntity<>(categorySongDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value = "/GetAll/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetAll" , method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> getAll()
     {
-        return new ResponseEntity<>(categorySongDAO.getAll(),HttpStatus.OK);
+        List< CategorysongEntity> categorysongEntityList = categorySongDAO.getAll();
+        List<CategorySongDTO> categorySongDTOList = new ArrayList<>();
+        if(!categorysongEntityList.isEmpty()){
+            for (CategorysongEntity item: categorysongEntityList){
+                categorySongDTOList.add(getCategorySongDTO(item));
+            }
+            return new ResponseEntity<>(categorySongDTOList,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value = "/GetTop10/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop{iTop}/" , method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getTop10()
+    public ResponseEntity<?> getTop10(@PathVariable("iTop") int iTop)
     {
         try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(CategorysongEntity.class);
-        criteria.setTop(10);
-        return new ResponseEntity<>(categorySongDAO.getTop10(criteria),HttpStatus.OK);
+            Criteria criteria = new Criteria();
+            criteria.setClazz(CategorysongEntity.class);
+            criteria.setTop(iTop);
+            List< CategorysongEntity> categorysongEntityList = categorySongDAO.getTop10(criteria);
+            List<CategorySongDTO> categorySongDTOList = new ArrayList<>();
+            if(!categorysongEntityList.isEmpty()){
+                for (CategorysongEntity item: categorysongEntityList){
+                categorySongDTOList.add(getCategorySongDTO(item));
+                }
+                return new ResponseEntity<>(categorySongDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -74,14 +98,23 @@ public class CategorySongController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(CategorysongEntity.class);
-        criteria.setCurrentPage(page);
-        return new ResponseEntity<>(categorySongDAO.loadDataPagination(criteria),HttpStatus.OK);
+            Criteria criteria = new Criteria();
+            criteria.setClazz(CategorysongEntity.class);
+            criteria.setCurrentPage(page);
+            criteria.setItemPerPage(itemOnPage);
+            List<CategorysongEntity> categorysongEntityList = categorySongDAO.loadDataPagination(criteria);
+            List<CategorySongDTO> categorySongDTOList = new ArrayList<>();
+            if(!categorysongEntityList.isEmpty()){
+                for (CategorysongEntity item: categorysongEntityList){
+                    categorySongDTOList.add(getCategorySongDTO(item));
+                }
+                return new ResponseEntity<>(categorySongDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -99,5 +132,45 @@ public class CategorySongController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
+    }
+    @RequestMapping(value = "/GetRandom{iRandom}/",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> getRandom(@PathVariable("iRandom") int iRandom){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.setTop(iRandom);
+            criteria.setClazz(CategorysongEntity.class);
+            List<CategorysongEntity> categorysongEntityList = categorySongDAO.getTopRandom(criteria);
+            if(!categorysongEntityList.isEmpty()){
+                List<CategorySongDTO> categorySongDTOList = new ArrayList<>();
+                for ( CategorysongEntity item : categorysongEntityList
+                ) {
+                    CategorySongDTO categorySongDTO = getCategorySongDTO(item);
+                    if(categorySongDTO!=null)
+                        categorySongDTOList.add(categorySongDTO);
+                }
+                return new ResponseEntity<>(categorySongDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
+    private CategorySongDTO getCategorySongDTO(CategorysongEntity categorysongEntity){
+        List<SongCategorysongEntity> songCategorysongEntityList = songCategorySongDAO.getId("categoryid",categorysongEntity.getId()+"");
+        List<SongDTO> songDTOList = new ArrayList<>();
+        if(!songCategorysongEntityList.isEmpty()){
+            for( SongCategorysongEntity item : songCategorysongEntityList){
+                SongDTO songDTO = songSiteDAO.getSongDTOById(item.getSongid());
+                if(songDTO!=null)
+                    songDTOList.add(songDTO);
+            }
+        }
+        return new CategorySongDTO(categorysongEntity,songDTOList);
     }
 }

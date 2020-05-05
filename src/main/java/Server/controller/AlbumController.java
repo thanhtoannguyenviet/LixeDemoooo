@@ -24,6 +24,7 @@ public class AlbumController {
     SongSingerDAO songSingerDAO = new SongSingerDAO();
     SingerDAO singerDAO = new SingerDAO();
     AlbumSingerDAO albumSingerDAO = new AlbumSingerDAO();
+    AlbumSongDAO albumSongDAO = new AlbumSongDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -44,7 +45,10 @@ public class AlbumController {
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         AlbumEntity albumEntity =  albumDAO.getByID(id);
-        return new ResponseEntity<>(getAlbumDTO(albumEntity),HttpStatus.OK);
+        if(albumEntity!=null)
+            return new ResponseEntity<>(getAlbumDTO(albumEntity),HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
     @RequestMapping(value = "/Delete",
             method = RequestMethod.DELETE)
@@ -121,7 +125,17 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
         Criteria criteria = new Criteria();
         criteria.setClazz(AlbumEntity.class);
         criteria.setTop(item);
-        return new ResponseEntity<>(albumDAO.getTop10(criteria),HttpStatus.OK);
+        List<AlbumEntity> albumEntityList = albumDAO.getTop10(criteria);
+        if(!albumEntityList.isEmpty()){
+            List<AlbumDTO> albumDTOList = new ArrayList<>();
+            for (AlbumEntity ite: albumEntityList
+                 ) {
+                if(ite!=null)
+                albumDTOList.add(getAlbumDTO(ite));
+            }
+            return new ResponseEntity<>(albumDTOList,HttpStatus.OK);
+            }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
             LogEntity log = new LogEntity(e);
@@ -131,17 +145,22 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
         }
     }
     private AlbumDTO getAlbumDTO(AlbumEntity albumEntity){
-//        String[] lsSong = albumEntity.getListsongid().split(",");
         List<SongEntity> songEntityList = new ArrayList<>();
-//        for ( String item : lsSong) {
-//            if(!item.isEmpty()&&!item.isBlank()){
-//                songEntityList.add(songDAO.getByID(Long.parseLong(item)));
-//            }
-//        }
+        List<AlbumSongEntity> albumSongEntityList = albumSongDAO.getId("albumid",albumEntity.getId()+"");
+        if(!albumSongEntityList.isEmpty()){
+            for ( AlbumSongEntity item : albumSongEntityList
+                 ) {
+                SongEntity songEntity = songDAO.getByID(item.getSongid());
+                if(songEntity!=null)
+                    songEntityList.add(songEntity);
+            }
+        }
         List<SingerEntity> singerEntityList = new ArrayList<>();
         List<AlbumSingerEntity> albumSingerEntityList = albumSingerDAO.getId("albumid",albumEntity.getId()+"");
         for(AlbumSingerEntity item : albumSingerEntityList){
-            singerEntityList.add(singerDAO.getByID(item.getSingerid()));
+            SingerEntity singerEntity = singerDAO.getByID(item.getSingerid());
+            if(singerEntity!=null)
+                singerEntityList.add(singerEntity);
         }
         AlbumDTO albumDTO = new AlbumDTO(albumEntity,songEntityList,singerEntityList);
         return albumDTO;

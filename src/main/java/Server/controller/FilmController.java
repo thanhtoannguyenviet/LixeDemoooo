@@ -18,7 +18,8 @@ import java.util.List;
 public class FilmController {
     @Autowired
     FilmDAO filmDAO;
-
+    @Autowired
+    FilmSiteDAO filmSiteDAO;
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -53,17 +54,24 @@ public class FilmController {
             method = RequestMethod.GET)
     @ResponseBody
     public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
-        return new ResponseEntity<>(filmDAO.getByID(id),HttpStatus.OK);
+
+        return new ResponseEntity<>(filmSiteDAO.getFilmDTOById(id),HttpStatus.OK);
     }
-    @RequestMapping(value = "/GetTop10" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop{item}" , method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getTop10()
+    public ResponseEntity<?> getTop10(@PathVariable int item)
     {
         try{
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
-            criteria.setTop(10);
-            return new ResponseEntity<>(filmDAO.GetTop10(criteria),HttpStatus.OK);
+            criteria.setTop(item);
+            List<FilmEntity> lsFilm = filmDAO.GetTop10(criteria);
+            List<FilmDTO> lsFilmDTO = new ArrayList<>();
+            for ( FilmEntity filmE : lsFilm
+                 ) {
+                lsFilmDTO.add(filmSiteDAO.getFilmDTOById(filmE.getId()));
+            }
+            return new ResponseEntity<>(lsFilmDTO,HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -71,15 +79,22 @@ public class FilmController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(FilmEntity.class);
-        criteria.setCurrentPage(page);
-        return new ResponseEntity<>(filmDAO.loadDataPagination(criteria),HttpStatus.OK);
-        }catch (Exception e) {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(FilmEntity.class);
+            criteria.setCurrentPage(page);
+            criteria.setItemPerPage(itemOnPage);
+            List<FilmEntity> lsFilm = filmDAO.loadDataPagination(criteria);
+            List<FilmDTO> lsFilmDTO = new ArrayList<>();
+            for ( FilmEntity filmE : lsFilm)
+            {
+                lsFilmDTO.add(filmSiteDAO.getFilmDTOById(filmE.getId()));
+            }
+            return new ResponseEntity<>(lsFilmDTO,HttpStatus.OK);
+       }catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();

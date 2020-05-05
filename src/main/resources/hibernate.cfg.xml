@@ -13,6 +13,7 @@
     <!-- Enable Hibernate's automatic session context management -->
     <property name="current_session_context_class">thread</property>
     <property name="hibernate.connection.autoReconnect">true</property>
+    <property name="hibernate.connection.autocommit">true</property>
     <!-- Echo all executed SQL to stdout -->
     <property name="show_sql">true</property>
     <property name="hibernate.hbm2ddl.auto">update</property>

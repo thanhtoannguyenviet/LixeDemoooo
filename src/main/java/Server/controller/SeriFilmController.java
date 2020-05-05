@@ -1,11 +1,9 @@
 package Server.controller;
 
-import Server.model.DAO.FilmSiteDAO;
-import Server.model.DAO.LogDAO;
-import Server.model.DAO.SeriFilmDAO;
-import Server.model.DAO.SignalDAO;
+import Server.model.DAO.*;
 import Server.model.DB.LogEntity;
 import Server.model.DB.SerifilmEntity;
+import Server.model.DB.SerifilmFilmEntity;
 import Server.model.DTO.Criteria;
 import Server.model.DTO.FilmDTO;
 import Server.model.DTO.SeriFilmDTO;
@@ -22,8 +20,9 @@ import java.util.List;
 @RestController
 public class SeriFilmController {
     @Autowired
-     SeriFilmDAO seriFilmDAO;
-     SignalDAO signalDAO;
+    SeriFilmDAO seriFilmDAO;
+    FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
+    SerifilmFilmDAO serifilmFilmDAO = new SerifilmFilmDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
@@ -101,5 +100,15 @@ public class SeriFilmController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
+    }
+    private SeriFilmDTO getSeriFilmDTO(SerifilmEntity serifilmEntity){
+//        List<SerifilmFilmEntity> serifilmFilmEntityList = serifilmFilmDAO.getId("serifilmid",serifilmEntity.getId()+"");
+////        List<FilmDTO> filmDTOList = new ArrayList<>();
+////        if(!serifilmFilmEntityList.isEmpty()){
+////            for(SerifilmFilmEntity item : serifilmFilmEntityList){
+////                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.get)
+////            }
+////        }
+        return null;
     }
 }
