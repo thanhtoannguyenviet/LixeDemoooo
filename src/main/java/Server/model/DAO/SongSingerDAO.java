@@ -31,8 +31,8 @@ public class SongSingerDAO {
         return entity;
     }
     public List<SongSingerEntity> getId(String conditionColumn, String condition ){
-            Session s = HibernateUtil.getSession(SongEntity.class);
-            List<SongSingerEntity> entity = DBUtil.getListHasCondition("song_singer",conditionColumn,condition,SongSingerEntity.class,s);
-            return Collections.unmodifiableList(entity);
+            Session s = HibernateUtil.getSession(SongSingerEntity.class);
+            List<SongSingerEntity> entity = DBUtil.getListHasCondition(conditionColumn,condition,SongSingerEntity.class,s);
+            return entity;
     }
 }

@@ -44,14 +44,14 @@ public class SongController {
         else
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value = "/GetTop10",
+    @RequestMapping(value = "/GetTop{id}",
             method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getTop10 () {
+    public  ResponseEntity<?> getTop10 (@PathVariable("id") int id) {
         try {
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
-            criteria.setTop(10);
+            criteria.setTop(id);
             List<SongEntity> ls = songDAO.getTop10(criteria);
             List<SongDTO> songDTOList = new ArrayList<>();
             for ( SongEntity item : ls
@@ -70,12 +70,18 @@ public class SongController {
         @RequestMapping(value = "/GetTopNew{id}",
                 method = RequestMethod.GET)
         @ResponseBody
-        public  ResponseEntity<?> getTopNew10 (@PathVariable Long id) {
+        public  ResponseEntity<?> getTopNew10 (@PathVariable("id") int  id) {
             try {
                 Criteria criteria = new Criteria();
                 criteria.setClazz(SongEntity.class);
-                criteria.setTop(Math.toIntExact(id));
-                return new ResponseEntity<>(songDAO.getTop10New(criteria), HttpStatus.OK);
+                criteria.setTop(id);
+                List<SongEntity> ls = songDAO.getTop10New(criteria);
+                List<SongDTO> songDTOList = new ArrayList<>();
+                for ( SongEntity item : ls
+                ) {
+                    songDTOList.add(songSiteDAO.getSongDTOById(item));
+                }
+                return new ResponseEntity<>(songDTOList, HttpStatus.OK);
             }
             catch (Exception e) {
                 LogEntity log = new LogEntity(e);
@@ -84,16 +90,22 @@ public class SongController {
                 return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
             }
         }
-    @RequestMapping(value = "/GetAllHasPage/{page}",
+    @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}",
             method = RequestMethod.GET)
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(SongEntity.class);
         criteria.setCurrentPage(page);
+        criteria.setItemPerPage(itemOnPage);
         //SongDTO entity = musicDAO.GetSongDTO(id);
-        return new ResponseEntity<>(songDAO.loadDataPagination(criteria),HttpStatus.ACCEPTED);
+            List<SongEntity> songEntityList = songDAO.loadDataPagination(criteria);
+            List<SongDTO> songDTOList = new ArrayList<>();
+            for ( SongEntity item : songEntityList) {
+                songDTOList.add( songSiteDAO.getSongDTOById(item));
+            }
+        return new ResponseEntity<>(Collections.unmodifiableList(songDTOList),HttpStatus.ACCEPTED);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -176,7 +188,6 @@ public class SongController {
     @ResponseBody
     public  ResponseEntity<?> getAll (){
             return new ResponseEntity<>(songDAO.getAll2(),HttpStatus.ACCEPTED);
-
     }
 
 }

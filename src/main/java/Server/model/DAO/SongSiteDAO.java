@@ -24,7 +24,11 @@ public class SongSiteDAO {
         List<AlbumSongEntity> albumSongEntity = albumSongDAO.getId("songid",songEntity.getId()+"");
         AlbumEntity albumEntity = albumDAO.getByID(albumSongEntity.get(0).getId());
         AuthorEntity authorEntity = authorDAO.getByID(songEntity.getAuthorid());
-        ImageEntity imageEntity = imageDAO.getId("Song",songEntity.getId()).get(0);
+        List<ImageEntity> imageEntityList = imageDAO.getId("Song",songEntity.getId());
+        ImageEntity imageEntity = new ImageEntity();
+        if(!imageEntityList.isEmpty()){
+            imageEntity= imageEntityList.get(0);
+        }
         List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("songid",songEntity.getId()+"");
         List<SingerEntity> singerEntityList = new ArrayList<>();
         for (SongSingerEntity item : songSingerEntityList) {
@@ -33,7 +37,7 @@ public class SongSiteDAO {
                 singerEntityList.add(singerEntity);
         }
         List<UploadEntity> uploadEntityList = uploadDAO.getId("Song",songEntity.getId());
-        List<SongCategorysongEntity> songCategorysongEntityList = songCategorySongDAO.getId("Song",songEntity.getId()+"");
+        List<SongCategorysongEntity> songCategorysongEntityList = songCategorySongDAO.getId("songid",songEntity.getId()+"");
         List<CategorysongEntity> categorysongEntityList = new ArrayList<>();
         for(SongCategorysongEntity item : songCategorysongEntityList){
             CategorysongEntity categorysongEntity = categorySongDAO.getByID(item.getCategoryid());
@@ -50,7 +54,7 @@ public class SongSiteDAO {
         }
         AuthorEntity authorEntity = authorDAO.getByID(songEntity.getAuthorid());
         List<ImageEntity> imageEntityList = imageDAO.getId("Song",songEntity.getId());
-        ImageEntity imageEntity = null;
+        ImageEntity imageEntity = new ImageEntity();
         if(!imageEntityList.isEmpty()){
             imageEntity=imageEntityList.get(0);
         }
@@ -62,7 +66,7 @@ public class SongSiteDAO {
                 singerEntityList.add(singerEntity);
         }
         List<UploadEntity> uploadEntityList = uploadDAO.getId("Song",songEntity.getId());
-        List<SongCategorysongEntity> songCategorysongEntityList = songCategorySongDAO.getId("Song",songEntity.getId()+"");
+        List<SongCategorysongEntity> songCategorysongEntityList = songCategorySongDAO.getId("songid",songEntity.getId()+"");
         List<CategorysongEntity> categorysongEntityList = new ArrayList<>();
         for(SongCategorysongEntity item : songCategorysongEntityList){
             CategorysongEntity categorysongEntity = categorySongDAO.getByID(item.getCategoryid());

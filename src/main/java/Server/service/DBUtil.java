@@ -149,13 +149,10 @@ public class DBUtil {
         Transaction tx = null;
         try{
             tx=session.beginTransaction();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<T> criteriaQuery = builder.createQuery(criteria.getClazz());
-            Root<T> from = criteriaQuery.from(criteria.getClazz());
-            criteriaQuery.select(from).orderBy((javax.persistence.criteria.Order) Order.desc(condition));
-            Query<T> q = session.createQuery(criteriaQuery).setMaxResults(criteria.getTop());
+            org.hibernate.Criteria crit = session.createCriteria(criteria.getClazz()).addOrder(Order.desc(condition)).
+                    setMaxResults(criteria.getTop());
             tx.commit();
-            return  q.getResultList();
+            return  crit.list();
         }catch (HibernateException ex){
             new LogDAO().save(new LogEntity(ex));
         }
@@ -182,6 +179,19 @@ public class DBUtil {
             q.addEntity(type);
             tx.commit();
             return  q.getResultList()  ;
+        }catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            new LogDAO().save(new LogEntity(ex));
+            return null;
+        }
+    }
+    public static <T> List<T> getListHasCondition(String conditionColumn,String condition,Class<T> type,Session session){
+        Transaction tx = null;
+        try {
+            tx =  session.beginTransaction();
+            org.hibernate.Criteria criteria = session.createCriteria(type).add(Restrictions.eq(conditionColumn, Long.parseLong(condition)));
+            tx.commit();
+            return  criteria.list() ;
         }catch (HibernateException ex) {
             if (tx != null) tx.rollback();
             new LogDAO().save(new LogEntity(ex));
