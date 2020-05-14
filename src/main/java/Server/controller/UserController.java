@@ -15,7 +15,7 @@ public class UserController {
 
     @RequestMapping(value = "/Account", //
             method = RequestMethod.GET, //
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getAccount(){
 

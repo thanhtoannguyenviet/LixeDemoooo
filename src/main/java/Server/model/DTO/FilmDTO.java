@@ -2,17 +2,17 @@ package Server.model.DTO;
 
 import Server.model.DB.*;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
-
 public class FilmDTO {
-    private FilmEntity filmEntity = new FilmEntity();
-    private DirectorEntity directorEntity = new DirectorEntity();
-    private List<ActorEntity> actorEntityList = new ArrayList<>();
-    private List<ImageEntity> imageEntity = new ArrayList<>();
-    private List<UploadEntity> uploadEntityList = new ArrayList<>();
-    private List<CategoryfilmEntity> categoryFilmEntityList = new ArrayList<>();
-    private SerifilmEntity seriCategoryFilmEntity = new SerifilmEntity();
+    public FilmEntity filmEntity = new FilmEntity();
+    public DirectorEntity directorEntity = new DirectorEntity();
+    public List<ActorEntity> actorEntityList = new ArrayList<>();
+    public List<ImageEntity> imageEntity = new ArrayList<>();
+    public List<UploadEntity> uploadEntityList = new ArrayList<>();
+    public List<CategoryfilmEntity> categoryFilmEntityList = new ArrayList<>();
+    public SerifilmEntity seriCategoryFilmEntity = new SerifilmEntity();
 
     public FilmDTO() {
     }

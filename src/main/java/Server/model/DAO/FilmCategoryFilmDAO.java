@@ -33,7 +33,7 @@ public class FilmCategoryFilmDAO {
     }
     public List<FilmCategoryfilmEntity> getId(String conditionColumn, String condition ){
         Session s = HibernateUtil.getSession(FilmCategoryfilmEntity.class);
-        List<FilmCategoryfilmEntity> entity = DBUtil.getListHasCondition("film_categoryfilm",conditionColumn,condition,FilmCategoryfilmEntity.class,s);
-        return Collections.unmodifiableList(entity);
+        List<FilmCategoryfilmEntity> entity = DBUtil.getListHasCondition(conditionColumn,condition,FilmCategoryfilmEntity.class,s);
+        return entity;
     }
 }

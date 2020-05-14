@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeriFilmDTO {
-    private SerifilmEntity seriFilmEntity = new SerifilmEntity();
-    private List<FilmDTO> filmDTOList = new ArrayList<>();
+    public SerifilmEntity seriFilmEntity = new SerifilmEntity();
+    public List<FilmDTO> filmDTOList = new ArrayList<>();
 
     public SeriFilmDTO() {
     }

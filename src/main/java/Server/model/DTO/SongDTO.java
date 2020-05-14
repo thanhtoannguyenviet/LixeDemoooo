@@ -8,13 +8,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class SongDTO {
-    private SongEntity songEntity = new SongEntity();
-    private AlbumEntity albumEntity = new AlbumEntity();
-    private AuthorEntity authorEntity = new AuthorEntity();
-    private ImageEntity imageEntity = new ImageEntity();
-    private List<SingerEntity> singerEntityList = new ArrayList<>();
-    private List<UploadEntity> uploadEntityList = new ArrayList<>();
-    private List<CategorysongEntity> categorySongEntityList = new ArrayList<>();
+    public SongEntity songEntity = new SongEntity();
+    public AlbumEntity albumEntity = new AlbumEntity();
+    public AuthorEntity authorEntity = new AuthorEntity();
+    public ImageEntity imageEntity = new ImageEntity();
+    public List<SingerEntity> singerEntityList = new ArrayList<>();
+    public List<UploadEntity> uploadEntityList = new ArrayList<>();
+    public List<CategorysongEntity> categorySongEntityList = new ArrayList<>();
 
     public SongDTO(SongEntity songEntity) {
         this.songEntity = songEntity;

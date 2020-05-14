@@ -17,8 +17,8 @@ import java.util.List;
 public class SingerController {
     @Autowired
     SingerDAO singerDAO;
-    SongSingerDAO songSingerDAO;
-    SongSiteDAO songSiteDAO;
+    SongSingerDAO songSingerDAO = new SongSingerDAO();
+    SongSiteDAO songSiteDAO = new SongSiteDAO();
     @RequestMapping(value = "Post/",
             method = RequestMethod.POST)
     @ResponseBody

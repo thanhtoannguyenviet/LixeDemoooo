@@ -77,7 +77,7 @@ public class DirectorController {
         criteria.setClazz(DirectorEntity.class);
         criteria.setCurrentPage(page);
         criteria.setItemPerPage(itemOnPage);
-        List< DirectorEntity > directorEntityList = directorDAO.loadDataPagination(criteria);
+        List<DirectorEntity> directorEntityList = directorDAO.loadDataPagination(criteria);
         List<DirectorDTO> directorDTOList = new ArrayList<>();
             if(!directorEntityList.isEmpty()){
                 for (DirectorEntity item : directorEntityList

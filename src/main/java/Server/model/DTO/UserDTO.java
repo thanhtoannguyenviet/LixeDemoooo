@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
-    private UserEntity userEntity = new UserEntity();
-    private RoleEntity roleEntity = new RoleEntity();
-    private List<ImageEntity> imageEntity = new ArrayList<>();
+    public UserEntity userEntity = new UserEntity();
+    public RoleEntity roleEntity = new RoleEntity();
+    public List<ImageEntity> imageEntity = new ArrayList<>();
 
     public UserDTO() {
     }

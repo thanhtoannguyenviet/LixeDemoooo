@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RequestMapping("api/FilmSite/Category")
@@ -100,8 +102,7 @@ public class CategoryFilmController {
             List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.loadDataPagination(criteria);
             if(!categoryfilmEntityList.isEmpty()){
                 List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
-                for ( CategoryfilmEntity item : categoryfilmEntityList
-                ) {
+                for ( CategoryfilmEntity item : categoryfilmEntityList) {
                     CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
                     if(categoryFilmDTO!=null)
                         categoryFilmDTOList.add(categoryFilmDTO);
