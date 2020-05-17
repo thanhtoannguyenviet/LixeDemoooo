@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActorDTO {
-    public ActorEntity actorEntity = new ActorEntity();
-    public List<FilmDTO> filmDTOList= new ArrayList<>();
+    private ActorEntity actorEntity = new ActorEntity();
+    private List<FilmDTO> filmDTOList= new ArrayList<>();
     public ActorDTO(){}
     public ActorDTO(ActorEntity actorEntity, List<FilmDTO> filmDTOList) {
         this.actorEntity = actorEntity;

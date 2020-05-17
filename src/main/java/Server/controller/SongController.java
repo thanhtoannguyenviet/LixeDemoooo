@@ -35,7 +35,8 @@ public class SongController {
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> Get (@PathVariable("id") Long id){
         SongEntity entity =  songDAO.getByID(id);
@@ -45,7 +46,8 @@ public class SongController {
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
     }
     @RequestMapping(value = "/GetTop{id}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getTop10 (@PathVariable("id") int id) {
         try {
@@ -68,7 +70,8 @@ public class SongController {
         }
     }
         @RequestMapping(value = "/GetTopNew{id}",
-                method = RequestMethod.GET)
+                method = RequestMethod.GET,
+                produces = { MediaType.APPLICATION_JSON_VALUE})
         @ResponseBody
         public  ResponseEntity<?> getTopNew10 (@PathVariable("id") int  id) {
             try {
@@ -91,7 +94,8 @@ public class SongController {
             }
         }
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
@@ -183,11 +187,4 @@ public class SongController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
             }
     }
-    @RequestMapping(value = "/GetAll",
-            method = RequestMethod.GET)
-    @ResponseBody
-    public  ResponseEntity<?> getAll (){
-            return new ResponseEntity<>(songDAO.getAll2(),HttpStatus.ACCEPTED);
-    }
-
 }

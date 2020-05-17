@@ -12,6 +12,7 @@ import Server.model.DTO.Criteria;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +67,8 @@ public class AuthorController {
         else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
         AuthorEntity authorEntity = authorDAO.getByID(id);
@@ -75,7 +77,8 @@ public class AuthorController {
         }
         return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value ="/GetAllHasPage{item}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{item}/{page}", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("item") int item) {
         try {
@@ -100,7 +103,8 @@ public class AuthorController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         try {

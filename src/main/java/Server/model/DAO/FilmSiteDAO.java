@@ -2,6 +2,7 @@ package Server.model.DAO;
 
 import Server.model.DB.*;
 import Server.model.DTO.FilmDTO;
+import Server.model.DTO.SeriFilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,7 @@ public class FilmSiteDAO {
     SeriFilmDAO seriFilmDAO = new SeriFilmDAO();
     FilmActorDAO filmActorDAO = new FilmActorDAO();
     FilmCategoryFilmDAO filmCategoryFilmDAO = new FilmCategoryFilmDAO();
+    SerifilmFilmDAO serifilmFilmDAO = new SerifilmFilmDAO();
     public FilmDTO getFilmDTOById(FilmEntity filmEntity){
         DirectorEntity directorEntity = directorDAO.getByID(filmEntity.getDirectorid());
         List<FilmActorEntity> filmActorEntityList= filmActorDAO.getListHasCondition("filmid",filmEntity.getId()+"");
@@ -74,5 +76,30 @@ public class FilmSiteDAO {
         FilmDTO filmDTO = new FilmDTO(filmEntity,directorEntity, Collections.unmodifiableList(actorEntityList),Collections.unmodifiableList(imageEntityList),
                 Collections.unmodifiableList(uploadEntityList),Collections.unmodifiableList(categoryfilmEntityList),serifilmEntity);
         return filmDTO;
+    }
+    public SeriFilmDTO getSeriFilmDTO(SerifilmEntity serifilmEntity){
+        List<SerifilmFilmEntity> serifilmFilmEntityList = serifilmFilmDAO.getId("seriid",serifilmEntity.getId()+"");
+        List<FilmDTO> filmDTOList = new ArrayList<>();
+        if(!serifilmFilmEntityList.isEmpty()) {
+            for (SerifilmFilmEntity item : serifilmFilmEntityList) {
+                FilmDTO filmDTO = getFilmDTOById(item.getFilmid());
+                if (filmDTO != null)
+                    filmDTOList.add(filmDTO);
+            }
+        }
+        return new SeriFilmDTO(serifilmEntity,filmDTOList);
+    }
+    public SeriFilmDTO getSeriFilmDTO(Long id){
+        SerifilmEntity serifilmEntity = seriFilmDAO.getByID(id);
+        List<SerifilmFilmEntity> serifilmFilmEntityList = serifilmFilmDAO.getId("seriid",id+"");
+        List<FilmDTO> filmDTOList = new ArrayList<>();
+        if(!serifilmFilmEntityList.isEmpty()) {
+            for (SerifilmFilmEntity item : serifilmFilmEntityList) {
+                FilmDTO filmDTO = getFilmDTOById(item.getFilmid());
+                if (filmDTO != null)
+                    filmDTOList.add(filmDTO);
+            }
+        }
+        return new SeriFilmDTO(serifilmEntity,filmDTOList);
     }
 }

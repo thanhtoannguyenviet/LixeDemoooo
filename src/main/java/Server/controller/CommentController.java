@@ -4,8 +4,11 @@ import Server.model.DAO.CommentDAO;
 import Server.model.DB.CommentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("api/Comment")
 @RestController
@@ -40,5 +43,15 @@ public class CommentController {
             return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
+    }
+    @RequestMapping(value="/GetComment/model={model}&id={id}",
+        method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> getComment(@PathVariable("id") Long id,@PathVariable("model") String model){
+        List<CommentEntity> commentEntityList = commentDAO.getId(model,id);
+        if(!commentEntityList.isEmpty()){
+            return new ResponseEntity<>(commentEntityList,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Please create first comment",HttpStatus.OK);
     }
 }

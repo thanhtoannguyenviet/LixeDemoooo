@@ -56,8 +56,7 @@ public class ActorController {
     }
     @RequestMapping(value = "/GetDetail/{id}",
             method = RequestMethod.GET,
-
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         ActorDTO actorDTO = getActorDTO(actorDAO.getByID(id));
@@ -91,8 +90,9 @@ public class ActorController {
         filmActorDAO.delete(id);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }
-@RequestMapping(value ="/GetAllHasPage{item}/{page}", method = RequestMethod.GET,
-        produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+@RequestMapping(value ="/GetAllHasPage{item}/{page}",
+        method = RequestMethod.GET,
+        produces = { MediaType.APPLICATION_JSON_VALUE})
 @ResponseBody
 public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVariable("item") int item) {
     try {
@@ -117,8 +117,9 @@ public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVar
         return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
     }
 }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @RequestMapping(value ="/Count",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count () {
         try {
@@ -130,8 +131,9 @@ public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVar
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetRandom{item}", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @RequestMapping(value ="/GetRandom{item}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getRandom (@PathVariable("item") int item) {
         try {

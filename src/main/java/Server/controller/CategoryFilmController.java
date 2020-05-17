@@ -10,6 +10,7 @@ import Server.model.DTO.Criteria;
 import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,7 +108,7 @@ public class CategoryFilmController {
                     if(categoryFilmDTO!=null)
                         categoryFilmDTOList.add(categoryFilmDTO);
                 }
-                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+                return new ResponseEntity<> (categoryFilmDTOList,HttpStatus.OK);
             }
             return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         }
@@ -118,7 +119,8 @@ public class CategoryFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop{itop}/", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetTop{itop}/", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getTop (@PathVariable("itop") int itop){
         try{
@@ -146,7 +148,8 @@ public class CategoryFilmController {
         }
     }
     @RequestMapping(value = "/GetRandom{iRandom}/",
-            method = RequestMethod.GET
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
     public ResponseEntity<?> getRandom(@PathVariable("iRandom") int iRandom){
@@ -173,7 +176,8 @@ public class CategoryFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         try {

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumDTO {
-    public AlbumEntity albumEntity = new AlbumEntity();
-    public List<SongEntity> songDTOList = new ArrayList<>();
-    public List<SingerEntity> singerEntity = new ArrayList<>();
+    private AlbumEntity albumEntity = new AlbumEntity();
+    private List<SongEntity> songDTOList = new ArrayList<>();
+    private List<SingerEntity> singerEntity = new ArrayList<>();
 
     public AlbumDTO() {
     }

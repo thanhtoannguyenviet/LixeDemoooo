@@ -7,8 +7,8 @@ import java.util.Objects;
 @Table(name = "serifilm_film", schema = "public", catalog = "test12345")
 public class SerifilmFilmEntity {
     private long id;
-    private String name;
-    private String ext;
+    private long filmid;
+    private long seriid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,23 +22,23 @@ public class SerifilmFilmEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 250)
-    public String getName() {
-        return name;
+    @Column(name = "filmid", nullable = true)
+    public long getFilmid() {
+        return filmid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFilmid(long name) {
+        this.filmid = name;
     }
 
     @Basic
-    @Column(name = "ext", nullable = true, length = -1)
-    public String getExt() {
-        return ext;
+    @Column(name = "seriid", nullable = true)
+    public long getSeriid() {
+        return seriid;
     }
 
-    public void setExt(String ext) {
-        this.ext = ext;
+    public void setSeriid(long seriid) {
+        this.seriid = seriid;
     }
 
     @Override
@@ -47,12 +47,12 @@ public class SerifilmFilmEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SerifilmFilmEntity that = (SerifilmFilmEntity) o;
         return id == that.id &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(ext, that.ext);
+                Objects.equals(seriid, that.seriid) &&
+                Objects.equals(filmid, that.filmid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, ext);
+        return Objects.hash(id, seriid, filmid);
     }
 }

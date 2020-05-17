@@ -10,6 +10,7 @@ import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -58,7 +59,8 @@ public class DirectorController {
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
     public ResponseEntity<?> get (@PathVariable("id") Long id){
@@ -69,7 +71,8 @@ public class DirectorController {
         return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
@@ -96,7 +99,8 @@ public class DirectorController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         try {

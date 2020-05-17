@@ -6,6 +6,7 @@ import Server.model.DTO.Criteria;
 import Server.model.DTO.FilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,13 +52,15 @@ public class FilmController {
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
 
         return new ResponseEntity<>(filmSiteDAO.getFilmDTOById(id),HttpStatus.OK);
     }
-    @RequestMapping(value = "/GetTop{item}" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop{item}" , method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getTop10(@PathVariable int item)
     {
@@ -79,7 +82,8 @@ public class FilmController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
@@ -101,7 +105,8 @@ public class FilmController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         try {

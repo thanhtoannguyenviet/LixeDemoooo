@@ -8,6 +8,7 @@ import Server.model.DTO.Criteria;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,7 +99,8 @@ public class CategorySongController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{
@@ -122,7 +124,8 @@ public class CategorySongController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         try {
@@ -134,7 +137,8 @@ public class CategorySongController {
         }
     }
     @RequestMapping(value = "/GetRandom{iRandom}/",
-            method = RequestMethod.GET
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
     public ResponseEntity<?> getRandom(@PathVariable("iRandom") int iRandom){

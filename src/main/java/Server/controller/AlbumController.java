@@ -8,6 +8,7 @@ import Server.model.DTO.SongDTO;
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,8 @@ public class AlbumController {
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         AlbumEntity albumEntity =  albumDAO.getByID(id);
@@ -91,12 +93,16 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
         albumCategoryMusicDAO.delete(id);
         return new ResponseEntity<>("Update Completed",HttpStatus.OK);
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         return new ResponseEntity<>(albumDAO.count(),HttpStatus.OK);
     }
-    @RequestMapping(value ="/GetAllHasPage{itemOnpage}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnpage}/{page}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnpage") int itemOnpage){
         try{
@@ -118,7 +124,9 @@ public ResponseEntity<?>updateToCategoryMusic(@RequestBody AlbumEntity entity, @
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop{item}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetTop{item}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getTop (@PathVariable("item") int item){
         try{

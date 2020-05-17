@@ -9,6 +9,7 @@ import Server.model.DTO.FilmDTO;
 import Server.model.DTO.SeriFilmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,20 +55,34 @@ public class SeriFilmController {
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id){
-       return  new ResponseEntity<>(seriFilmDAO.getByID(id),HttpStatus.BAD_REQUEST);
+        SerifilmEntity serifilmEntity = seriFilmDAO.getByID(id);
+        if(serifilmEntity!=null){
+            return  new ResponseEntity<>(filmSiteDAO.getSeriFilmDTO(serifilmEntity),HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value = "/GetTop10" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop{iTop}" , method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop10() {
+    public ResponseEntity<?> getTop10(@PathVariable("iTop") int iTop) {
         try {
             Criteria criteria = new Criteria();
             criteria.setClazz(SerifilmEntity.class);
-            criteria.setTop(10);
-            return new ResponseEntity<>(seriFilmDAO.getTop10(criteria), HttpStatus.OK);
+            criteria.setTop(iTop);
+            List<SerifilmEntity> serifilmEntityList =seriFilmDAO.getTop10(criteria);
+            List<SeriFilmDTO> seriFilmDTOList = new ArrayList<>();
+            if(!serifilmEntityList.isEmpty()){
+                for(SerifilmEntity item : serifilmEntityList){
+                    seriFilmDTOList.add(filmSiteDAO.getSeriFilmDTO(item));
+                }
+                return new ResponseEntity<>(seriFilmDTOList, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -75,14 +90,24 @@ public class SeriFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page){
+    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage ){
         try{
         Criteria criteria = new Criteria();
         criteria.setClazz(SerifilmEntity.class);
         criteria.setCurrentPage(page);
-        return new ResponseEntity<>(seriFilmDAO.loadDataPagination(criteria),HttpStatus.OK);
+        criteria.setItemPerPage(itemOnPage);
+        List<SerifilmEntity> serifilmEntityList = seriFilmDAO.loadDataPagination(criteria);
+        List<SeriFilmDTO> seriFilmDTOList = new ArrayList<>();
+        if(!seriFilmDTOList.isEmpty()){
+            for(SerifilmEntity item: serifilmEntityList){
+                seriFilmDTOList.add(filmSiteDAO.getSeriFilmDTO(item));
+            }
+            return new ResponseEntity<>(seriFilmDTOList,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -90,7 +115,8 @@ public class SeriFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET)
+    @RequestMapping(value ="/Count", method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> count (){
         try {
@@ -100,15 +126,5 @@ public class SeriFilmController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
-    }
-    private SeriFilmDTO getSeriFilmDTO(SerifilmEntity serifilmEntity){
-//        List<SerifilmFilmEntity> serifilmFilmEntityList = serifilmFilmDAO.getId("serifilmid",serifilmEntity.getId()+"");
-////        List<FilmDTO> filmDTOList = new ArrayList<>();
-////        if(!serifilmFilmEntityList.isEmpty()){
-////            for(SerifilmFilmEntity item : serifilmFilmEntityList){
-////                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.get)
-////            }
-////        }
-        return null;
     }
 }

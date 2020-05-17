@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorDTO {
-    public AuthorEntity authorEntity = new AuthorEntity();
-    public List<SongDTO> songDTOList = new ArrayList<>();
+    private AuthorEntity authorEntity = new AuthorEntity();
+    private List<SongDTO> songDTOList = new ArrayList<>();
 
     public AuthorDTO(){}
     public AuthorDTO(AuthorEntity authorEntity, List<SongDTO> songDTOList) {

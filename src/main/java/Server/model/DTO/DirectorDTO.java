@@ -6,8 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DirectorDTO {
-    public DirectorEntity directorEntity = new DirectorEntity();
-    public List<FilmDTO> filmDTOList = new ArrayList<>();
+    private DirectorEntity directorEntity = new DirectorEntity();
+
+    public DirectorEntity getDirectorEntity() {
+        return directorEntity;
+    }
+
+    public void setDirectorEntity(DirectorEntity directorEntity) {
+        this.directorEntity = directorEntity;
+    }
+
+    public List<FilmDTO> getFilmDTOList() {
+        return filmDTOList;
+    }
+
+    public void setFilmDTOList(List<FilmDTO> filmDTOList) {
+        this.filmDTOList = filmDTOList;
+    }
+
+    private List<FilmDTO> filmDTOList = new ArrayList<>();
     public DirectorDTO(){}
     public DirectorDTO(DirectorEntity directorEntity, List<FilmDTO> filmDTOList) {
         this.directorEntity = directorEntity;

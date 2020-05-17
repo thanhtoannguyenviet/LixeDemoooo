@@ -162,7 +162,9 @@ public class DBUtil {
         Transaction tx = null;
         try{
             tx=session.beginTransaction();
-            org.hibernate.Criteria  q= session.createCriteria(criteria.getClazz()).add(Restrictions.sqlRestriction("order by random()")).setMaxResults(criteria.getTop());
+            org.hibernate.Criteria  q= session.createCriteria(criteria.getClazz())
+                    .add(Restrictions.sqlRestriction("order by random()"))
+                    .setMaxResults(criteria.getTop());
             tx.commit();
             return  q.list();
         }catch (HibernateException ex){
