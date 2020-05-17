@@ -46,6 +46,7 @@
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DB/UserEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/AuthorDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/CategoryFilmDTO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/CategorySeriFilmDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/CategorySongDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/DirectorDTO.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/Server/model/DTO/SeriCategoryDTO.java" charset="UTF-8" />

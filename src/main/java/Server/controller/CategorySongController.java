@@ -51,7 +51,7 @@ public class CategorySongController {
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/GetDetail/{id}" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetDetail/{id}" , method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
         CategorysongEntity categorysongEntity = categorySongDAO.getByID(id);
@@ -61,7 +61,7 @@ public class CategorySongController {
         }
         return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value = "/GetAll" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetAll" , method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getAll()
     {
@@ -75,7 +75,7 @@ public class CategorySongController {
         }
         return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value = "/GetTop{iTop}/" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop{iTop}/" , method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getTop10(@PathVariable("iTop") int iTop)
     {

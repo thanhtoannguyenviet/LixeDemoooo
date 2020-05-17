@@ -87,6 +87,7 @@ C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\ActorDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\common\CUSTOM_QUERY.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\AlbumDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\SignalDAO.java
+C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\CategorySeriFilmDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DB\RatingEntity.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\CategoryFilmDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\DirectorDAO.java

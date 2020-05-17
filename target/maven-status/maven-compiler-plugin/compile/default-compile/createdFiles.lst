@@ -40,6 +40,7 @@ Server\model\DAO\SongSiteDAO.class
 Server\model\DAO\FilmSiteDAO.class
 Server\model\DAO\SerifilmFilmDAO.class
 Server\model\DB\AlbumSingerEntity.class
+Server\model\DTO\CategorySeriFilmDTO.class
 Server\model\DB\CommentEntity.class
 Server\model\DB\UserEntity.class
 Server\model\DTO\SeriCategoryDTO.class

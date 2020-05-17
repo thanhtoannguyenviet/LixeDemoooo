@@ -1,4 +1,4 @@
-﻿package Server.model.DTO;
+package Server.model.DTO;
 
 import Server.model.DB.CategoryfilmEntity;
 

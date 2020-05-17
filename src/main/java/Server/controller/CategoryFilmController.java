@@ -68,7 +68,7 @@ public class CategoryFilmController {
         return new ResponseEntity<>("Not Found",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetAll/",
-            method = RequestMethod.GET
+            method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
     public ResponseEntity<?> getAll(){
@@ -92,7 +92,7 @@ public class CategoryFilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage ){
         try {
