@@ -80,7 +80,7 @@ public class ActorController {
     public ResponseEntity<?> putToFilm(@PathVariable("id") Long id,@RequestBody FilmActorEntity entity){
         FilmActorEntity filmActorEntity = filmActorDAO.getByID(id);
         if(filmActorEntity.getFilmid()==entity.getId())
-        filmActorDAO.save(entity);
+            filmActorDAO.save(entity);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }
     @RequestMapping(value = "/RemoveToFilm/{id}",
@@ -90,32 +90,32 @@ public class ActorController {
         filmActorDAO.delete(id);
         return new ResponseEntity<>("Post Completed",HttpStatus.OK);
     }
-@RequestMapping(value ="/GetAllHasPage{item}/{page}",
-        method = RequestMethod.GET,
-        produces = { MediaType.APPLICATION_JSON_VALUE})
-@ResponseBody
-public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVariable("item") int item) {
-    try {
-        Criteria criteria = new Criteria();
-        criteria.setClazz(ActorEntity.class);
-        criteria.setCurrentPage(page);
-        criteria.setItemPerPage(item);
-        List<ActorEntity> ls =actorDAO.loadDataPagination(criteria);
-        List<ActorDTO> lsResult = new ArrayList<>();
-        if(!ls.isEmpty()) {
-            for (ActorEntity actor : ls
-            ) {
-                lsResult.add(getActorDTO(actor));
+    @RequestMapping(value ="/GetAllHasPage{item}/{page}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public  ResponseEntity<?> getAllHasPage (@PathVariable("page") int page,@PathVariable("item") int item) {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(ActorEntity.class);
+            criteria.setCurrentPage(page);
+            criteria.setItemPerPage(item);
+            List<ActorEntity> ls =actorDAO.loadDataPagination(criteria);
+            List<ActorDTO> lsResult = new ArrayList<>();
+            if(!ls.isEmpty()) {
+                for (ActorEntity actor : ls
+                ) {
+                    lsResult.add(getActorDTO(actor));
+                }
+                return new ResponseEntity<>(lsResult, HttpStatus.OK);
             }
-            return new ResponseEntity<>(lsResult, HttpStatus.OK);
+            else return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
-        else return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-        LogEntity log = new LogEntity(e);
-        (new LogDAO()).save(log);
-        e.printStackTrace();
-        return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
-    }
 }
     @RequestMapping(value ="/Count",
             method = RequestMethod.GET,
