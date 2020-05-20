@@ -51,6 +51,7 @@ Server\model\DAO\SongSingerDAO.class
 Server\model\DB\ApiaccountEntity.class
 Server\controller\ImageController.class
 Server\config\WebInit.class
+Server\controller\BannerController.class
 Server\model\DB\SongEntity.class
 Server\model\DTO\DirectorDTO.class
 Server\controller\CategorySongController.class

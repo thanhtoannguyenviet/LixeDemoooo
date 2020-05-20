@@ -5,10 +5,11 @@ import Server.model.DB.CategoryfilmEntity;
 import Server.service.DBUtil;
 import Server.service.HibernateUtil;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
-
+@Repository
 public class BannerDAO {
     public List<BannerEntity> getAll() {
         Session s = HibernateUtil.getSession(BannerEntity.class);
