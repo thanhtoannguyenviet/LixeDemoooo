@@ -25,7 +25,8 @@ public class ActorController {
     @Autowired
     ActorDAO actorDAO;
     FilmActorDAO filmActorDAO = new FilmActorDAO();
-    @RequestMapping(value = "/Post",
+
+    @RequestMapping(value = "/Post/",
             method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody ActorEntity actor){

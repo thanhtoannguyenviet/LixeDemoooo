@@ -32,7 +32,10 @@ public class CUSTOM_QUERY {
         String sql = "Select * from "+ table + " Where model ='" + model + "'and entryId='"+entryId+"'";
         return sql;
     }
-
+    public static String getToken(String string){
+        String sql = "SELECT * FROM APIACCOUNT WHERE TOKEN ='"+string+"'";
+        return sql;
+    }
     public static String sqlGetTop(Criteria criteria){
         String model = "";
         if(criteria.getClazz().equals(SongEntity.class)){

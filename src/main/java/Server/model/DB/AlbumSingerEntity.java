@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "album_singer", schema = "public", catalog = "test12345")
+@Table(name = "Album_Singer", schema = "dbo", catalog = "ProjectMusicFilm")
 public class AlbumSingerEntity {
     private long id;
     private Long albumid;

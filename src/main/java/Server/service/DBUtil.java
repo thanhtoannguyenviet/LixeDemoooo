@@ -28,10 +28,7 @@ public class DBUtil {
         session.getTransaction().commit();
         return data;
     }
-    public static <T> List<T> execCustomSQL(Class<T> clazz, String query) {
-        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(clazz).buildSessionFactory();
-        Session session = factory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
+    public static <T> List<T> execCustomSQL(Class<T> clazz, String query,Session session) {
         try {
             SQLQuery q = session.createSQLQuery(query); // bỏ custom SQL vào
             q.setResultTransformer((org.hibernate.Criteria.ALIAS_TO_ENTITY_MAP));
@@ -39,7 +36,6 @@ public class DBUtil {
             List<T> data = (List<T>) q.list();
             return data;
         } catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
             ex.printStackTrace();
         } finally {
             session.close();
@@ -205,6 +201,7 @@ public class DBUtil {
             return null;
         }
     }
+
     public static <T> List<T> getListHasCondition(String conditionColumn,String condition,Class<T> type,Session session){
         Transaction tx = null;
         try {

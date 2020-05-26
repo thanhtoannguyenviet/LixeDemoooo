@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "search", schema = "public", catalog = "test12345")
+@Table(name = "Search", schema = "dbo", catalog = "ProjectMusicFilm")
 public class SearchEntity {
     private long id;
     private String keyword;

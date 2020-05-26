@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "apiaccount", schema = "public", catalog = "test12345")
+@Table(name = "APIAccount", schema = "dbo", catalog = "ProjectMusicFilm")
 public class ApiaccountEntity {
     private long id;
     private String token;

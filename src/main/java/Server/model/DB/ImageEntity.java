@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
-@Table(name = "image", schema = "public", catalog = "test12345")
+@Table(name = "Image", schema = "dbo", catalog = "ProjectMusicFilm")
 public class ImageEntity {
     private long id;
     private String path;

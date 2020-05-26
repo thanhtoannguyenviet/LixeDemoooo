@@ -48,6 +48,7 @@ Server\model\DB\ActorEntity.class
 Server\model\DAO\SingerDAO.class
 Server\model\DTO\SeriFilmDTO.class
 Server\model\DAO\SongSingerDAO.class
+Server\model\DAO\APIAccountDAO.class
 Server\model\DB\ApiaccountEntity.class
 Server\controller\ImageController.class
 Server\config\WebInit.class

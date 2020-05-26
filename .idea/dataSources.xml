@@ -7,5 +7,11 @@
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
       <jdbc-url>jdbc:sqlserver://localhost:1433;database=ProjectMusicFilm</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ProjectMusicFilm@localhost" uuid="70565e0b-1362-4d93-a968-41bc05296f34">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://localhost:1433;database=ProjectMusicFilm</jdbc-url>
+    </data-source>
   </component>
 </project>

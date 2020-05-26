@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "banner", schema = "public", catalog = "test12345")
+@Table(name = "Banner", schema = "dbo", catalog = "ProjectMusicFilm")
 public class BannerEntity {
     private long id;
     private String imagename;

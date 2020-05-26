@@ -28,6 +28,7 @@ C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\controller\SongCont
 C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DAO\RoleDAO.java
 C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DB\DirectorEntity.java
 C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DAO\LogDAO.java
+C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DAO\APIAccountDAO.java
 C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DB\CommentEntity.java
 C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DAO\SongCategorySongDAO.java
 C:\Users\kishu\IdeaProjects\LixeDemoooo\src\main\java\Server\model\DTO\CategorySongDTO.java

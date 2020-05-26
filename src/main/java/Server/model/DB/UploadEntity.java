@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "upload", schema = "public", catalog = "test12345")
+@Table(name = "Upload", schema = "dbo", catalog = "ProjectMusicFilm")
 public class UploadEntity {
     private long id;
     private String source;
