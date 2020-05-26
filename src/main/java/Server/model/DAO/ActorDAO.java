@@ -41,8 +41,14 @@ public class ActorDAO {
         List<ActorEntity> ls = DBUtil.getTopRandom(criteria, s);
         return Collections.unmodifiableList(ls);
     }
+    public List<ActorEntity> getDataByName(String condition){
+        Session s = HibernateUtil.getSession(ActorEntity.class);
+        List<ActorEntity> ls = DBUtil.getDataByName("actorName",condition,ActorEntity.class,s);
+        return Collections.unmodifiableList(ls);
+    }
     public long count(){
         Session s = HibernateUtil.getSession(ActorEntity.class);
         return DBUtil.countData(s,ActorEntity.class);
     }
+
 }

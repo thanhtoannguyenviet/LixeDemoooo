@@ -215,4 +215,17 @@ public class DBUtil {
             return null;
         }
     }
+    public static <T> List<T> getDataByName(String conditionColumn,String condition,Class<T> type,Session session){
+        Transaction tx = null;
+        try{
+            tx=session.beginTransaction();
+            org.hibernate.Criteria criteria = session.createCriteria(type).add(Restrictions.ilike(conditionColumn,"%"+condition+"%"));
+            tx.commit();
+            return criteria.list();
+        }catch(HibernateException ex){
+            if(tx!=null) tx.rollback();
+            new LogDAO().save(new LogEntity(ex));
+            return null;
+        }
+    }
 }
