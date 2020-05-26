@@ -6,6 +6,7 @@ import Server.model.DB.LogEntity;
 import Server.model.DTO.Criteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -27,7 +28,24 @@ public class DBUtil {
         session.getTransaction().commit();
         return data;
     }
+    public static <T> List<T> execCustomSQL(Class<T> clazz, String query) {
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(clazz).buildSessionFactory();
+        Session session = factory.getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            SQLQuery q = session.createSQLQuery(query); // bỏ custom SQL vào
+            q.setResultTransformer((org.hibernate.Criteria.ALIAS_TO_ENTITY_MAP));
 
+            List<T> data = (List<T>) q.list();
+            return data;
+        } catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
 
     public static <T> T addData(T newItem, Session session) {
         Transaction tx = null;
