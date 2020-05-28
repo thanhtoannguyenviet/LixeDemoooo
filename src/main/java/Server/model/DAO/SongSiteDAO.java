@@ -29,6 +29,7 @@ public class SongSiteDAO {
         if(!imageEntityList.isEmpty()){
             imageEntity= imageEntityList.get(0);
         }
+        else imageEntity = null;
         List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("songid",songEntity.getId()+"");
         List<SingerEntity> singerEntityList = new ArrayList<>();
         for (SongSingerEntity item : songSingerEntityList) {
@@ -58,6 +59,7 @@ public class SongSiteDAO {
         if(!imageEntityList.isEmpty()){
             imageEntity=imageEntityList.get(0);
         }
+        else imageEntity = null;
         List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("songid",songEntity.getId()+"");
         List<SingerEntity> singerEntityList = new ArrayList<>();
         for (SongSingerEntity item : songSingerEntityList) {

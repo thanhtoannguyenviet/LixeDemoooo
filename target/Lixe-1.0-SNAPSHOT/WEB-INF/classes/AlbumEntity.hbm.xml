@@ -16,7 +16,7 @@
             <column name="datereleased" sql-type="timestamp"/>
         </property>
         <property name="index">
-            <column name="index" sql-type="integer"/>
+            <column name="index_" sql-type="integer"/>
         </property>
         <property name="range">
             <column name="range" sql-type="integer"/>

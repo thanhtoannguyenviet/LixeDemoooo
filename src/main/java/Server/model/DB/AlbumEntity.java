@@ -10,7 +10,7 @@ public class AlbumEntity {
     private long id;
     private String albumname;
     private Timestamp datereleased;
-    private int index;
+    private int index_;
     private int range;
     private int singerid;
 
@@ -46,13 +46,13 @@ public class AlbumEntity {
     }
 
     @Basic
-    @Column(name = "index", nullable = false)
+    @Column(name = "index_", nullable = false)
     public int getIndex() {
-        return index;
+        return index_;
     }
 
     public void setIndex(int index) {
-        this.index = index;
+        this.index_ = index;
     }
 
     @Basic
@@ -81,7 +81,7 @@ public class AlbumEntity {
         if (o == null || getClass() != o.getClass()) return false;
         AlbumEntity that = (AlbumEntity) o;
         return id == that.id &&
-                index == that.index &&
+                index_ == that.index_ &&
                 range == that.range &&
                 singerid == that.singerid &&
                 Objects.equals(albumname, that.albumname) &&
@@ -90,6 +90,6 @@ public class AlbumEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, albumname, datereleased, index, range, singerid);
+        return Objects.hash(id, albumname, datereleased, index_, range, singerid);
     }
 }

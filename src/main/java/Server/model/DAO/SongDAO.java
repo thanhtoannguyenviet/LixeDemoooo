@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 @Repository
 public class SongDAO {
-    SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(SongEntity.class).buildSessionFactory();
     public List<SongEntity> getAll() {
         Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);

@@ -18,8 +18,7 @@ import java.util.List;
 @RequestMapping("api/MusicSite/Album")
 @RestController
 public class AlbumController {
-    @Autowired
-    AlbumDAO albumDAO;
+    AlbumDAO albumDAO = new AlbumDAO();
     SongDAO songDAO = new SongDAO();
     AlbumCategoryMusicDAO albumCategoryMusicDAO = new AlbumCategoryMusicDAO();
     SongSingerDAO songSingerDAO = new SongSingerDAO();
