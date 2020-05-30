@@ -56,4 +56,9 @@ public class FilmDAO {
         List<FilmEntity> ls = DBUtil.getTop10New("createdate",criteria,s);
         return Collections.unmodifiableList(ls);
     }
+    public List<FilmEntity> loadTopRandom(Criteria criteria){
+       Session s = HibernateUtil.getSession(FilmEntity.class);
+       List<FilmEntity> ls = DBUtil.getTopRandom(criteria,s);
+       return Collections.unmodifiableList(ls);
+    }
 }

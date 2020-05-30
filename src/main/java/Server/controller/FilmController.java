@@ -117,5 +117,29 @@ public class FilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-
+    @RequestMapping(value ="/GetRandom{item}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public  ResponseEntity<?> getRandom (@PathVariable("item") int item) {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(FilmEntity.class);
+            criteria.setTop(item);
+            List<FilmEntity> filmEntityList = filmDAO.loadTopRandom(criteria);
+            List<FilmDTO> lsFilmDTO = new ArrayList<>();
+            for ( FilmEntity filmE : filmEntityList)
+            {
+                lsFilmDTO.add(filmSiteDAO.getFilmDTOById(filmE.getId()));
+            }
+            if(!filmEntityList.isEmpty())
+                return new ResponseEntity<>(lsFilmDTO, HttpStatus.OK);
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
+    }
 }

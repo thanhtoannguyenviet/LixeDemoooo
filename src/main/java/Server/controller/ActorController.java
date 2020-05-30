@@ -25,7 +25,7 @@ public class ActorController {
     @Autowired
     ActorDAO actorDAO;
     FilmActorDAO filmActorDAO = new FilmActorDAO();
-
+    ImageDAO imageDAO = new ImageDAO();
     @RequestMapping(value = "/Post/",
             method = RequestMethod.POST)
     @ResponseBody
@@ -154,6 +154,7 @@ public class ActorController {
     }
     private ActorDTO getActorDTO(ActorEntity actorEntity){
         List<FilmActorEntity> filmActorEntityList= filmActorDAO.getListHasCondition("actorid",actorEntity.getId()+"");
+        ImageEntity imageEntity = imageDAO.getId("actor",actorEntity.getId()).get(0);
         FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
         List<FilmDTO> filmDTOList = new ArrayList<>();
         for ( FilmActorEntity item : filmActorEntityList) {
@@ -161,7 +162,7 @@ public class ActorController {
             if(film!=null)
                 filmDTOList.add(film);
         }
-        return new ActorDTO(actorEntity, Collections.unmodifiableList(filmDTOList));
+        return new ActorDTO(actorEntity,imageEntity, filmDTOList);
     }
 }
 

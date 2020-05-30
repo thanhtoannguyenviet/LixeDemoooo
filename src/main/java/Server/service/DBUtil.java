@@ -177,7 +177,7 @@ public class DBUtil {
         try{
             tx=session.beginTransaction();
             org.hibernate.Criteria  q= session.createCriteria(criteria.getClazz())
-                    .add(Restrictions.sqlRestriction("1=1 order by rand()"))
+                    .add(Restrictions.sqlRestriction("1=1 order by newid()"))
                     .setMaxResults(criteria.getTop());
             tx.commit();
             return  q.list();
