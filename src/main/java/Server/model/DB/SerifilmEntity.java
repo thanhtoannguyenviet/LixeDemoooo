@@ -8,7 +8,7 @@ import java.util.Objects;
 public class SerifilmEntity {
     private long id;
     private String ext;
-    private long index;
+    private long index_;
     private long range;
 
     @Id
@@ -33,13 +33,13 @@ public class SerifilmEntity {
     }
 
     @Basic
-    @Column(name = "index", nullable = false)
+    @Column(name = "index_", nullable = false)
     public long getIndex() {
-        return index;
+        return index_;
     }
 
     public void setIndex(long index) {
-        this.index = index;
+        this.index_ = index;
     }
 
     @Basic
@@ -58,13 +58,13 @@ public class SerifilmEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SerifilmEntity that = (SerifilmEntity) o;
         return id == that.id &&
-                index == that.index &&
+                index_ == that.index_ &&
                 range == that.range &&
                 Objects.equals(ext, that.ext);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ext, index, range);
+        return Objects.hash(id, ext, index_, range);
     }
 }

@@ -17,6 +17,7 @@ public class LogEntity {
         nameapierror=ex.getClass().getName();
     }
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public long getId() {
         return id;

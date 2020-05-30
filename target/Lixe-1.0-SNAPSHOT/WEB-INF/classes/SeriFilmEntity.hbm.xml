@@ -13,7 +13,7 @@
             <column name="ext" sql-type="text"/>
         </property>
         <property name="index">
-            <column name="index" sql-type="bigint"/>
+            <column name="index_" sql-type="bigint"/>
         </property>
         <property name="range">
             <column name="range" sql-type="bigint"/>

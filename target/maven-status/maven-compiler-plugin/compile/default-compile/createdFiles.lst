@@ -32,6 +32,7 @@ Server\controller\FilmController.class
 Server\model\DB\FilmEntity.class
 Server\model\DAO\ImageDAO.class
 Server\model\DAO\SignalDAO.class
+Server\common\test.class
 Server\model\DAO\UserDAO.class
 Server\model\DAO\PlaylistCategoryDAO.class
 Server\model\DB\RatingEntity.class

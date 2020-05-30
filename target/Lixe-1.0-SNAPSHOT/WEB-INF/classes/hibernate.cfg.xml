@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:sqlserver://192.168.4.252:1433;database=ProjectMusicFilm</property>
+    <property name="connection.url">jdbc:sqlserver://localhost:1433;database=ProjectMusicFilm</property>
     <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     <property name="connection.pool_size">10</property>
     <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
@@ -15,7 +15,6 @@
     <property name="hibernate.connection.autoReconnect">true</property>
     <property name="hibernate.connection.autocommit">true</property>
     <!-- Echo all executed SQL to stdout -->
-    <property name="show_sql">true</property>
     <property name="hibernate.hibernate.hbm2ddl.auto">update</property>
     <property name="hibernate.connection.Charset">utf8</property>
     <mapping class="Server.model.DB.ActorEntity"/>

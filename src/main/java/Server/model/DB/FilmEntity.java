@@ -17,7 +17,7 @@ public class FilmEntity {
     private Timestamp createdate;
     private int length;
     private String info;
-    private int index;
+    private int index_;
     private int range;
     private Boolean active;
     private Long actorid;
@@ -124,13 +124,13 @@ public class FilmEntity {
     }
 
     @Basic
-    @Column(name = "index", nullable = false)
+    @Column(name = "index_", nullable = false)
     public int getIndex() {
-        return index;
+        return index_;
     }
 
     public void setIndex(int index) {
-        this.index = index;
+        this.index_ = index;
     }
 
     @Basic
@@ -172,7 +172,7 @@ public class FilmEntity {
                 directorid == that.directorid &&
                 yearreleased == that.yearreleased &&
                 length == that.length &&
-                index == that.index &&
+                index_ == that.index_ &&
                 range == that.range &&
                 Objects.equals(filmname, that.filmname) &&
                 Objects.equals(country, that.country) &&
@@ -186,6 +186,6 @@ public class FilmEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, index, range, active, actorid);
+        return Objects.hash(id, filmname, country, directorid, yearreleased, uploadsource, img, createdate, length, info, index_, range, active, actorid);
     }
 }
