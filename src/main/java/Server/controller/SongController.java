@@ -4,6 +4,7 @@ import Server.model.DAO.*;
 import Server.model.DB.*;
 import Server.model.DTO.AlbumDTO;
 import Server.model.DTO.Criteria;
+import Server.model.DTO.FilmDTO;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -186,5 +187,30 @@ public class SongController {
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
             }
+    }
+    @RequestMapping(value ="/GetRandom{item}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public  ResponseEntity<?> getRandom (@PathVariable("item") int item) {
+        try {
+            Criteria criteria = new Criteria();
+            criteria.setClazz(SongEntity.class);
+            criteria.setTop(item);
+            List<SongEntity> songEntityList = songDAO.loadTopRandom(criteria);
+            List<SongDTO> lsSongDTO = new ArrayList<>();
+            for ( SongEntity songE : songEntityList)
+            {
+                lsSongDTO.add(songSiteDAO.getSongDTOById(songE.getId()));
+            }
+            if(!songEntityList.isEmpty())
+                return new ResponseEntity<>(lsSongDTO, HttpStatus.OK);
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -142,8 +142,13 @@ public class ActorController {
             criteria.setClazz(ActorEntity.class);
             criteria.setTop(item);
             List<ActorEntity> actorEntityList = actorDAO.loadTopRandom(criteria);
-            if(!actorEntityList.isEmpty())
+            List<ActorDTO> actorDTOList = new ArrayList<>();
+            if(!actorEntityList.isEmpty()){
+                for(ActorEntity aItem : actorEntityList){
+                    actorDTOList.add(getActorDTO(aItem));
+                }
                 return new ResponseEntity<>(actorEntityList, HttpStatus.OK);
+            }
             return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);

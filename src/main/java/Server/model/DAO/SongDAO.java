@@ -1,6 +1,7 @@
 package Server.model.DAO;
 
 import Server.model.DB.CategorysongEntity;
+import Server.model.DB.FilmEntity;
 import Server.model.DB.SongCategorysongEntity;
 import Server.model.DB.SongEntity;
 import Server.model.DTO.Criteria;
@@ -59,6 +60,11 @@ public class SongDAO {
     public List<SongEntity> getAll2() {
         Session s = HibernateUtil.getSession(SongEntity.class);
         List<SongEntity> ls = DBUtil.loadAllData(SongEntity.class, s);
+        return Collections.unmodifiableList(ls);
+    }
+    public List<SongEntity> loadTopRandom(Criteria criteria){
+        Session s = HibernateUtil.getSession(SongEntity.class);
+        List<SongEntity> ls = DBUtil.getTopRandom(criteria,s);
         return Collections.unmodifiableList(ls);
     }
 }
