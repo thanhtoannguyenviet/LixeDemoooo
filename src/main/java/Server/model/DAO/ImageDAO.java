@@ -33,6 +33,6 @@ public class ImageDAO {
     public List<ImageEntity> getId(String model,long entryId ){
         Session s = HibernateUtil.getSession(ImageEntity.class);
         List<ImageEntity> ls = DBUtil.getImageOrResource("Image",model,entryId,ImageEntity.class,s);
-        return Collections.unmodifiableList(ls);
+        return ls;
     }
 }

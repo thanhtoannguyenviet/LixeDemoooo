@@ -6,6 +6,7 @@ import Server.model.DTO.SingerDTO;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,12 +49,14 @@ public class SingerController {
         }
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/GetDetail/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/GetDetail/{id}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> get(@PathVariable("id") Long id){
         return  new ResponseEntity<>(singerDAO.getByID(id),HttpStatus.OK);
     }
-    @RequestMapping(value = "/GetTop{itop}" , method = RequestMethod.GET)
+    @RequestMapping(value = "/GetTop{itop}" , method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getTop10(@PathVariable("itop") int itop)
     {
@@ -77,7 +80,7 @@ public class SingerController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
         try{

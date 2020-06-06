@@ -56,7 +56,7 @@ public class CategoryFilmController {
         else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.DELETE
+            method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
     public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {

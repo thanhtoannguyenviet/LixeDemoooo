@@ -159,13 +159,18 @@ public class ActorController {
     }
     private ActorDTO getActorDTO(ActorEntity actorEntity){
         List<FilmActorEntity> filmActorEntityList= filmActorDAO.getListHasCondition("actorid",actorEntity.getId()+"");
-        ImageEntity imageEntity = imageDAO.getId("actor",actorEntity.getId()).get(0);
+        List<ImageEntity> imageEntities = imageDAO.getId("actor",actorEntity.getId());
+        ImageEntity imageEntity = null ;
+        if(!imageEntities.isEmpty()){
+            imageEntity = imageEntities.get(0);}
         FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
         List<FilmDTO> filmDTOList = new ArrayList<>();
-        for ( FilmActorEntity item : filmActorEntityList) {
-            FilmDTO film = filmSiteDAO.getFilmDTOById(item.getFilmid());
-            if(film!=null)
-                filmDTOList.add(film);
+        if(!filmActorEntityList.isEmpty()){
+            for ( FilmActorEntity item : filmActorEntityList) {
+                FilmDTO film = filmSiteDAO.getFilmDTOById(item.getFilmid());
+                if(film!=null)
+                    filmDTOList.add(film);
+            }
         }
         return new ActorDTO(actorEntity,imageEntity, filmDTOList);
     }

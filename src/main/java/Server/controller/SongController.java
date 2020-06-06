@@ -19,8 +19,7 @@ import java.util.*;
 public class SongController {
     @Autowired
     SongDAO songDAO;
-    @Autowired
-    SongSiteDAO songSiteDAO;
+    SongSiteDAO songSiteDAO = new SongSiteDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
