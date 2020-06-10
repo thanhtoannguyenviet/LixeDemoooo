@@ -1,9 +1,6 @@
 package Server.controller;
 
-import Server.model.DAO.AuthorDAO;
-import Server.model.DAO.LogDAO;
-import Server.model.DAO.SongDAO;
-import Server.model.DAO.SongSiteDAO;
+import Server.model.DAO.*;
 import Server.model.DB.AuthorEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DB.SongEntity;
@@ -28,74 +25,93 @@ public class AuthorController {
     AuthorDAO authorDAO;
     SongDAO songDAO = new SongDAO();
     SongSiteDAO songSiteDAO = new SongSiteDAO();
-    @RequestMapping(value = "/Post",
+    APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
+    @RequestMapping(value = "{apiToken}/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody AuthorEntity entity){
-        entity =authorDAO.save(entity);
+    public ResponseEntity<?> post(@PathVariable("apiToken") String apiToken, @RequestBody AuthorEntity entity) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        entity = authorDAO.save(entity);
         return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
     }
-    @RequestMapping(value = "/Delete/{id}",
+
+    @RequestMapping(value = "{apiToken}/Delete/{id}",
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(authorDAO.getByID(id)!=null){
-            authorDAO.delete(id);
-            return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
+    public ResponseEntity<?> delete(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
+        if (authorDAO.getByID(id) != null) {
+            authorDAO.delete(id);
+            return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Delete Fail", HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/GetAll",
+    @RequestMapping(value = "{apiToken}/GetAll",
             method = RequestMethod.GET
     )
     @ResponseBody
-    public ResponseEntity<?> GetAll(){
-        return new ResponseEntity<>(authorDAO.getAll(),HttpStatus.OK);
+    public ResponseEntity<?> GetAll(@PathVariable("apiToken") String apiToken) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(authorDAO.getAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/Put/{id}",
+    @RequestMapping(value = "{apiToken}/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> updateActor (@RequestBody AuthorEntity actor, @PathVariable("id") Long id){
-        if(id==actor.getId())
-        {
+    public ResponseEntity<?> updateActor(@PathVariable("apiToken") String apiToken, @RequestBody AuthorEntity actor, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (id == actor.getId()) {
             authorDAO.save(actor);
-            return new ResponseEntity<>("Update Completed",HttpStatus.OK);
-        }
-        else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Update Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/GetDetail/{id}",
+
+    @RequestMapping(value = "{apiToken}/GetDetail/{id}",
             method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> getDetail (@PathVariable("id") Long id){
-        AuthorEntity authorEntity = authorDAO.getByID(id);
-        if(authorEntity!=null){
-            return new ResponseEntity<>(getAuthorDTO(authorEntity),HttpStatus.OK);
+    public ResponseEntity<?> getDetail(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        AuthorEntity authorEntity = authorDAO.getByID(id);
+        if (authorEntity != null) {
+            return new ResponseEntity<>(getAuthorDTO(authorEntity), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
     }
-    @RequestMapping(value ="/GetAllHasPage{item}/{page}", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+
+    @RequestMapping(value = "{apiToken}/GetAllHasPage{item}/{page}", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("item") int item) {
+    public ResponseEntity<?> getPage(@PathVariable("apiToken") String apiToken, @PathVariable("page") int page, @PathVariable("item") int item) {
         try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(AuthorEntity.class);
             criteria.setCurrentPage(page);
             criteria.setItemPerPage(item);
             List<AuthorEntity> authorEntityList = authorDAO.loadDataPagination(criteria);
-            if(!authorEntityList.isEmpty())
-            {
+            if (!authorEntityList.isEmpty()) {
                 List<AuthorDTO> authorDTOList = new ArrayList<>();
-                for(AuthorEntity ite : authorEntityList ){
+                for (AuthorEntity ite : authorEntityList) {
                     authorDTOList.add(getAuthorDTO(ite));
                 }
                 return new ResponseEntity<>(Collections.unmodifiableList(authorDTOList), HttpStatus.OK);
             }
-            return  new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -103,25 +119,30 @@ public class AuthorController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+
+    @RequestMapping(value = "{apiToken}/Count", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> count (){
+    public ResponseEntity<?> count(@PathVariable("apiToken") String apiToken) {
         try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>(authorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    private AuthorDTO getAuthorDTO(AuthorEntity authorEntity){
-        List<SongEntity> songEntityList = songDAO.getSongByAuthorId("authorid",authorEntity.getId()+"");
+
+    private AuthorDTO getAuthorDTO(AuthorEntity authorEntity) {
+        List<SongEntity> songEntityList = songDAO.getSongByAuthorId("authorid", authorEntity.getId() + "");
         List<SongDTO> songDTOList = new ArrayList<>();
-        for(SongEntity item : songEntityList){
+        for (SongEntity item : songEntityList) {
             SongDTO songDTO = songSiteDAO.getSongDTOById(item);
-            if(songDTO!=null){
+            if (songDTO != null) {
                 songDTOList.add(songDTO);
             }
         }

@@ -26,179 +26,212 @@ public class CategoryFilmController {
     CategoryFilmDAO categoryFilmDAO;
     FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
     FilmCategoryFilmDAO filmCategoryFilmDAO = new FilmCategoryFilmDAO();
-    @RequestMapping(value = "/Post",
+    APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
+    @RequestMapping(value = "{apiToken}/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody CategoryfilmEntity categorySongEntity){
+    public ResponseEntity<?> post(@PathVariable("apiToken") String apiToken, @RequestBody CategoryfilmEntity categorySongEntity) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         categoryFilmDAO.save(categorySongEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
-    @RequestMapping(value = "Put/{id}",
+
+    @RequestMapping(value = "{apiToken}/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody CategoryfilmEntity entity, @PathVariable("id") Long id){
-        if(id==entity.getId())
-        {
-            categoryFilmDAO.save(entity);
-            return new ResponseEntity<>("Update Completed",HttpStatus.OK);
+    public ResponseEntity<?> update(@PathVariable("apiToken") String apiToken, @RequestBody CategoryfilmEntity entity, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
+        if (id == entity.getId()) {
+            categoryFilmDAO.save(entity);
+            return new ResponseEntity<>("Update Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/Delete/{id}",
+
+    @RequestMapping(value = "{apiToken}/Delete/{id}",
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(categoryFilmDAO.getByID(id)!=null){
-            categoryFilmDAO.delete(id);
-            return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
+    public ResponseEntity<?> delete(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
+        if (categoryFilmDAO.getByID(id) != null) {
+            categoryFilmDAO.delete(id);
+            return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE}
+
+    @RequestMapping(value = "{apiToken}/GetDetail/{id}",
+            method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getDetail(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         CategoryfilmEntity categoryfilmEntity = categoryFilmDAO.getByID(id);
         if (categoryfilmEntity != null) {
             CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(categoryfilmEntity);
             return new ResponseEntity<>(categoryFilmDTO, HttpStatus.OK);
         }
-        return new ResponseEntity<>("Not Found",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Not Found", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/GetAll/",
-            method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE}
+
+    @RequestMapping(value = "{apiToken}/GetAll/",
+            method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getAll(){
-        try{
+    public ResponseEntity<?> getAll(@PathVariable("apiToken") String apiToken) {
+        try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getAll();
-            if(!categoryfilmEntityList.isEmpty()){
+            if (!categoryfilmEntityList.isEmpty()) {
                 List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
-                for ( CategoryfilmEntity item : categoryfilmEntityList
-                     ) {
+                for (CategoryfilmEntity item : categoryfilmEntityList
+                ) {
                     CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
-                    if(categoryFilmDTO!=null)
+                    if (categoryFilmDTO != null)
                         categoryFilmDTOList.add(categoryFilmDTO);
                 }
-                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+                return new ResponseEntity<>(categoryFilmDTOList, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,produces = { MediaType.APPLICATION_JSON_VALUE})
+
+    @RequestMapping(value = "{apiToken}/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage ){
+    public ResponseEntity<?> getPage(@PathVariable("apiToken") String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
         try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
             criteria.setCurrentPage(page);
             criteria.setItemPerPage(itemOnPage);
             List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.loadDataPagination(criteria);
-            if(!categoryfilmEntityList.isEmpty()){
+            if (!categoryfilmEntityList.isEmpty()) {
                 List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
-                for ( CategoryfilmEntity item : categoryfilmEntityList) {
+                for (CategoryfilmEntity item : categoryfilmEntityList) {
                     CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
-                    if(categoryFilmDTO!=null)
+                    if (categoryFilmDTO != null)
                         categoryFilmDTOList.add(categoryFilmDTO);
                 }
-                return new ResponseEntity<> (categoryFilmDTOList,HttpStatus.OK);
+                return new ResponseEntity<>(categoryFilmDTOList, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e) {
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/GetTop{itop}/", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+
+    @RequestMapping(value = "{apiToken}/GetTop{itop}/", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> getTop (@PathVariable("itop") int itop){
-        try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(CategoryfilmEntity.class);
-        criteria.setTop(itop);
-        List<CategoryfilmEntity> categoryfilmEntityList   = categoryFilmDAO.getTop10(criteria);
-        if(!categoryfilmEntityList.isEmpty()){
+    public ResponseEntity<?> getTop(@PathVariable("apiToken") String apiToken, @PathVariable("itop") int itop) {
+        try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            Criteria criteria = new Criteria();
+            criteria.setClazz(CategoryfilmEntity.class);
+            criteria.setTop(itop);
+            List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getTop10(criteria);
+            if (!categoryfilmEntityList.isEmpty()) {
                 List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
-                for ( CategoryfilmEntity item : categoryfilmEntityList
+                for (CategoryfilmEntity item : categoryfilmEntityList
                 ) {
                     CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
-                    if(categoryFilmDTO!=null)
+                    if (categoryFilmDTO != null)
                         categoryFilmDTOList.add(categoryFilmDTO);
                 }
-                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e) {
+                return new ResponseEntity<>(categoryFilmDTOList, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value = "/GetRandom{iRandom}/",
+
+    @RequestMapping(value = "{apiToken}/GetRandom{iRandom}/",
             method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE}
+            produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getRandom(@PathVariable("iRandom") int iRandom){
-        try{
+    public ResponseEntity<?> getRandom(@PathVariable("apiToken") String apiToken, @PathVariable("iRandom") int iRandom) {
+        try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setTop(iRandom);
             criteria.setClazz(CategoryfilmEntity.class);
             List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getTopRandom(criteria);
-            if(!categoryfilmEntityList.isEmpty()){
+            if (!categoryfilmEntityList.isEmpty()) {
                 List<CategoryFilmDTO> categoryFilmDTOList = new ArrayList<>();
-                for ( CategoryfilmEntity item : categoryfilmEntityList
+                for (CategoryfilmEntity item : categoryfilmEntityList
                 ) {
                     CategoryFilmDTO categoryFilmDTO = getCategoryFilmDTO(item);
-                    if(categoryFilmDTO!=null)
+                    if (categoryFilmDTO != null)
                         categoryFilmDTOList.add(categoryFilmDTO);
                 }
-                return new ResponseEntity<>(categoryFilmDTOList,HttpStatus.OK);
+                return new ResponseEntity<>(categoryFilmDTOList, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+
+    @RequestMapping(value = "{apiToken}/Count", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> count (){
+    public ResponseEntity<?> count(@PathVariable("apiToken") String apiToken) {
         try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>(categoryFilmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    private CategoryFilmDTO getCategoryFilmDTO(CategoryfilmEntity categoryfilmEntity){
-       List<FilmCategoryfilmEntity> filmCategoryfilmEntities = filmCategoryFilmDAO.getId("categoryid",categoryfilmEntity.getId()+"");
-       List<FilmDTO> filmDTOList = new ArrayList<>();
-       if(!filmCategoryfilmEntities.isEmpty()){
-           for (FilmCategoryfilmEntity item : filmCategoryfilmEntities
-                ) {
-               FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getFilmid());
-               if(filmDTO != null)
-                   filmDTOList.add(filmDTO);
-           }
-       }
-       return new CategoryFilmDTO(categoryfilmEntity,filmDTOList);
+
+    private CategoryFilmDTO getCategoryFilmDTO(CategoryfilmEntity categoryfilmEntity) {
+        List<FilmCategoryfilmEntity> filmCategoryfilmEntities = filmCategoryFilmDAO.getId("categoryid", categoryfilmEntity.getId() + "");
+        List<FilmDTO> filmDTOList = new ArrayList<>();
+        if (!filmCategoryfilmEntities.isEmpty()) {
+            for (FilmCategoryfilmEntity item : filmCategoryfilmEntities
+            ) {
+                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getFilmid());
+                if (filmDTO != null)
+                    filmDTOList.add(filmDTO);
+            }
+        }
+        return new CategoryFilmDTO(categoryfilmEntity, filmDTOList);
     }
 }

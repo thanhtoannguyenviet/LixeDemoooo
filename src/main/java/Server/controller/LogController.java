@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.LogDAO;
 import Server.model.DB.LogEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class LogController {
     @Autowired
     LogDAO logDAO;
-    @RequestMapping(value = "/Post",
+    APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
+    @RequestMapping(value = "{apiToken}/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestBody LogEntity logEntity){
+    public ResponseEntity<?> registerActor(@PathVariable("apiToken") String apiToken, @RequestBody LogEntity logEntity) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         logDAO.save(logEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }

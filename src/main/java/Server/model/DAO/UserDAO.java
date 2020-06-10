@@ -19,150 +19,41 @@ public class UserDAO {
         List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, s);
         return Collections.unmodifiableList(ls);
     }
-//    public List<UserDTO> getAll() {
-//        Session s = factory.getCurrentSession();
-//
-//        List<UserDTO> userList = new ArrayList<>();
-//        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class,s );
-//        for (UserEntity userEntity: ls
-//        ) {
-//            s = factory.getCurrentSession();
-//            RoleEntity role = DBUtil.getDataByID(userEntity.getRoleid(),RoleEntity.class,s);
-//            UserDTO user = new UserDTO();
-//            user.setRoleEntity(role);
-//            user.setUserEntity(userEntity);
-//
-//
-//            s = factory.getCurrentSession();
-//            Transaction tx = s.beginTransaction();
-//            try{
-//                SQLQuery q = s.createSQLQuery(CUSTOM_QUERY.sqlImg(UserDTO.class.getName(), userEntity.getId()));
-//                q.setResultTransformer((Criteria.ALIAS_TO_ENTITY_MAP));
-//
-//                List<ImageEntity> imageEntityList = (List<ImageEntity>) q.list();
-//                if(imageEntityList != null && imageEntityList.size() > 0){
-//                    user.setImageEntity(imageEntityList);
-//                }
-//            }catch (HibernateException ex) {
-//                if (tx != null) tx.rollback();
-//                ex.printStackTrace();
-//            } finally {
-//                s.close();
-//            }
-//            userList.add(user);
-//        }
-//        return Collections.unmodifiableList(userList);
-//    }
-//    public UserDTO login(String userName, String password){
-//
-//        Session s = factory.getCurrentSession();
-//        Transaction tx = s.beginTransaction();
-//        try{
-//            SQLQuery q = s.createSQLQuery(CUSTOM_QUERY.sqlLogin(userName, password));
-//            q.addEntity(UserEntity.class);
-//            List<UserEntity> user = (List<UserEntity>) q.list();
-//            if(user != null && user.size() > 0){
-//
-//                return GetAccountByID(user.get(0).getId());
-//            }
-//            return null;
-//        }catch (HibernateException ex) {
-//            if (tx != null) tx.rollback();
-//            ex.printStackTrace();
-//            return null;
-//        } finally {
-//            s.close();
-//        }
-//    }
-//
-//    public void Save(UserEntity entity){
-//        Session s = factory.getCurrentSession();
-//        DBUtil.addData(entity,s);
-//    }
-//    public void Delete(Long id){
-//        Session s= factory.getCurrentSession();
-//        DBUtil.deleteData(id,UserEntity.class,s);
-//    }
-//    public UserEntity getByID(Long id){
-//        Session s = factory.getCurrentSession();
-//        UserEntity entity = DBUtil.getDataByID(id,UserEntity.class,s);
-//        return entity;
-//    }
-//
-//    public  UserEntity getUserByUsername(String userName){
-//        Session s = factory.getCurrentSession();
-//        Transaction tx = s.beginTransaction();
-//        try {
-//            //sql = select * from User_ where userName = '?'
-//            String sql = CUSTOM_QUERY.GetUserByUsername;
-//            sql = sql.replace("?",userName);
-//            SQLQuery q = s.createSQLQuery(sql);
-//            q.addEntity(UserEntity.class);
-//            return (UserEntity) q.uniqueResult() ;
-//        }catch (HibernateException ex) {
-//            if (tx != null) tx.rollback();
-//            ex.printStackTrace();
-//            return null;
-//        } finally {
-//            s.close();
-//        }
-//    }
-//
-//    public List<UserDTO> getAllAccount() {
-//        Session s = factory.getCurrentSession();
-//
-//        List<UserDTO> userList = new ArrayList<>();
-//        List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, null);
-//        for (UserEntity userEntity: ls) {
-//            s = factory.getCurrentSession();
-//            RoleEntity role = DBUtil.getDataByID(userEntity.getRoleid(),RoleEntity.class,s);
-//            UserDTO user = new UserDTO();
-//            user.setRoleEntity(role);
-//            user.setUserEntity(userEntity);
-//
-//            s = factory.getCurrentSession();
-//            Transaction tx = s.beginTransaction();
-//            try{
-//                SQLQuery q = s.createSQLQuery(CUSTOM_QUERY.sqlImg(UserDTO.class.getName(), userEntity.getId()));
-//                q.setResultTransformer((Criteria.ALIAS_TO_ENTITY_MAP));
-//
-//                List<ImageEntity> imageEntityList = (List<ImageEntity>) q.list();
-//                if(imageEntityList != null && imageEntityList.size() > 0){
-//                    user.setImageEntity(imageEntityList);
-//                }
-//            }catch (HibernateException ex) {
-//                if (tx != null) tx.rollback();
-//                ex.printStackTrace();
-//            } finally {
-//                s.close();
-//            }
-//            userList.add(user);
-//        }
-//        return Collections.unmodifiableList(userList);
-//    }
-//    public void createAccount(UserEntity acc){
-//        Session s = factory.getCurrentSession();
-//        DBUtil.addData(acc,s);
-//    }
-//    public void DeleteAccount(long id){
-//        Session s= factory.getCurrentSession();
-//        DBUtil.deleteData(id,UserEntity.class,s);
-//    }
-//    public UserDTO GetAccountByID(long id){
-//        Session s = factory.getCurrentSession();
-//        UserDTO user = new UserDTO();
-//        UserEntity acc = DBUtil.getDataByID(id,UserEntity.class,s);
-//        user.setUserEntity(acc);
-//        s = factory.getCurrentSession();
-//        RoleEntity role = DBUtil.getDataByID(acc.getRoleid(),RoleEntity.class,s);
-//        user.setRoleEntity(role);
-//        s = factory.getCurrentSession();
-//        SQLQuery q = s.createSQLQuery(CUSTOM_QUERY.sqlImg(UserDTO.class.getName(), acc.getId()));
-//        q.setResultTransformer((Criteria.ALIAS_TO_ENTITY_MAP));
-//        List<ImageEntity> imageEntity = (List<ImageEntity>) q.list();
-//        user.setImageEntity(imageEntity);
-//
-//        return user;
-//    }
 
+    /**
+     * User Register
+     *
+     * @param userEntity UserEntity
+     * @return UserEntity
+     */
+    public UserEntity registerUser(UserEntity userEntity) {
+        Session s = HibernateUtil.getSession(UserEntity.class);
+        return DBUtil.addData(userEntity, s);
+    }
+
+    /**
+     * Get User by ID
+     *
+     * @param id long
+     * @return UserEntity
+     */
+    public UserEntity getUserByID(long id) {
+        Session s = HibernateUtil.getSession(UserEntity.class);
+        UserEntity user = new UserEntity();
+        List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.getUserByID(id), s);
+        if (listUsers != null && listUsers.size() != 0) {
+            user = DBUtil.convertToOBject(listUsers.get(0), UserEntity.class);
+        }
+        return user;
+    }
+
+    /**
+     * Get All Users
+     *
+     * @return List<UserEntity>
+     */
+    public List<UserEntity> getAllUsers() {
+        Session s = HibernateUtil.getSession(UserEntity.class);
+        return DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.getAllUsers(), s);
+    }
 }

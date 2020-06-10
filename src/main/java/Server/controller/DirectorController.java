@@ -26,102 +26,124 @@ public class DirectorController {
     DirectorDAO directorDAO;
     DirectorFilmDAO directorFilmDAO = new DirectorFilmDAO();
     FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
-    @RequestMapping(value = "/Post",
+    APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
+    @RequestMapping(value = "{apiToken}/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody DirectorEntity entity){
+    public ResponseEntity<?> post(@PathVariable("apiToken") String apiToken, @RequestBody DirectorEntity entity) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         directorDAO.save(entity);
-        HttpHeaders responseHeader=new HttpHeaders();
-        URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
+        HttpHeaders responseHeader = new HttpHeaders();
+        URI newAccounUrl = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>("Post completed",responseHeader, HttpStatus.CREATED);
+        return new ResponseEntity<>("Post completed", responseHeader, HttpStatus.CREATED);
     }
-    @RequestMapping(value = "Put/{id}",
+
+    @RequestMapping(value = "{apiToken}/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody DirectorEntity entity, @PathVariable("id") Long id){
-        if(directorDAO.getByID(id)!=null)
-        {
-            directorDAO.save(entity);
-            return new ResponseEntity<>("Update Completed",HttpStatus.OK);
+    public ResponseEntity<?> update(@PathVariable("apiToken") String apiToken, @RequestBody DirectorEntity entity, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
+        if (directorDAO.getByID(id) != null) {
+            directorDAO.save(entity);
+            return new ResponseEntity<>("Update Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/Delete/{id}",
+
+    @RequestMapping(value = "{apiToken}/Delete/{id}",
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(directorDAO.getByID(id)!=null){
+    public ResponseEntity<?> delete(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (directorDAO.getByID(id) != null) {
             directorDAO.delete(id);
-            return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
-        }
-        else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
-    }
-    @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE}
-    )
-    @ResponseBody
-    public ResponseEntity<?> get (@PathVariable("id") Long id){
-        DirectorEntity directorEntity = directorDAO.getByID(id);
-        if(directorEntity!=null){
-            return  new ResponseEntity<>(getDirectorDTO(directorEntity),HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value ="/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "{apiToken}/GetDetail/{id}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
     @ResponseBody
-    public  ResponseEntity<?> getPage (@PathVariable("page") int page,@PathVariable("itemOnPage") int itemOnPage){
-        try{
-        Criteria criteria = new Criteria();
-        criteria.setClazz(DirectorEntity.class);
-        criteria.setCurrentPage(page);
-        criteria.setItemPerPage(itemOnPage);
-        List<DirectorEntity> directorEntityList = directorDAO.loadDataPagination(criteria);
-        List<DirectorDTO> directorDTOList = new ArrayList<>();
-            if(!directorEntityList.isEmpty()){
+    public ResponseEntity<?> get(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        DirectorEntity directorEntity = directorDAO.getByID(id);
+        if (directorEntity != null) {
+            return new ResponseEntity<>(getDirectorDTO(directorEntity), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "{apiToken}/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> getPage(@PathVariable("apiToken") String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+        try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            Criteria criteria = new Criteria();
+            criteria.setClazz(DirectorEntity.class);
+            criteria.setCurrentPage(page);
+            criteria.setItemPerPage(itemOnPage);
+            List<DirectorEntity> directorEntityList = directorDAO.loadDataPagination(criteria);
+            List<DirectorDTO> directorDTOList = new ArrayList<>();
+            if (!directorEntityList.isEmpty()) {
                 for (DirectorEntity item : directorEntityList
-                     ) {
+                ) {
                     DirectorDTO directorDTO = getDirectorDTO(item);
-                    if(directorDTO!=null)
+                    if (directorDTO != null)
                         directorDTOList.add(directorDTO);
                 }
-                return  new ResponseEntity<>(directorDTOList,HttpStatus.OK);
+                return new ResponseEntity<>(directorDTOList, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value ="/Count", method = RequestMethod.GET,
-            produces = { MediaType.APPLICATION_JSON_VALUE})
+
+    @RequestMapping(value = "{apiToken}/Count", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public  ResponseEntity<?> count (){
+    public ResponseEntity<?> count(@PathVariable("apiToken") String apiToken) {
         try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>(directorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));
             e.printStackTrace();
-            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-    private DirectorDTO getDirectorDTO(DirectorEntity directorEntity){
-        List<DirectorFilmEntity> directorFilmEntityList = directorFilmDAO.getID("directorid",directorEntity.getId()+"");
+
+    private DirectorDTO getDirectorDTO(DirectorEntity directorEntity) {
+        List<DirectorFilmEntity> directorFilmEntityList = directorFilmDAO.getID("directorid", directorEntity.getId() + "");
         List<FilmDTO> filmDTOList = new ArrayList<>();
-        if(!directorFilmEntityList.isEmpty()){
+        if (!directorFilmEntityList.isEmpty()) {
             for (DirectorFilmEntity item : directorFilmEntityList) {
                 FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getId());
-                if(filmDTO!=null){
+                if (filmDTO != null) {
                     filmDTOList.add(filmDTO);
                 }
             }
         }
-        return new DirectorDTO(directorEntity,filmDTOList);
+        return new DirectorDTO(directorEntity, filmDTOList);
     }
 }
