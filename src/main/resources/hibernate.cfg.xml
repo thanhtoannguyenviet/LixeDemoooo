@@ -7,7 +7,7 @@
     <property name="connection.url">jdbc:sqlserver://localhost:1433;database=ProjectMusicFilm</property>
     <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     <property name="connection.pool_size">10</property>
-    <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+    <property name="dialect">org.hibernate.dialect.SQLServer2008Dialect</property>
     <property name="connection.username">toan</property>
     <property name="connection.password">123456</property>
     <!-- Enable Hibernate's automatic session context management -->
