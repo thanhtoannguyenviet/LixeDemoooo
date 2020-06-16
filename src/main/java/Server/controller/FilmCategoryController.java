@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.FilmCategoryFilmDAO;
 import Server.model.DB.FilmCategoryfilmEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,37 +17,47 @@ import java.net.URI;
 public class FilmCategoryController {
     @Autowired
     FilmCategoryFilmDAO filmCategoryFilmDAO;
-    @RequestMapping(value = "/Post",
+    APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
+    @RequestMapping(value = "{apiToken}/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody FilmCategoryfilmEntity entity){
+    public ResponseEntity<?> post(@PathVariable("apiToken") String apiToken, @RequestBody FilmCategoryfilmEntity entity) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         filmCategoryFilmDAO.save(entity);
-        HttpHeaders responseHeader=new HttpHeaders();
-        URI newAccounUrl= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
+        HttpHeaders responseHeader = new HttpHeaders();
+        URI newAccounUrl = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>("Post completed",responseHeader, HttpStatus.CREATED);
+        return new ResponseEntity<>("Post completed", responseHeader, HttpStatus.CREATED);
     }
-    @RequestMapping(value = "Put/{id}",
+
+    @RequestMapping(value = "{apiToken}/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public  ResponseEntity<?> update (@RequestBody FilmCategoryfilmEntity entity, @PathVariable("id") Long id){
-        if(filmCategoryFilmDAO.getByID(id)!=null)
-        {
-            filmCategoryFilmDAO.save(entity);
-            return new ResponseEntity<>("Update Completed",HttpStatus.OK);
+    public ResponseEntity<?> update(@PathVariable("apiToken") String apiToken, @RequestBody FilmCategoryfilmEntity entity, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        else return new ResponseEntity<>("Update Fail",HttpStatus.BAD_REQUEST);
+        if (filmCategoryFilmDAO.getByID(id) != null) {
+            filmCategoryFilmDAO.save(entity);
+            return new ResponseEntity<>("Update Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/Delete/{id}",
+
+    @RequestMapping(value = "{apiToken}/Delete/{id}",
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
-        if(filmCategoryFilmDAO.getByID(id)!=null){
-            filmCategoryFilmDAO.delete(id);
-            return new ResponseEntity<>("Delete Completed",HttpStatus.OK);
+    public ResponseEntity<?> delete(@PathVariable("apiToken") String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        else return  new ResponseEntity<>("Delte Fail",HttpStatus.BAD_REQUEST);
+        if (filmCategoryFilmDAO.getByID(id) != null) {
+            filmCategoryFilmDAO.delete(id);
+            return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
+        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
     }
 
 }
