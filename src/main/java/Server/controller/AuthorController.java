@@ -35,7 +35,7 @@ public class AuthorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         entity = authorDAO.save(entity);
-        return new ResponseEntity<>(entity.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{apiToken}/Delete/{id}",

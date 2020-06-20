@@ -1,9 +1,6 @@
 package Server.model.DAO;
 
-import Server.model.DB.DirectorEntity;
-import Server.model.DB.DirectorFilmEntity;
-import Server.model.DB.SongEntity;
-import Server.model.DB.SongSingerEntity;
+import Server.model.DB.*;
 import Server.service.DBUtil;
 import Server.service.HibernateUtil;
 import org.hibernate.Session;
@@ -24,5 +21,10 @@ public class DirectorFilmDAO {
         Session s = HibernateUtil.getSession(DirectorFilmEntity.class);
         List<DirectorFilmEntity> entity = DBUtil.getListHasCondition("director_film",conditionColumn,condition,DirectorFilmEntity.class,s);
         return Collections.unmodifiableList(entity);
+    }
+    public DirectorFilmEntity getByID(Long id){
+        Session s = HibernateUtil.getSession(DirectorFilmEntity.class);
+        DirectorFilmEntity entity = DBUtil.getDataByID(id,DirectorFilmEntity.class,s);
+        return entity;
     }
 }

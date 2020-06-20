@@ -156,8 +156,8 @@ public class DBUtil {
         typedQuery.setFirstResult(itemStart);
         typedQuery.setMaxResults(itemEnd);
         List<T> data = typedQuery.getResultList();
-        session.getTransaction().commit();
-        return data;
+       // session.getTransaction().commit();
+        return typedQuery.getResultList();
     }
     public static <T> List<T> getTop10New(String condition,Criteria criteria,Session session){
         Transaction tx = null;

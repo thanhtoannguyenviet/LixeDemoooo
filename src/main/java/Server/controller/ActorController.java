@@ -24,14 +24,14 @@ public class ActorController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "{apiToken}/Post/",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> registerActor(@PathVariable("apiToken") String apiToken, @RequestBody ActorEntity actor) {
         if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        actorDAO.save(actor);
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+        actor =actorDAO.save(actor);
+        return new ResponseEntity<>(actor, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{apiToken}/Put/{id}",

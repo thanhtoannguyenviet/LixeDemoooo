@@ -22,7 +22,7 @@ public class SongSiteDAO {
     public SongDTO getSongDTOById(Long id){
         SongEntity songEntity = songDAO.getByID(id);
         List<AlbumSongEntity> albumSongEntity = albumSongDAO.getId("songid",songEntity.getId()+"");
-        AlbumEntity albumEntity = null;
+        AlbumEntity albumEntity = new AlbumEntity();
         if(!albumSongEntity.isEmpty()){
             albumEntity = albumDAO.getByID(albumSongEntity.get(0).getId());
         }
@@ -32,7 +32,6 @@ public class SongSiteDAO {
         if(!imageEntityList.isEmpty()){
             imageEntity= imageEntityList.get(0);
         }
-        else imageEntity = null;
         List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("songid",songEntity.getId()+"");
         List<SingerEntity> singerEntityList = new ArrayList<>();
         for (SongSingerEntity item : songSingerEntityList) {

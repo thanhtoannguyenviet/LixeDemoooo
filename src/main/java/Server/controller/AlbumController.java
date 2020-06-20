@@ -34,8 +34,8 @@ public class AlbumController {
         if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        albumDAO.save(entity);
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+        AlbumEntity albumEntity= albumDAO.save(entity);
+        return new ResponseEntity<>(albumEntity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{apiToken}/Put/{id}",

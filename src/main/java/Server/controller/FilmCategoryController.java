@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@RequestMapping("Relationship/FilmCategory")
+@RequestMapping("FilmSite/FilmCategory")
 @RestController
 public class FilmCategoryController {
     @Autowired
