@@ -25,10 +25,10 @@ public class UserController {
         return new ResponseEntity<>(userDAO.getAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{apiToken}/RegisterAPI/",
+    @RequestMapping(value = "/RegisterAPI/",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registerAPI(@PathVariable("apiToken") String apiToken, @RequestBody UserEntity user) {
+    public ResponseEntity<?> registerAPI(@RequestHeader("apiToken") String apiToken, @RequestBody UserEntity user) {
         if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
@@ -36,11 +36,11 @@ public class UserController {
         return new ResponseEntity<>("", HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "{apiToken}/GetAllUsers",
+    @RequestMapping(value = "/GetAllUsers",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getAllUsers(@PathVariable("apiToken") String apiToken) {
+    public ResponseEntity<?> getAllUsers(@RequestHeader("apiToken") String apiToken) {
         if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
@@ -49,11 +49,11 @@ public class UserController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{apiToken}/GetUserById/{id}",
+    @RequestMapping(value = "/GetUserById/{id}",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getUserByID(@PathVariable("apiToken") String apiToken, @PathVariable("id") long id) {
+    public ResponseEntity<?> getUserByID(@RequestHeader("apiToken") String apiToken, @PathVariable("id") long id) {
         if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }

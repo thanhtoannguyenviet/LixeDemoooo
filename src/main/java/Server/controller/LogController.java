@@ -15,10 +15,10 @@ public class LogController {
     LogDAO logDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
-    @RequestMapping(value = "{apiToken}/Post",
+    @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registerActor(@PathVariable("apiToken") String apiToken, @RequestBody LogEntity logEntity) {
+    public ResponseEntity<?> registerActor(@RequestHeader("apiToken") String apiToken, @RequestBody LogEntity logEntity) {
         if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
