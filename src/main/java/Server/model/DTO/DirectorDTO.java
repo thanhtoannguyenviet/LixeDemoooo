@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DirectorDTO {
     private DirectorEntity directorEntity = new DirectorEntity();
-
+    private List<FilmDTO> filmDTOList = new ArrayList<>();
     public DirectorEntity getDirectorEntity() {
         return directorEntity;
     }
@@ -24,7 +24,6 @@ public class DirectorDTO {
         this.filmDTOList = filmDTOList;
     }
 
-    private List<FilmDTO> filmDTOList = new ArrayList<>();
     public DirectorDTO(){}
     public DirectorDTO(DirectorEntity directorEntity, List<FilmDTO> filmDTOList) {
         this.directorEntity = directorEntity;
