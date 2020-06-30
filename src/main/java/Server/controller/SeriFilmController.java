@@ -29,10 +29,10 @@ public class SeriFilmController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestHeader("apiToken") String apiToken, @RequestBody SerifilmEntity entity) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> post(@RequestBody SerifilmEntity entity) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         seriFilmDAO.save(entity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
@@ -40,10 +40,10 @@ public class SeriFilmController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateAccount(@RequestHeader("apiToken") String apiToken, @RequestBody SerifilmEntity entity, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> updateAccount(@RequestBody SerifilmEntity entity, @PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         if (seriFilmDAO.getByID(id) != null) {
             seriFilmDAO.save(entity);
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
@@ -54,10 +54,10 @@ public class SeriFilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteAccount(@RequestHeader("apiToken") String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         if (seriFilmDAO.getByID(id) != null) {
             seriFilmDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
@@ -69,10 +69,10 @@ public class SeriFilmController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getDetail(@RequestHeader("apiToken") String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         SerifilmEntity serifilmEntity = seriFilmDAO.getByID(id);
         if (serifilmEntity != null) {
             return new ResponseEntity<>(filmSiteDAO.getSeriFilmDTO(serifilmEntity), HttpStatus.OK);
@@ -83,11 +83,11 @@ public class SeriFilmController {
     @RequestMapping(value = "/GetTop{iTop}", method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop10(@RequestHeader("apiToken") String apiToken, @PathVariable("iTop") int iTop) {
+    public ResponseEntity<?> getTop10(@PathVariable("iTop") int iTop) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-            }
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SerifilmEntity.class);
             criteria.setTop(iTop);
@@ -111,11 +111,11 @@ public class SeriFilmController {
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestHeader("apiToken") String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-            }
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SerifilmEntity.class);
             criteria.setCurrentPage(page);
@@ -140,11 +140,11 @@ public class SeriFilmController {
     @RequestMapping(value = "/Count", method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count(@RequestHeader("apiToken") String apiToken) {
+    public ResponseEntity<?> count() {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-            }
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
             return new ResponseEntity<>(seriFilmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));

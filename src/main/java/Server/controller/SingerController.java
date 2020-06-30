@@ -26,10 +26,10 @@ public class SingerController {
     @RequestMapping(value = "/Post/",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestHeader("apiToken") String apiToken, @RequestBody SingerEntity singer) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> post(@RequestBody SingerEntity singer) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         singerDAO.save(singer);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
@@ -37,10 +37,10 @@ public class SingerController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> put(@RequestHeader("apiToken") String apiToken, @RequestBody SingerEntity singer, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> put(@RequestBody SingerEntity singer, @PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         if (singerDAO.getByID(id) != null) {
             singerDAO.save(singer);
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
@@ -51,10 +51,10 @@ public class SingerController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestHeader("apiToken") String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         if (singerDAO.getByID(id) != null) {
             singerDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
@@ -65,20 +65,20 @@ public class SingerController {
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> get(@RequestHeader("apiToken") String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> get(@PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         return new ResponseEntity<>(singerDAO.getByID(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/GetTop{itop}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop10(@RequestHeader("apiToken") String apiToken, @PathVariable("itop") int itop) {
+    public ResponseEntity<?> getTop10(@PathVariable("itop") int itop) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-            }
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SingerEntity.class);
             criteria.setTop(itop);
@@ -101,11 +101,11 @@ public class SingerController {
 
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestHeader("apiToken") String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-            }
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SingerEntity.class);
             criteria.setCurrentPage(page);
@@ -129,11 +129,11 @@ public class SingerController {
 
     @RequestMapping(value = "/Count", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> count(@RequestHeader("apiToken") String apiToken) {
+    public ResponseEntity<?> count() {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-            }
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
             return new ResponseEntity<>(singerDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));

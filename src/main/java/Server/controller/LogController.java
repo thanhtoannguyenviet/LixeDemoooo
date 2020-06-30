@@ -18,10 +18,10 @@ public class LogController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestHeader("apiToken") String apiToken, @RequestBody LogEntity logEntity) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> registerActor(@RequestBody LogEntity logEntity) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         logDAO.save(logEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }

@@ -19,10 +19,10 @@ public class AlbumCategoryMusicController {
     @RequestMapping(value = "/Post/",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestHeader("apiToken") String apiToken, @RequestBody AlbumCategorymusicEntity albumCategorymusicEntity) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> registerActor(@RequestBody AlbumCategorymusicEntity albumCategorymusicEntity) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         albumCategoryMusicDAO.save(albumCategorymusicEntity);
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
@@ -31,10 +31,10 @@ public class AlbumCategoryMusicController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestHeader("apiToken") String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> deleteActor(@PathVariable("id") Long id) {
+//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+//            }
         if (albumCategoryMusicDAO.getByID(id) != null) {
             albumCategoryMusicDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
