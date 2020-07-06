@@ -40,7 +40,10 @@ public class CUSTOM_QUERY {
         String sql = "Select * from " + table + " Where model ='" + model + "'and entryId='" + entryId + "'";
         return sql;
     }
-
+    public static String sqlGetSearch(String table, String keyword , String model) {
+        String sql = "Select top 1 * from " + table + " Where keyword ='%" + keyword.toLowerCase() + "%'and model='" + model + "'";
+        return sql;
+    }
     public static String getToken(String string) {
         String sql = "SELECT * FROM APIACCOUNT WHERE TOKEN ='" + string + "'";
         return sql;
@@ -65,6 +68,10 @@ public class CUSTOM_QUERY {
 
     public static String getUserByID(long id) {
         String sql = "select id, username, email, ext, follow, active, roleid, img, displayname FROM USER_ WHERE id = '" + id + "'";
+        return sql;
+    }
+    public static String searchBasic(String table, String conditionColumn,String condition){
+        String sql = "select * from " +table+" where "+ conditionColumn+" like '%"+condition+"%' order by "+conditionColumn ;
         return sql;
     }
 }

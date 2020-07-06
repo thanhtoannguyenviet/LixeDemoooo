@@ -84,6 +84,7 @@ Server\common\CUSTOM_QUERY.class
 Server\model\DAO\CommentDAO.class
 Server\service\DBUtil.class
 Server\model\DB\SeriCategoryfilmEntity.class
+Server\controller\SearchController.class
 Server\model\DAO\AuthorDAO.class
 Server\controller\DirectorController.class
 Server\controller\DirectorFilmController.class

@@ -1,7 +1,6 @@
 package Server.model.DAO;
 
-import Server.model.DB.RoleEntity;
-import Server.model.DB.SearchEntity;
+import Server.model.DB.*;
 import Server.service.DBUtil;
 import Server.service.HibernateUtil;
 import org.hibernate.Session;
@@ -30,5 +29,49 @@ public class SearchDAO {
         Session s = HibernateUtil.getSession(SearchEntity.class);
         SearchEntity entity = DBUtil.getDataByID(id,SearchEntity.class,s);
         return entity;
+    }
+    public List<SearchEntity> getSearch(String keyword, String model ){
+        Session s = HibernateUtil.getSession(SearchEntity.class);
+        List<SearchEntity> ls = DBUtil.getSearch("Search",keyword,model,SearchEntity.class,s);
+        return ls;
+    }
+    public void updateSearch(SearchEntity searchEntity){
+        Session s = HibernateUtil.getSession(SearchEntity.class);
+        DBUtil.addData(searchEntity,s);
+    }
+    public  <T> List<T> getSearchBasic(String keyword, String model ){
+        Class clazz = null;
+        String table=null;
+        if(model.equals("film")) {
+            table = "Film";
+            clazz = FilmEntity.class;
+        }else if(model.equals("song")){
+            table = "Song";
+            clazz = SongEntity.class;
+        }else if(model.equals("actor")){
+            table = "Actor";
+            clazz = ActorEntity.class;
+        }else if(model.equals("album")){
+            table = "Album";
+            clazz = AlbumEntity.class;
+        }else if(model.equals("author")){
+            table = "Author";
+            clazz = AuthorEntity.class;
+        }else if(model.equals("categoryfilm")){
+            table = "CategoryFilm";
+            clazz = CategoryfilmEntity.class;
+        }else if(model.equals("categorysong")){
+            table = "CategorySong";
+            clazz = CategorysongEntity.class;
+        }else if(model.equals("director")){
+            table = "Director";
+            clazz = DirectorEntity.class;
+        }else if(model.equals("singer")){
+            table = "Singer";
+            clazz = SingerEntity.class;
+        }
+        Session s = HibernateUtil.getSession(clazz);
+        List<T> ls = DBUtil.getDataByName(table,model+"Name",keyword, clazz,s);
+        return ls;
     }
 }

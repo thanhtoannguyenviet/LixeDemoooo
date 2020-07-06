@@ -11,6 +11,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,20 +21,13 @@ import java.util.List;
 
 public class DBUtil {
     public static <T> List<T> loadAllData(Class<T> type, Session session) {
-        try {
-            session.beginTransaction();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<T> criteria = builder.createQuery(type);
-            criteria.from(type);
-            List<T> data = session.createQuery(criteria).getResultList();
-            session.getTransaction().commit();
-            return data;
-        }catch (HibernateException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
+        session.beginTransaction();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> criteria = builder.createQuery(type);
+        criteria.from(type);
+        List<T> data = session.createQuery(criteria).getResultList();
+        session.getTransaction().commit();
+        return data;
     }
     public static <T> List<T> execCustomSQL(Class<T> clazz, String query,Session session) {
         try {
@@ -44,10 +38,10 @@ public class DBUtil {
             return data;
         } catch (HibernateException ex) {
             ex.printStackTrace();
-            return null;
         } finally {
             session.close();
         }
+        return null;
     }
 
     public static <T> T addData(T newItem, Session session) {
@@ -83,8 +77,7 @@ public class DBUtil {
             }
             new LogDAO().save(new LogEntity(ex));
             ex.printStackTrace();
-        }
-        finally {
+        }finally {
             session.close();
         }
     }
@@ -103,7 +96,8 @@ public class DBUtil {
             new LogDAO().save(new LogEntity(ex));
             ex.printStackTrace();
             return null;
-        }finally {
+        }
+        finally {
             session.close();
         }
     }
@@ -123,18 +117,19 @@ public class DBUtil {
         }catch (HibernateException ex){
             new LogDAO().save(new LogEntity(ex));
             return null;
-        }finally {
+        }
+        finally {
             session.close();
         }
     }
     public static <T> long countDataWithCondition(Session session, Class<T> type){
         Transaction tx = null;
         try {
-        tx=session.beginTransaction();
-        org.hibernate.Criteria q = session.createCriteria(type).
-                add(Restrictions.eq("active",true)).setProjection(Projections.rowCount());
-        tx.commit();
-        return (long) q.uniqueResult();
+            tx=session.beginTransaction();
+            org.hibernate.Criteria q = session.createCriteria(type).
+                    add(Restrictions.eq("active",true)).setProjection(Projections.rowCount());
+            tx.commit();
+            return (long) q.uniqueResult();
         }catch (Exception ex){
             ex.printStackTrace();
             return 0;
@@ -147,14 +142,15 @@ public class DBUtil {
         try{
             tx=session.beginTransaction();
             org.hibernate.Criteria q = session.createCriteria(type).
-                setProjection(Projections.rowCount());
+                    setProjection(Projections.rowCount());
             tx.commit();
             return (long) q.uniqueResult();
         }
         catch (Exception ex){
             ex.printStackTrace();
             return 0;
-        }finally {
+        }
+        finally {
             session.close();
         }
     }
@@ -175,13 +171,12 @@ public class DBUtil {
         typedQuery.setFirstResult(itemStart);
         typedQuery.setMaxResults(itemEnd);
         List<T> data = typedQuery.getResultList();
-       // session.getTransaction().commit();
+        // session.getTransaction().commit();
         return typedQuery.getResultList();
-        }
-        catch (Exception ex){
+        }catch (Exception ex){
+            ex.getMessage();
             return null;
-        }
-        finally {
+        }finally {
             session.close();
         }
     }
@@ -229,27 +224,12 @@ public class DBUtil {
             if (tx != null) tx.rollback();
             new LogDAO().save(new LogEntity(ex));
             return null;
-        }finally {
+        }
+        finally {
             session.close();
         }
     }
-    public static <T> List<T> checkToken(String table,String conditionColumn,String condition,Class<T> type,Session session){
-        Transaction tx = null;
-        try {
-            tx =  session.beginTransaction();
-            String sql = CUSTOM_QUERY.sqlGetId(table,conditionColumn,condition);
-            SQLQuery q = session.createSQLQuery(sql);
-            q.addEntity(type);
-            tx.commit();
-            return  q.getResultList()  ;
-        }catch (HibernateException ex) {
-            if (tx != null) tx.rollback();
-            new LogDAO().save(new LogEntity(ex));
-            return null;
-        }finally {
-            session.close();
-        }
-    }
+
     public static <T> List<T> getListHasCondition(String conditionColumn,String condition,Class<T> type,Session session){
         Transaction tx = null;
         try {
@@ -279,23 +259,41 @@ public class DBUtil {
             if (tx != null) tx.rollback();
             new LogDAO().save(new LogEntity(ex));
             return null;
-        }
-        finally {
+        }finally {
             session.close();
         }
     }
-    public static <T> List<T> getDataByName(String conditionColumn,String condition,Class<T> type,Session session){
+    public static <T> List<T>  getSearch(String table,String keyword,String model ,Class<T> type,Session session){
+        Transaction tx = null;
+        try {
+            tx= session.beginTransaction();
+            String sql = CUSTOM_QUERY.sqlGetSearch(table,keyword,model);
+            SQLQuery q = session.createSQLQuery(sql);
+            q.addEntity( type);
+            tx.commit();
+            return  q.getResultList();
+        }catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            new LogDAO().save(new LogEntity(ex));
+            return null;
+        }finally {
+            session.close();
+        }
+    }
+    public static <T> List<T> getDataByName(String table,String conditionColumn,String condition,Class<T> type,Session session){
         Transaction tx = null;
         try{
             tx=session.beginTransaction();
-            org.hibernate.Criteria criteria = session.createCriteria(type).add(Restrictions.eq(conditionColumn,condition));
+            SQLQuery  q = session.createSQLQuery(CUSTOM_QUERY.searchBasic(table, conditionColumn, condition));
+            q.addEntity(type);
             tx.commit();
-            return criteria.list();
+            return q.list();
         }catch(HibernateException ex){
             if(tx!=null) tx.rollback();
             new LogDAO().save(new LogEntity(ex));
             return null;
-        }finally {
+        }
+        finally {
             session.close();
         }
     }
