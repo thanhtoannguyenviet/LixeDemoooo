@@ -22,7 +22,7 @@ public class AuthorEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "authorName", nullable = false, length = 255)
     public String getName() {
         return name;
     }

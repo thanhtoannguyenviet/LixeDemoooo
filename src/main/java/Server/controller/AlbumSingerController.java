@@ -2,9 +2,11 @@ package Server.controller;
 
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.AlbumSingerDAO;
+import Server.model.DB.AlbumCategorymusicEntity;
 import Server.model.DB.AlbumSingerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,28 +17,32 @@ public class AlbumSingerController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post/",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody AlbumSingerEntity albumSingerEntity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        albumSingerDAO.save(albumSingerEntity);
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+      albumSingerEntity = albumSingerDAO.save(albumSingerEntity);
+        return new ResponseEntity<>(albumSingerEntity, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/Delete/{id}",
+    @RequestMapping(value = "/Delete/{idAlbum}/{idSinger}",
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteActor(@PathVariable("idAlbum") Long idAlbum, @PathVariable("idSinger") Long idSinger) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        if (albumSingerDAO.getByID(id) != null) {
-            albumSingerDAO.delete(id);
+        if (albumSingerDAO.getId(idAlbum,idSinger) != null) {
+            for (AlbumSingerEntity item : albumSingerDAO.getId(idAlbum,idSinger)) {
+                Long id = item.getId();
+                albumSingerDAO.delete(id);
+            }
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
-        } else return new ResponseEntity<>("Delete Fail", HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
     }
 
 

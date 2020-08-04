@@ -28,7 +28,8 @@ public class AlbumController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody AlbumEntity entity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
@@ -59,24 +60,26 @@ public class AlbumController {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
         AlbumEntity albumEntity = albumDAO.getByID(id);
+        albumEntity.setIndex(albumEntity.getIndex()+1);
+        albumDAO.save(albumEntity);
         if (albumEntity != null)
             return new ResponseEntity<>(getAlbumDTO(albumEntity), HttpStatus.OK);
         else
             return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value = "/Delete",
+    @RequestMapping(value = "/Delete/{id}",
             method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody AlbumEntity entity) {
+    public ResponseEntity<?> delete(@PathVariable("id") long id) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        albumDAO.delete(entity.getId());
-        List<AlbumCategorymusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.getId("albumid", entity.getId() + "");
-        for (AlbumCategorymusicEntity item : albumCategoryMusicEntity) {
-            albumCategoryMusicDAO.delete(item.getId());
-        }
+        albumDAO.delete(id);
+//        List<AlbumCategorymusicEntity> albumCategoryMusicEntity = albumCategoryMusicDAO.getId("albumid", entity.getId() + "");
+//        for (AlbumCategorymusicEntity item : albumCategoryMusicEntity) {
+//            albumCategoryMusicDAO.delete(item.getId());
+//        }
         return new ResponseEntity<>("Delete completed", HttpStatus.OK);
     }
 

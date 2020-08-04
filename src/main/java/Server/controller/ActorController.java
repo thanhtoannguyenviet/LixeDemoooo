@@ -43,8 +43,8 @@ public class ActorController {
 //            }
 
         if (id == actor.getId()) {
-            actorDAO.save(actor);
-            return new ResponseEntity<>("Update Completed", HttpStatus.OK);
+            actor= actorDAO.save(actor);
+            return new ResponseEntity<>(actor, HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
 
@@ -192,7 +192,7 @@ public class ActorController {
     }
 
     private ActorDTO getActorDTO(ActorEntity actorEntity) {
-        List<FilmActorEntity> filmActorEntityList = filmActorDAO.getListHasCondition("actorid", actorEntity.getId() + "");
+        List<FilmActorEntity> filmActorEntityList = filmActorDAO.getListHasCondition("actorId", actorEntity.getId()+"");
         List<ImageEntity> imageEntities = imageDAO.getId("actor", actorEntity.getId());
         ImageEntity imageEntity = null;
         if (!imageEntities.isEmpty()) {

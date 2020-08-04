@@ -17,4 +17,22 @@ public class AlbumSongDAO {
         List<AlbumSongEntity> entity = DBUtil.getListHasCondition("album_song",conditionColumn,condition,AlbumSongEntity.class,s);
         return entity;
     }
+    public AlbumSongEntity save(AlbumSongEntity entity){
+        Session s = HibernateUtil.getSession(AlbumSongEntity.class);
+        return DBUtil.addData(entity,s);
+    }
+    public void delete(Long id){
+        Session s= HibernateUtil.getSession(AlbumSongEntity.class);
+        DBUtil.deleteData(id,AlbumSongEntity.class,s);
+    }
+    public AlbumSongEntity getByID(Long id){
+        Session s = HibernateUtil.getSession(AlbumSongEntity.class);
+        AlbumSongEntity entity = DBUtil.getDataByID(id,AlbumSongEntity.class,s);
+        return entity;
+    }
+    public List<AlbumSongEntity> getId(Long condition, Long condition1 ){
+        Session s = HibernateUtil.getSession(AlbumSongEntity.class);
+        List<AlbumSongEntity> entity = DBUtil.getIdTableM2M("album_song","albumid",condition+"","songid",condition1+"",AlbumSongEntity.class,s);
+        return entity;
+    }
 }

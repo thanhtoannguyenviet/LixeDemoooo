@@ -27,4 +27,9 @@ public class DirectorFilmDAO {
         DirectorFilmEntity entity = DBUtil.getDataByID(id,DirectorFilmEntity.class,s);
         return entity;
     }
+    public List<DirectorFilmEntity> getId(Long condition, Long condition1 ){
+        Session s = HibernateUtil.getSession(DirectorFilmEntity.class);
+        List<DirectorFilmEntity> entity = DBUtil.getIdTableM2M("director_film","directorid",condition+"","filmid",condition1+"",DirectorFilmEntity.class,s);
+        return Collections.unmodifiableList(entity);
+    }
 }

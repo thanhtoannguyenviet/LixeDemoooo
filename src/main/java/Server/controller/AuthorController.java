@@ -28,7 +28,8 @@ public class AuthorController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody AuthorEntity entity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {

@@ -36,4 +36,9 @@ public class FilmCategoryFilmDAO {
         List<FilmCategoryfilmEntity> entity = DBUtil.getListHasCondition(conditionColumn,condition,FilmCategoryfilmEntity.class,s);
         return entity;
     }
+    public List<FilmCategoryfilmEntity> getId(Long condition, Long condition1 ){
+        Session s = HibernateUtil.getSession(FilmCategoryfilmEntity.class);
+        List<FilmCategoryfilmEntity> entity = DBUtil.getIdTableM2M("film_categoryfilm","filmid",condition+"","categoryid",condition1+"",FilmCategoryfilmEntity.class,s);
+        return entity;
+    }
 }

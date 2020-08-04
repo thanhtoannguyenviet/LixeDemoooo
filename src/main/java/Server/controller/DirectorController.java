@@ -29,17 +29,16 @@ public class DirectorController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody DirectorEntity entity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        directorDAO.save(entity);
-        HttpHeaders responseHeader = new HttpHeaders();
-        URI newAccounUrl = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
-        responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>("Post completed", responseHeader, HttpStatus.CREATED);
+        entity =    directorDAO.save(entity);
+
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",
@@ -138,7 +137,7 @@ public class DirectorController {
         List<FilmDTO> filmDTOList = new ArrayList<>();
         if (!directorFilmEntityList.isEmpty()) {
             for (DirectorFilmEntity item : directorFilmEntityList) {
-                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getId());
+                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getFilmid());
                 if (filmDTO != null) {
                     filmDTOList.add(filmDTO);
                 }

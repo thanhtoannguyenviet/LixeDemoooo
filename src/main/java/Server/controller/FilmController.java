@@ -4,6 +4,7 @@ import Server.model.DAO.*;
 import Server.model.DB.*;
 import Server.model.DTO.Criteria;
 import Server.model.DTO.FilmDTO;
+import Server.model.DTO.FilmPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,15 +25,33 @@ public class FilmController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody FilmEntity entity) {
+    public ResponseEntity<?> post(@RequestBody FilmPostDTO filmEntity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        entity = filmDAO.save(entity);
-
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+        SearchDAO searchDAO = new SearchDAO();
+        FilmEntity entity = filmDAO.save(filmEntity.getFilmEntity());
+        String strKey[]= filmEntity.getKeyword().split(",");
+        for(String item : strKey){
+            List<SearchEntity> searchLs = searchDAO.getSearch(item,"film");
+            if(!searchLs.isEmpty()){
+                SearchEntity searchEntity =searchLs.get(0);
+                String mergeStr = searchEntity.getData()+","+entity.getId();
+                searchEntity.setData(mergeStr);
+                searchDAO.Save(searchEntity);
+            }
+            else{
+                SearchEntity searchEntity = new SearchEntity();
+                searchEntity.setKeyword(item);
+                searchEntity.setData(entity.getId()+"");
+                searchEntity.setModel("film");
+                searchDAO.Save(searchEntity);
+            }
+        }
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",

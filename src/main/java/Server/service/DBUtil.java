@@ -180,6 +180,7 @@ public class DBUtil {
             session.close();
         }
     }
+
     public static <T> List<T> getTop10New(String condition,Criteria criteria,Session session){
         Transaction tx = null;
         try{
@@ -285,6 +286,23 @@ public class DBUtil {
         try{
             tx=session.beginTransaction();
             SQLQuery  q = session.createSQLQuery(CUSTOM_QUERY.searchBasic(table, conditionColumn, condition));
+            q.addEntity(type);
+            tx.commit();
+            return q.list();
+        }catch(HibernateException ex){
+            if(tx!=null) tx.rollback();
+            new LogDAO().save(new LogEntity(ex));
+            return null;
+        }
+        finally {
+            session.close();
+        }
+    }
+    public static <T> List<T> getIdTableM2M(String table, String conditionColumn,String condition,String conditionColumn1,String condition1,Class <T> type, Session session){
+        Transaction tx= null;
+        try{
+            tx=session.beginTransaction();
+            SQLQuery q = session.createSQLQuery(CUSTOM_QUERY.getIdTableM2M(table,conditionColumn,condition,conditionColumn1,condition1));
             q.addEntity(type);
             tx.commit();
             return q.list();

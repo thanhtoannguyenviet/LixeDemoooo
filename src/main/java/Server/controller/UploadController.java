@@ -5,6 +5,7 @@ import Server.model.DAO.UploadDAO;
 import Server.model.DB.UploadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +17,15 @@ public class UploadController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> postImage(@RequestBody UploadEntity entity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        uploadDAO.save(entity);
-        return new ResponseEntity<>("Post Completed", HttpStatus.CREATED);
+        entity=  uploadDAO.save(entity);
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",

@@ -35,4 +35,9 @@ public class SerifilmFilmDAO {
         List<SerifilmFilmEntity> entity = DBUtil.getListHasCondition("serifilm_film",conditionColumn,condition,SerifilmFilmEntity.class,s);
         return Collections.unmodifiableList(entity);
     }
+    public List<SerifilmFilmEntity> getId(Long condition, Long condition1 ){
+        Session s = HibernateUtil.getSession(SerifilmFilmEntity.class);
+        List<SerifilmFilmEntity> entity = DBUtil.getIdTableM2M("serifilm_film","seriid",condition+"","filmid",condition1+"",SerifilmFilmEntity.class,s);
+        return Collections.unmodifiableList(entity);
+    }
 }

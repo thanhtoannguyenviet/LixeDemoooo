@@ -3,6 +3,7 @@ Server\config\WebConfig.class
 Server\controller\UserController.class
 Server\controller\FilmActorController.class
 Server\model\DAO\AlbumSingerDAO.class
+Server\model\DAO\AuthorSongDAO.class
 Server\model\DB\FilmActorEntity.class
 Server\controller\AlbumSingerController.class
 Server\model\DAO\AlbumCategoryMusicDAO.class
@@ -29,6 +30,7 @@ Server\common\CommonUtil.class
 Server\model\DAO\SongDAO.class
 Server\model\DTO\AlbumDTO.class
 Server\model\DTO\ActorDTO.class
+Server\model\DTO\FilmPostDTO.class
 Server\controller\AuthorController.class
 Server\controller\FilmController.class
 Server\model\DB\FilmEntity.class
@@ -48,6 +50,7 @@ Server\model\DTO\CategorySeriFilmDTO.class
 Server\model\DB\CommentEntity.class
 Server\model\DB\UserEntity.class
 Server\model\DTO\SeriCategoryDTO.class
+Server\model\DTO\SongPostDTO.class
 Server\model\DB\ActorEntity.class
 Server\model\DAO\SingerDAO.class
 Server\model\DTO\SeriFilmDTO.class
@@ -78,6 +81,7 @@ Server\model\DTO\CategoryFilmDTO.class
 Server\model\DB\CategoryfilmEntity.class
 Server\controller\SongSingerController.class
 Server\model\DAO\AlbumDAO.class
+Server\controller\AuthorSongController.class
 Server\model\BUS\UserBUS.class
 Server\model\DTO\CategorySongDTO.class
 Server\common\CUSTOM_QUERY.class

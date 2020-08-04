@@ -22,7 +22,7 @@ public class DirectorEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "directorName", nullable = false, length = 255)
     public String getName() {
         return name;
     }

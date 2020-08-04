@@ -35,8 +35,8 @@ public class CategoryFilmController {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        categoryFilmDAO.save(categorySongEntity);
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+        categorySongEntity = categoryFilmDAO.save(categorySongEntity);
+        return new ResponseEntity<>(categorySongEntity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",

@@ -7,6 +7,7 @@ import Server.model.DB.RatingEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,7 +21,8 @@ public class RatingController {
     RatingDAO ratingDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody RatingEntity entity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
@@ -29,11 +31,8 @@ public class RatingController {
         entity.setVotedislike(0);
         entity.setVotelike(0);
 
-        ratingDAO.save(entity);
-        HttpHeaders responseHeader = new HttpHeaders();
-        URI newAccounUrl = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
-        responseHeader.setLocation(newAccounUrl);
-        return new ResponseEntity<>("Post completed", responseHeader, HttpStatus.CREATED);
+        entity = ratingDAO.save(entity);
+       return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{id}",

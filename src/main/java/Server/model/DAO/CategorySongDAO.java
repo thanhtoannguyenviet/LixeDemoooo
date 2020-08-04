@@ -21,7 +21,7 @@ public class CategorySongDAO {
         return Collections.unmodifiableList(ls);
     }
     public CategorysongEntity save(CategorysongEntity entity){
-        Session s = HibernateUtil.getSession(CategoryfilmEntity.class);
+        Session s = HibernateUtil.getSession(CategorysongEntity.class);
         return DBUtil.addData(entity,s);
     }
     public void delete(Long id){

@@ -41,14 +41,17 @@ public class CUSTOM_QUERY {
         return sql;
     }
     public static String sqlGetSearch(String table, String keyword , String model) {
-        String sql = "Select top 1 * from " + table + " Where keyword ='%" + keyword.toLowerCase() + "%'and model='" + model + "'";
+        String sql = "Select top 1 * from " + table + " Where keyword like '%" + keyword.toLowerCase() + "%'and model='"+model+"'";
         return sql;
     }
     public static String getToken(String string) {
         String sql = "SELECT * FROM APIACCOUNT WHERE TOKEN ='" + string + "'";
         return sql;
     }
-
+    public static String getIdTableM2M(String table, String conditionColumn, String condition,String conditionColumn1, String condition1){
+        String sql = "select * from "+ table + " where "+ conditionColumn+ " =" + condition + " and "+ conditionColumn1 + " = "+ condition1;
+        return sql;
+    }
     public static String sqlGetTop(Criteria criteria) {
         String model = "";
         if (criteria.getClazz().equals(SongEntity.class)) {
@@ -71,7 +74,7 @@ public class CUSTOM_QUERY {
         return sql;
     }
     public static String searchBasic(String table, String conditionColumn,String condition){
-        String sql = "select * from " +table+" where "+ conditionColumn+" like '%"+condition+"%' order by "+conditionColumn ;
+        String sql = "select * from " +table+" where "+ conditionColumn+" like N'%"+condition+"%' order by "+conditionColumn ;
         return sql;
     }
 }

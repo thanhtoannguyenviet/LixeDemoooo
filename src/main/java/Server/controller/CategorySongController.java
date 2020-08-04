@@ -25,14 +25,15 @@ public class CategorySongController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> postCategorySong(@RequestBody CategorysongEntity categorySongEntity) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        categorySongDAO.save(categorySongEntity);
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+        categorySongEntity= categorySongDAO.save(categorySongEntity);
+        return new ResponseEntity<>(categorySongEntity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",

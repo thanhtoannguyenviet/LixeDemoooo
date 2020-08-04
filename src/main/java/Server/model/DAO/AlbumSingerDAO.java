@@ -35,4 +35,9 @@ public class AlbumSingerDAO {
         List<AlbumSingerEntity> entity = DBUtil.getListHasCondition("album_singer",conditionColumn,condition,AlbumSingerEntity.class,s);
         return entity;
     }
+    public List<AlbumSingerEntity> getId(Long condition,Long condition1 ){
+        Session s = HibernateUtil.getSession(AlbumSingerEntity.class);
+        List<AlbumSingerEntity> entity = DBUtil.getIdTableM2M("album_singer","albumid",condition+"","singerid",condition1+"",AlbumSingerEntity.class,s);
+        return entity;
+    }
 }

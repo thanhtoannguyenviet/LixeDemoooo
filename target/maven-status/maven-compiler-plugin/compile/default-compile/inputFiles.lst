@@ -8,6 +8,7 @@ C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\SongSiteDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\DirectorFilmDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DB\SerifilmFilmEntity.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DB\SerifilmEntity.java
+C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\FilmPostDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\UserDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\controller\UploadController.java
 C:\Project\LixeDemoooo\src\main\java\Server\service\HibernateUtil.java
@@ -93,6 +94,7 @@ C:\Project\LixeDemoooo\src\main\java\Server\common\GrantedAuthoritys.java
 C:\Project\LixeDemoooo\src\main\java\Server\controller\SongSingerController.java
 C:\Project\LixeDemoooo\src\main\java\Server\controller\SearchController.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\AlbumCategoryMusicDAO.java
+C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\SongPostDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\ActorDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\common\CUSTOM_QUERY.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\AlbumDAO.java
@@ -109,10 +111,12 @@ C:\Project\LixeDemoooo\src\main\java\Server\model\DB\AlbumSongEntity.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\BUS\UserBUS.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\APIAccountDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\FilmDAO.java
+C:\Project\LixeDemoooo\src\main\java\Server\controller\AuthorSongController.java
 C:\Project\LixeDemoooo\src\main\java\Server\controller\SeriFilmController.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DB\ActorEntity.java
 C:\Project\LixeDemoooo\src\main\java\Server\common\test.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\SingerDTO.java
+C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\AuthorSongDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DAO\FilmCategoryFilmDAO.java
 C:\Project\LixeDemoooo\src\main\java\Server\model\DTO\FilmDTO.java
 C:\Project\LixeDemoooo\src\main\java\Server\controller\FilmCategoryController.java

@@ -22,7 +22,7 @@ public class CategorysongEntity {
     }
 
     @Basic
-    @Column(name = "categoryname", nullable = false, length = 255)
+    @Column(name = "categorysongName", nullable = false, length = 255)
     public String getCategoryname() {
         return categoryname;
     }

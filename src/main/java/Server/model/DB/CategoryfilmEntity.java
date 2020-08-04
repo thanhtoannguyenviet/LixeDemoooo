@@ -22,7 +22,7 @@ public class CategoryfilmEntity {
     }
 
     @Basic
-    @Column(name = "categoryfilm", nullable = false, length = 255)
+    @Column(name = "categoryfilmName", nullable = false, length = 255)
     public String getCategoryfilm() {
         return categoryfilm;
     }

@@ -24,14 +24,15 @@ public class SingerController {
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 
     @RequestMapping(value = "/Post/",
-            method = RequestMethod.POST)
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SingerEntity singer) {
 //            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
 //                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
 //            }
-        singerDAO.save(singer);
-        return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
+        singer=  singerDAO.save(singer);
+        return new ResponseEntity<>(singer, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",
@@ -47,7 +48,7 @@ public class SingerController {
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/Singer/Delete/{id}",
+    @RequestMapping(value = "/Delete/{id}",
             method = RequestMethod.DELETE
     )
     @ResponseBody

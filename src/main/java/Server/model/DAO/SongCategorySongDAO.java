@@ -36,4 +36,9 @@ public class SongCategorySongDAO {
             List<SongCategorysongEntity> entity = DBUtil.getListHasCondition("song_categorysong",conditionColumn,condition,SongCategorysongEntity.class,s);
             return Collections.unmodifiableList(entity);
     }
+    public List<SongCategorysongEntity> getId(Long condition, Long condition1 ){
+        Session s = HibernateUtil.getSession(SongCategorysongEntity.class);
+        List<SongCategorysongEntity> entity = DBUtil.getIdTableM2M("song_categorysong","songid",condition+"","categoryid",condition1+"",SongCategorysongEntity.class,s);
+        return Collections.unmodifiableList(entity);
+    }
 }
