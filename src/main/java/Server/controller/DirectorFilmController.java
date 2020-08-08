@@ -5,6 +5,7 @@ import Server.model.DAO.DirectorFilmDAO;
 import Server.model.DB.AlbumSongEntity;
 import Server.model.DB.ApiaccountEntity;
 import Server.model.DB.DirectorFilmEntity;
+import Server.model.DTO.DirectorFilmInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,11 +22,12 @@ public class DirectorFilmController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestBody DirectorFilmEntity directorFilmEntity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        directorFilmEntity =   directorFilmDAO.save(directorFilmEntity);
+    public ResponseEntity<?> registerActor(@RequestBody DirectorFilmInDTO directorFilmInDTO) {
+        if (directorFilmInDTO == null || directorFilmInDTO.getApiToken() == null
+                || directorFilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorFilmInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        DirectorFilmEntity directorFilmEntity =   directorFilmDAO.save(directorFilmInDTO.getDirectorFilmEntity());
         return new ResponseEntity<>(directorFilmEntity, HttpStatus.CREATED);
     }
 
@@ -33,10 +35,10 @@ public class DirectorFilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@PathVariable("idDirector")  Long idDirector,@PathVariable("idFilm")  Long idFilm) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idDirector")  Long idDirector,@PathVariable("idFilm")  Long idFilm) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (directorFilmDAO.getId(idDirector,idFilm) != null) {
             for (DirectorFilmEntity item : directorFilmDAO.getId(idDirector,idFilm)) {
                 Long id = item.getId();

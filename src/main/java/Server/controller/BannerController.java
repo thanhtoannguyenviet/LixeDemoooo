@@ -8,6 +8,7 @@ import Server.model.DB.BannerEntity;
 import Server.model.DB.FilmActorEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DTO.ActorDTO;
+import Server.model.DTO.BannerInDTO;
 import Server.model.DTO.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,23 +28,25 @@ public class BannerController {
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestBody BannerEntity banner) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        bannerDAO.save(banner);
+    public ResponseEntity<?> registerActor(@RequestBody BannerInDTO bannerInDTO) {
+        if (bannerInDTO == null || bannerInDTO.getApiToken() == null || bannerInDTO.getApiToken().isEmpty()
+                || apiAccountDAO.checkToken(bannerInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        bannerDAO.save(bannerInDTO.getBannerEntity());
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateActor(@RequestBody BannerEntity banner, @PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        if (id == banner.getId()) {
-            bannerDAO.save(banner);
+    public ResponseEntity<?> updateActor(@RequestBody BannerInDTO bannerInDTO, @PathVariable("id") Long id) {
+        if (bannerInDTO == null || bannerInDTO.getApiToken() == null || bannerInDTO.getApiToken().isEmpty()
+                || apiAccountDAO.checkToken(bannerInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (id == bannerInDTO.getBannerEntity().getId()) {
+            bannerDAO.save(bannerInDTO.getBannerEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
@@ -52,10 +55,10 @@ public class BannerController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (bannerDAO.getByID(id) != null) {
             bannerDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
@@ -63,13 +66,13 @@ public class BannerController {
     }
 
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> get(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> get(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         BannerEntity banner = bannerDAO.getByID(id);
         if (banner != null)
             return new ResponseEntity<>(banner, HttpStatus.OK);
@@ -77,13 +80,13 @@ public class BannerController {
     }
 
     @RequestMapping(value = "/GetAll",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> get() {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> get(@RequestBody String apiToken) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(bannerDAO.getAll(), HttpStatus.OK);
     }
 }

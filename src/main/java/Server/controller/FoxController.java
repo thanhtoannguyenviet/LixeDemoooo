@@ -79,4 +79,28 @@ public class FoxController {
 
         return new ResponseEntity<>("Okay succeed!", HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/putMethod",
+            method = RequestMethod.PUT,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> putMethod(@RequestBody String apiToken) {
+        if (apiToken == null || !"daApiToken".equalsIgnoreCase(apiToken)) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>("Okay succeed!", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/deleteMethod",
+            method = RequestMethod.DELETE,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> deleteMethod(@RequestBody String apiToken) {
+        if (apiToken == null || !"daApiToken".equalsIgnoreCase(apiToken)) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>("Okay succeed!", HttpStatus.OK);
+    }
 }

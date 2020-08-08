@@ -4,6 +4,7 @@ import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.RatingDAO;
 import Server.model.DB.ApiaccountEntity;
 import Server.model.DB.RatingEntity;
+import Server.model.DTO.RatingInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,30 +21,33 @@ public class RatingController {
     @Autowired
     RatingDAO ratingDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody RatingEntity entity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        entity.setVotedislike(0);
-        entity.setVotelike(0);
+    public ResponseEntity<?> post(@RequestBody RatingInDTO ratingInDTO) {
+        if (ratingInDTO == null || ratingInDTO.getApiToken() == null
+                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        ratingInDTO.getRatingEntity().setVotedislike(0);
+        ratingInDTO.getRatingEntity().setVotelike(0);
 
-        entity = ratingDAO.save(entity);
-       return new ResponseEntity<>(entity, HttpStatus.CREATED);
+        RatingEntity entity = ratingDAO.save(ratingInDTO.getRatingEntity());
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody RatingEntity entity, @PathVariable Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> update(@RequestBody RatingInDTO ratingInDTO, @PathVariable Long id) {
+        if (ratingInDTO == null || ratingInDTO.getApiToken() == null
+                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (ratingDAO.getByID(id) != null) {
-            ratingDAO.save(entity);
+            ratingDAO.save(ratingInDTO.getRatingEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
@@ -51,13 +55,14 @@ public class RatingController {
     @RequestMapping(value = "/VoteLike/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> increase(@RequestBody RatingEntity entity, @PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> increase(@RequestBody RatingInDTO ratingInDTO, @PathVariable("id") Long id) {
+        if (ratingInDTO == null || ratingInDTO.getApiToken() == null
+                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (ratingDAO.getByID(id) != null) {
-            entity.setVotelike(1 + entity.getVotedislike());
-            ratingDAO.save(entity);
+            ratingInDTO.getRatingEntity().setVotelike(1 + ratingInDTO.getRatingEntity().getVotedislike());
+            ratingDAO.save(ratingInDTO.getRatingEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
@@ -65,13 +70,14 @@ public class RatingController {
     @RequestMapping(value = "/VoteDissLike/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> decrease(@RequestBody RatingEntity entity, @PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> decrease(@RequestBody RatingInDTO ratingInDTO, @PathVariable("id") Long id) {
+        if (ratingInDTO == null || ratingInDTO.getApiToken() == null
+                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (ratingDAO.getByID(id) != null) {
-            entity.setVotedislike(1 + entity.getVotedislike());
-            ratingDAO.save(entity);
+            ratingInDTO.getRatingEntity().setVotedislike(1 + ratingInDTO.getRatingEntity().getVotedislike());
+            ratingDAO.save(ratingInDTO.getRatingEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
@@ -80,13 +86,13 @@ public class RatingController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (ratingDAO.getByID(id) != null) {
             ratingDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
-        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>("Delete Fail", HttpStatus.BAD_REQUEST);
     }
 }

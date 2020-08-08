@@ -21,6 +21,8 @@ import java.util.List;
 public class SearchController {
     @Autowired
     SearchDAO searchDAO;
+    APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
     //{search}/model/{model}/
 //    @RequestMapping(value = "/q/{search}/{model}",
 //            method = RequestMethod.GET,
@@ -39,105 +41,108 @@ public class SearchController {
 //        }
 //    }
     @RequestMapping(value = "/q/{search}/{model}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getResultAdvance(@PathVariable("search") String search, @PathVariable("model") String model) {
+    public ResponseEntity<?> getResultAdvance(@RequestBody String apiToken, @PathVariable("search") String search, @PathVariable("model") String model) {
         try {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+
             List<SearchEntity> ls = searchDAO.getSearch(search, model);
-            if(ls!=null && !ls.isEmpty()){
+            if (ls != null && !ls.isEmpty()) {
                 SearchEntity searchEntity = ls.get(0);
-                String[] arrSearch =searchEntity.getData().split(",");
+                String[] arrSearch = searchEntity.getData().split(",");
                 Arrays.sort(arrSearch, Collections.reverseOrder());
-                if(searchEntity.getModel().equals("film")){
+                if (searchEntity.getModel().equals("film")) {
                     FilmDAO filmDAO = new FilmDAO();
                     List<FilmEntity> lsFilm = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsFilm.add(filmDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsFilm,HttpStatus.OK);
+                    return new ResponseEntity<>(lsFilm, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("song")){
+                if (searchEntity.getModel().equals("song")) {
                     SongDAO songDAO = new SongDAO();
                     List<SongEntity> lsSong = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsSong.add(songDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsSong,HttpStatus.OK);
+                    return new ResponseEntity<>(lsSong, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("actor")){
+                if (searchEntity.getModel().equals("actor")) {
                     ActorDAO actorDAO = new ActorDAO();
                     List<ActorEntity> lsActor = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsActor.add(actorDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsActor,HttpStatus.OK);
+                    return new ResponseEntity<>(lsActor, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("album")){
+                if (searchEntity.getModel().equals("album")) {
                     AlbumDAO albumDAO = new AlbumDAO();
                     List<AlbumEntity> lsAlbum = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsAlbum.add(albumDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsAlbum,HttpStatus.OK);
+                    return new ResponseEntity<>(lsAlbum, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("author")){
+                if (searchEntity.getModel().equals("author")) {
                     AuthorDAO authorDAO = new AuthorDAO();
                     List<AuthorEntity> lsAuthor = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsAuthor.add(authorDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsAuthor,HttpStatus.OK);
+                    return new ResponseEntity<>(lsAuthor, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("categoryfilm")){
+                if (searchEntity.getModel().equals("categoryfilm")) {
                     CategoryFilmDAO authorDAO = new CategoryFilmDAO();
                     List<CategoryfilmEntity> lsCategoryfilm = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsCategoryfilm.add(authorDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsCategoryfilm,HttpStatus.OK);
+                    return new ResponseEntity<>(lsCategoryfilm, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("categorysong")){
+                if (searchEntity.getModel().equals("categorysong")) {
                     CategorySongDAO categorySongDAO = new CategorySongDAO();
                     List<CategorysongEntity> lsCategorysong = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsCategorysong.add(categorySongDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsCategorysong,HttpStatus.OK);
+                    return new ResponseEntity<>(lsCategorysong, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("director")){
+                if (searchEntity.getModel().equals("director")) {
                     DirectorDAO directorDAO = new DirectorDAO();
                     List<DirectorEntity> lsDirector = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsDirector.add(directorDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsDirector,HttpStatus.OK);
+                    return new ResponseEntity<>(lsDirector, HttpStatus.OK);
                 }
-                if(searchEntity.getModel().equals("singer")){
+                if (searchEntity.getModel().equals("singer")) {
                     SingerDAO singerDAO = new SingerDAO();
                     List<SingerEntity> lsSinger = new ArrayList<>();
-                    for(String item : arrSearch){
+                    for (String item : arrSearch) {
                         lsSinger.add(singerDAO.getByID(Long.parseLong(item)));
                     }
-                    return new ResponseEntity<>(lsSinger    ,HttpStatus.OK);
+                    return new ResponseEntity<>(lsSinger, HttpStatus.OK);
                 }
-            }
-            else{
-                List<?> results =  searchDAO.getSearchBasic(search,model);
+            } else {
+                List<?> results = searchDAO.getSearchBasic(search, model);
                 SearchEntity searchEntity = new SearchEntity();
-                String str ="";
-                for( Object item :results ){
+                String str = "";
+                for (Object item : results) {
 
                     for (Field field : item.getClass().getDeclaredFields()) {
                         field.setAccessible(true);
-                        if(field.getName().equals("id")){
+                        if (field.getName().equals("id")) {
                             Object value = field.get(item);
                             if (value != null) {
-                                if(str==null||str.length()==0){
-                                    str+=value;
-                                }else
-                                    str+=","+value;
+                                if (str == null || str.length() == 0) {
+                                    str += value;
+                                } else
+                                    str += "," + value;
                             }
                         }
                     }
@@ -145,8 +150,8 @@ public class SearchController {
                 searchEntity.setData(str);
                 searchEntity.setKeyword(search);
                 searchEntity.setModel(model);
-                 searchDAO.Save(searchEntity);
-                return new ResponseEntity<>(results,HttpStatus.OK);
+                searchDAO.Save(searchEntity);
+                return new ResponseEntity<>(results, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -156,41 +161,46 @@ public class SearchController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
-        @RequestMapping(value = "/updateData/{search}/{model}",
-            method = RequestMethod.GET,
+
+    @RequestMapping(value = "/updateData/{search}/{model}",
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> updateSearch(@PathVariable("search") String search, @PathVariable("model") String model) {
+    public ResponseEntity<?> updateSearch(@RequestBody String apiToken, @PathVariable("search") String search, @PathVariable("model") String model) {
         try {
-                List<SearchEntity> lsSearch = searchDAO.getSearch(search,model);
-                SearchEntity searchEntity = new SearchEntity();
-                if(!lsSearch.isEmpty()){
-                    searchEntity=lsSearch.get(0);
-                }
-                List<?> results =  searchDAO.getSearchBasic(search,model);
-                String str ="";
-            for( Object item :results ){
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
 
-                    for (Field field : item.getClass().getDeclaredFields()) {
-                        field.setAccessible(true);
-                        if(field.getName().equals("id")){
-                            Object value = field.get(item);
-                            if (value != null) {
-                                if(str==null||str.length()==0){
-                                    str+=value;
-                                }else
-                                str+=","+value;
-                            }
+            List<SearchEntity> lsSearch = searchDAO.getSearch(search, model);
+            SearchEntity searchEntity = new SearchEntity();
+            if (!lsSearch.isEmpty()) {
+                searchEntity = lsSearch.get(0);
+            }
+            List<?> results = searchDAO.getSearchBasic(search, model);
+            String str = "";
+            for (Object item : results) {
+
+                for (Field field : item.getClass().getDeclaredFields()) {
+                    field.setAccessible(true);
+                    if (field.getName().equals("id")) {
+                        Object value = field.get(item);
+                        if (value != null) {
+                            if (str == null || str.length() == 0) {
+                                str += value;
+                            } else
+                                str += "," + value;
                         }
                     }
+                }
             }
-                searchEntity.setData(str);
-                searchEntity.setKeyword(search);
-                searchEntity.setModel(model);
-                searchEntity = searchDAO.Save(searchEntity);
-                return new ResponseEntity<>(searchEntity,HttpStatus.OK);
-            } catch (Exception e) {
+            searchEntity.setData(str);
+            searchEntity.setKeyword(search);
+            searchEntity.setModel(model);
+            searchEntity = searchDAO.Save(searchEntity);
+            return new ResponseEntity<>(searchEntity, HttpStatus.OK);
+        } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
