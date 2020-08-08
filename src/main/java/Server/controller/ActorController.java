@@ -160,7 +160,7 @@ public class ActorController {
     }
 
     @RequestMapping(value = "/GetRandom{item}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> getRandom(@RequestBody String apiToken, @PathVariable("item") int item) {
