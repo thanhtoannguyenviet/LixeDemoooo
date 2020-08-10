@@ -2,10 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.*;
 import Server.model.DB.*;
-import Server.model.DTO.AlbumDTO;
-import Server.model.DTO.Criteria;
-import Server.model.DTO.FilmDTO;
-import Server.model.DTO.SongDTO;
+import Server.model.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,37 +18,40 @@ public class SongController {
     SongDAO songDAO;
     SongSiteDAO songSiteDAO = new SongSiteDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody SongEntity entity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        entity= songDAO.save(entity);
+    public ResponseEntity<?> post(@RequestBody SongInDTO songInDTO) {
+        if (songInDTO == null || songInDTO.getApiToken() == null
+                || songInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(songInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        SongEntity entity = songDAO.save(songInDTO.getSongEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/Put",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> put(@RequestBody SongEntity entity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        songDAO.save(entity);
+    public ResponseEntity<?> put(@RequestBody SongInDTO songInDTO) {
+        if (songInDTO == null || songInDTO.getApiToken() == null
+                || songInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(songInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        songDAO.save(songInDTO.getSongEntity());
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> Get(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> Get(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         SongEntity entity = songDAO.getByID(id);
         if (entity != null)
             return new ResponseEntity<>(songSiteDAO.getSongDTOById(id), HttpStatus.ACCEPTED);
@@ -60,14 +60,14 @@ public class SongController {
     }
 
     @RequestMapping(value = "/GetTop{id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop10(@PathVariable("id") int id) {
+    public ResponseEntity<?> getTop10(@RequestBody String apiToken, @PathVariable("id") int id) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
             criteria.setTop(id);
@@ -87,14 +87,14 @@ public class SongController {
     }
 
     @RequestMapping(value = "/GetTopNew{id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTopNew10(@PathVariable("id") int id) {
+    public ResponseEntity<?> getTopNew10(@RequestBody String apiToken, @PathVariable("id") int id) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
             criteria.setTop(id);
@@ -114,14 +114,14 @@ public class SongController {
     }
 
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@RequestBody String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
             criteria.setCurrentPage(page);
@@ -144,12 +144,13 @@ public class SongController {
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody SongEntity entity, @PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> update(@RequestBody SongInDTO songInDTO, @PathVariable("id") Long id) {
+        if (songInDTO == null || songInDTO.getApiToken() == null
+                || songInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(songInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (songDAO.getByID(id) != null) {
-            songDAO.save(entity);
+            songDAO.save(songInDTO.getSongEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
@@ -157,10 +158,10 @@ public class SongController {
     @RequestMapping(value = "/Remove/{id}",
             method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<?> remove(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> remove(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         SongEntity entity = songDAO.getByID(id);
         if (entity != null) {
             entity.setActive(false);
@@ -172,10 +173,10 @@ public class SongController {
     @RequestMapping(value = "/Recover/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> recover(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> recover(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         SongEntity entity = songDAO.getByID(id);
         if (entity != null) {
             entity.setActive(true);
@@ -188,10 +189,10 @@ public class SongController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (songDAO.getByID(id) != null) {
             songDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
@@ -201,23 +202,24 @@ public class SongController {
     @RequestMapping(value = "/PostSinger/{idSong}", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public ResponseEntity<?> postSinger(@PathVariable("idSong") Long idSong, @RequestBody SingerEntity singerEntity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> postSinger(@PathVariable("idSong") Long idSong, @RequestBody SingerInDTO singerInDTO) {
+        if (singerInDTO == null || singerInDTO.getApiToken() == null
+                || singerInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(singerInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         SongSingerEntity songSingerEntity = new SongSingerEntity();
-        songSingerEntity.setSingerid(singerEntity.getId());
+        songSingerEntity.setSingerid(singerInDTO.getSingerEntity().getId());
         songSingerEntity.setSongid(idSong);
         return new ResponseEntity<>(songSingerEntity, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/Count", method = RequestMethod.GET)
+    @RequestMapping(value = "/Count", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> count() {
+    public ResponseEntity<?> count(@RequestBody String apiToken) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>(songDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));
@@ -227,14 +229,14 @@ public class SongController {
     }
 
     @RequestMapping(value = "/GetRandom{item}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getRandom(@PathVariable("item") int item) {
+    public ResponseEntity<?> getRandom(@RequestBody String apiToken, @PathVariable("item") int item) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
             criteria.setTop(item);

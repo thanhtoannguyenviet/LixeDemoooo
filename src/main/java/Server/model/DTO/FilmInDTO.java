@@ -2,18 +2,16 @@ package Server.model.DTO;
 
 import Server.model.DB.FilmEntity;
 
-public class FilmPostDTO {
-    String apiToken;
-    FilmEntity filmEntity = new FilmEntity();
-    String keyword;
+public class FilmInDTO {
+    private String apiToken = null;
+    private FilmEntity filmEntity = new FilmEntity();
 
-    public FilmPostDTO() {
+    public FilmInDTO() {
     }
 
-    public FilmPostDTO(String apiToken, FilmEntity filmEntity, String keyword) {
+    public FilmInDTO(String apiToken, FilmEntity filmEntity) {
         this.apiToken = apiToken;
         this.filmEntity = filmEntity;
-        this.keyword = keyword;
     }
 
     public String getApiToken() {
@@ -30,13 +28,5 @@ public class FilmPostDTO {
 
     public void setFilmEntity(FilmEntity filmEntity) {
         this.filmEntity = filmEntity;
-    }
-
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
     }
 }

@@ -5,6 +5,7 @@ import Server.model.DB.AuthorEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DB.SongEntity;
 import Server.model.DTO.AuthorDTO;
+import Server.model.DTO.AuthorInDTO;
 import Server.model.DTO.Criteria;
 import Server.model.DTO.SongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,12 @@ public class AuthorController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody AuthorEntity entity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        entity = authorDAO.save(entity);
+    public ResponseEntity<?> post(@RequestBody AuthorInDTO authorInDTO) {
+        if (authorInDTO == null || authorInDTO.getApiToken() == null || authorInDTO.getApiToken().isEmpty()
+                || apiAccountDAO.checkToken(authorInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        AuthorEntity entity = authorDAO.save(authorInDTO.getAuthorEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
@@ -43,10 +45,10 @@ public class AuthorController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (authorDAO.getByID(id) != null) {
             authorDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
@@ -54,37 +56,38 @@ public class AuthorController {
     }
 
     @RequestMapping(value = "/GetAll",
-            method = RequestMethod.GET
+            method = RequestMethod.POST
     )
     @ResponseBody
-    public ResponseEntity<?> GetAll() {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> GetAll(@RequestBody String apiToken) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(authorDAO.getAll(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateActor(@RequestBody AuthorEntity actor, @PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        if (id == actor.getId()) {
-            authorDAO.save(actor);
+    public ResponseEntity<?> updateActor(@RequestBody AuthorInDTO authorInDTO, @PathVariable("id") Long id) {
+        if (authorInDTO == null || authorInDTO.getApiToken() == null || authorInDTO.getApiToken().isEmpty()
+                || apiAccountDAO.checkToken(authorInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (id == authorInDTO.getAuthorEntity().getId()) {
+            authorDAO.save(authorInDTO.getAuthorEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> getDetail(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         AuthorEntity authorEntity = authorDAO.getByID(id);
         if (authorEntity != null) {
             return new ResponseEntity<>(getAuthorDTO(authorEntity), HttpStatus.OK);
@@ -92,14 +95,14 @@ public class AuthorController {
         return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value = "/GetAllHasPage{item}/{page}", method = RequestMethod.GET,
+    @RequestMapping(value = "/GetAllHasPage{item}/{page}", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@PathVariable("page") int page, @PathVariable("item") int item) {
+    public ResponseEntity<?> getPage(@RequestBody String apiToken, @PathVariable("page") int page, @PathVariable("item") int item) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(AuthorEntity.class);
             criteria.setCurrentPage(page);
@@ -121,14 +124,14 @@ public class AuthorController {
         }
     }
 
-    @RequestMapping(value = "/Count", method = RequestMethod.GET,
+    @RequestMapping(value = "/Count", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count() {
+    public ResponseEntity<?> count(@RequestBody String apiToken) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>(authorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);

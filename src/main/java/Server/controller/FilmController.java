@@ -4,6 +4,7 @@ import Server.model.DAO.*;
 import Server.model.DB.*;
 import Server.model.DTO.Criteria;
 import Server.model.DTO.FilmDTO;
+import Server.model.DTO.FilmInDTO;
 import Server.model.DTO.FilmPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,24 +30,24 @@ public class FilmController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody FilmPostDTO filmEntity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+        if (filmEntity == null || filmEntity.getApiToken() == null
+                || filmEntity.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmEntity.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         SearchDAO searchDAO = new SearchDAO();
         FilmEntity entity = filmDAO.save(filmEntity.getFilmEntity());
-        String strKey[]= filmEntity.getKeyword().split(",");
-        for(String item : strKey){
-            List<SearchEntity> searchLs = searchDAO.getSearch(item,"film");
-            if(!searchLs.isEmpty()){
-                SearchEntity searchEntity =searchLs.get(0);
-                String mergeStr = searchEntity.getData()+","+entity.getId();
+        String strKey[] = filmEntity.getKeyword().split(",");
+        for (String item : strKey) {
+            List<SearchEntity> searchLs = searchDAO.getSearch(item, "film");
+            if (!searchLs.isEmpty()) {
+                SearchEntity searchEntity = searchLs.get(0);
+                String mergeStr = searchEntity.getData() + "," + entity.getId();
                 searchEntity.setData(mergeStr);
                 searchDAO.Save(searchEntity);
-            }
-            else{
+            } else {
                 SearchEntity searchEntity = new SearchEntity();
                 searchEntity.setKeyword(item);
-                searchEntity.setData(entity.getId()+"");
+                searchEntity.setData(entity.getId() + "");
                 searchEntity.setModel("film");
                 searchDAO.Save(searchEntity);
             }
@@ -57,12 +58,13 @@ public class FilmController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody FilmEntity entity, @PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> update(@RequestBody FilmInDTO filmInDTO, @PathVariable("id") Long id) {
+        if (filmInDTO == null || filmInDTO.getApiToken() == null
+                || filmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (filmDAO.getByID(id) != null) {
-            filmDAO.save(entity);
+            filmDAO.save(filmInDTO.getFilmEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
@@ -82,24 +84,24 @@ public class FilmController {
     }
 
     @RequestMapping(value = "/GetDetail/{id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> getDetail(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(filmSiteDAO.getFilmDTOById(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/GetTop{item}", method = RequestMethod.GET,
+    @RequestMapping(value = "/GetTop{item}", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop10(@PathVariable int item) {
+    public ResponseEntity<?> getTop10(@RequestBody String apiToken, @PathVariable int item) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
             criteria.setTop(item);
@@ -118,14 +120,14 @@ public class FilmController {
         }
     }
 
-    @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.GET,
+    @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@RequestBody String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
             criteria.setCurrentPage(page);
@@ -144,14 +146,14 @@ public class FilmController {
         }
     }
 
-    @RequestMapping(value = "/Count", method = RequestMethod.GET,
+    @RequestMapping(value = "/Count", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count() {
+    public ResponseEntity<?> count(@RequestBody String apiToken) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             return new ResponseEntity<>(filmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));
@@ -161,14 +163,14 @@ public class FilmController {
     }
 
     @RequestMapping(value = "/GetRandom{item}",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getRandom(@PathVariable("item") int item) {
+    public ResponseEntity<?> getRandom(@RequestBody String apiToken, @PathVariable("item") int item) {
         try {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
             criteria.setTop(item);

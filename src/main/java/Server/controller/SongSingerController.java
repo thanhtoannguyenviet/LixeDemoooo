@@ -5,6 +5,7 @@ import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.SongSingerDAO;
 import Server.model.DB.SongCategorysongEntity;
 import Server.model.DB.SongSingerEntity;
+import Server.model.DTO.SongSingerInDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,12 @@ public class SongSingerController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestBody SongSingerEntity songSingerEntity) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        songSingerEntity=  songSingerDAO.save(songSingerEntity);
+    public ResponseEntity<?> registerActor(@RequestBody SongSingerInDTO songSingerInDTO) {
+        if (songSingerInDTO == null || songSingerInDTO.getApiToken() == null
+                || songSingerInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(songSingerInDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        SongSingerEntity songSingerEntity = songSingerDAO.save(songSingerInDTO.getSongSingerEntity());
         return new ResponseEntity<>(songSingerEntity, HttpStatus.CREATED);
     }
 
@@ -32,12 +34,12 @@ public class SongSingerController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@PathVariable("idSong") Long idSong, @PathVariable("idSinger") Long idSinger) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
-        if (songSingerDAO.getId(idSong,idSinger) != null) {
-            for (SongSingerEntity item : songSingerDAO.getId(idSong,idSinger)) {
+    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idSong") Long idSong, @PathVariable("idSinger") Long idSinger) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (songSingerDAO.getId(idSong, idSinger) != null) {
+            for (SongSingerEntity item : songSingerDAO.getId(idSong, idSinger)) {
                 Long id = item.getId();
                 songSingerDAO.delete(id);
             }
