@@ -26,7 +26,7 @@ public class AlbumController {
     AlbumSingerDAO albumSingerDAO = new AlbumSingerDAO();
     AlbumSongDAO albumSongDAO = new AlbumSongDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
-
+    ImageDAO imageDAO = new ImageDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -192,6 +192,11 @@ public class AlbumController {
 
     private AlbumDTO getAlbumDTO(AlbumEntity albumEntity) {
         List<SongEntity> songEntityList = new ArrayList<>();
+        List<ImageEntity> imgList = imageDAO.getId("album",albumEntity.getId());
+        ImageEntity imageEntity = new ImageEntity();
+        if(!imgList.isEmpty()){
+            imageEntity = imgList.get(0);
+        }
         List<AlbumSongEntity> albumSongEntityList = albumSongDAO.getId("albumid", albumEntity.getId() + "");
         if (!albumSongEntityList.isEmpty()) {
             for (AlbumSongEntity item : albumSongEntityList
@@ -208,7 +213,7 @@ public class AlbumController {
             if (singerEntity != null)
                 singerEntityList.add(singerEntity);
         }
-        AlbumDTO albumDTO = new AlbumDTO(albumEntity, songEntityList, singerEntityList);
+        AlbumDTO albumDTO = new AlbumDTO(albumEntity,imageEntity, songEntityList, singerEntityList);
         return albumDTO;
     }
 }

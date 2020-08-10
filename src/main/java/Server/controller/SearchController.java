@@ -2,8 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.*;
 import Server.model.DB.*;
-import Server.model.DTO.CategorySongDTO;
-import Server.model.DTO.Criteria;
+import Server.model.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,78 +49,8 @@ public class SearchController {
                 SearchEntity searchEntity = ls.get(0);
                 String[] arrSearch =searchEntity.getData().split(",");
                 Arrays.sort(arrSearch, Collections.reverseOrder());
-                if(searchEntity.getModel().equals("film")){
-                    FilmDAO filmDAO = new FilmDAO();
-                    List<FilmEntity> lsFilm = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsFilm.add(filmDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsFilm,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("song")){
-                    SongDAO songDAO = new SongDAO();
-                    List<SongEntity> lsSong = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsSong.add(songDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsSong,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("actor")){
-                    ActorDAO actorDAO = new ActorDAO();
-                    List<ActorEntity> lsActor = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsActor.add(actorDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsActor,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("album")){
-                    AlbumDAO albumDAO = new AlbumDAO();
-                    List<AlbumEntity> lsAlbum = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsAlbum.add(albumDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsAlbum,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("author")){
-                    AuthorDAO authorDAO = new AuthorDAO();
-                    List<AuthorEntity> lsAuthor = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsAuthor.add(authorDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsAuthor,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("categoryfilm")){
-                    CategoryFilmDAO authorDAO = new CategoryFilmDAO();
-                    List<CategoryfilmEntity> lsCategoryfilm = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsCategoryfilm.add(authorDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsCategoryfilm,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("categorysong")){
-                    CategorySongDAO categorySongDAO = new CategorySongDAO();
-                    List<CategorysongEntity> lsCategorysong = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsCategorysong.add(categorySongDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsCategorysong,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("director")){
-                    DirectorDAO directorDAO = new DirectorDAO();
-                    List<DirectorEntity> lsDirector = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsDirector.add(directorDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsDirector,HttpStatus.OK);
-                }
-                if(searchEntity.getModel().equals("singer")){
-                    SingerDAO singerDAO = new SingerDAO();
-                    List<SingerEntity> lsSinger = new ArrayList<>();
-                    for(String item : arrSearch){
-                        lsSinger.add(singerDAO.getByID(Long.parseLong(item)));
-                    }
-                    return new ResponseEntity<>(lsSinger    ,HttpStatus.OK);
-                }
+                List<?> lsResult = getResult(searchEntity,arrSearch);
+                return new ResponseEntity<>(lsResult,HttpStatus.OK);
             }
             else{
                 List<?> results =  searchDAO.getSearchBasic(search,model);
@@ -148,7 +77,6 @@ public class SearchController {
                  searchDAO.Save(searchEntity);
                 return new ResponseEntity<>(results,HttpStatus.OK);
             }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
@@ -189,12 +117,109 @@ public class SearchController {
                 searchEntity.setKeyword(search);
                 searchEntity.setModel(model);
                 searchEntity = searchDAO.Save(searchEntity);
-                return new ResponseEntity<>(searchEntity,HttpStatus.OK);
+                String[] arrSearch = searchEntity.getData().split(",");
+            List<?> lsResult = getResult(searchEntity,arrSearch);
+            return new ResponseEntity<>(lsResult,HttpStatus.OK);
             } catch (Exception e) {
             LogEntity log = new LogEntity(e);
             (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
+    }
+    private List<?> getResult(SearchEntity searchEntity,String[] arrSearch){
+        if(searchEntity.getModel().equals("film")){
+            FilmDAO filmDAO = new FilmDAO();
+            List<FilmDTO> lsFilm = new ArrayList<>();
+            for(String item : arrSearch){
+                if(item!=""){
+                    FilmEntity filmEntity = filmDAO.getByID(Long.parseLong(item));
+                    if(filmEntity!=null){
+                        FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
+                        lsFilm.add(filmSiteDAO.getFilmDTOById(filmEntity));
+                    }
+                }
+            }
+            return lsFilm;
+        }
+        SongSiteDAO songSiteDAO = new SongSiteDAO();
+        if(searchEntity.getModel().equals("song")){
+            SongDAO songDAO = new SongDAO();
+            List<SongDTO> lsSong = new ArrayList<>();
+            for(String item : arrSearch){
+                if(item!=""){
+                SongEntity songEntity = songDAO.getByID(Long.parseLong(item));
+                if(songEntity!=null){
+                    SongDTO songDTO=songSiteDAO.getSongDTOById(songEntity);
+                    lsSong.add(songDTO);
+                }}
+            }
+            return lsSong;
+        }
+        if(searchEntity.getModel().equals("actor")){
+            ActorDAO actorDAO = new ActorDAO();
+            List<ActorEntity> lsActor = new ArrayList<>();
+            for(String item : arrSearch){
+                lsActor.add(actorDAO.getByID(Long.parseLong(item)));
+            }
+            return lsActor;
+        }
+        if(searchEntity.getModel().equals("album")){
+            AlbumDAO albumDAO = new AlbumDAO();
+            List<AlbumEntity> lsAlbum = new ArrayList<>();
+            for(String item : arrSearch){
+                lsAlbum.add(albumDAO.getByID(Long.parseLong(item)));
+            }
+            return lsAlbum;
+        }
+        if(searchEntity.getModel().equals("author")){
+            AuthorDAO authorDAO = new AuthorDAO();
+            List<AuthorEntity> lsAuthor = new ArrayList<>();
+            for(String item : arrSearch){
+                lsAuthor.add(authorDAO.getByID(Long.parseLong(item)));
+            }
+            return lsAuthor;
+        }
+        if(searchEntity.getModel().equals("categoryfilm")){
+            CategoryFilmDAO authorDAO = new CategoryFilmDAO();
+            List<CategoryfilmEntity> lsCategoryfilm = new ArrayList<>();
+            for(String item : arrSearch){
+                lsCategoryfilm.add(authorDAO.getByID(Long.parseLong(item)));
+            }
+            return lsCategoryfilm;
+        }
+        if(searchEntity.getModel().equals("categorysong")){
+            CategorySongDAO categorySongDAO = new CategorySongDAO();
+            List<CategorysongEntity> lsCategorysong = new ArrayList<>();
+            for(String item : arrSearch){
+                lsCategorysong.add(categorySongDAO.getByID(Long.parseLong(item)));
+            }
+            return lsCategorysong;
+        }
+        if(searchEntity.getModel().equals("director")){
+            DirectorDAO directorDAO = new DirectorDAO();
+            List<DirectorEntity> lsDirector = new ArrayList<>();
+            for(String item : arrSearch){
+                lsDirector.add(directorDAO.getByID(Long.parseLong(item)));
+            }
+            return lsDirector;
+        }
+        if(searchEntity.getModel().equals("singer")){
+            SingerDAO singerDAO = new SingerDAO();
+            List<SingerDTO> lsSinger = new ArrayList<>();
+            for(String item : arrSearch){
+                if(item!=""){
+                    SingerEntity singerEntity =singerDAO.getByID(Long.parseLong(item));
+                    if(singerEntity!=null){
+                        SingerDTO singerDTO = songSiteDAO.getSingerDTO(singerEntity);
+                        if(singerEntity!=null){
+                            lsSinger.add(singerDTO);
+                        }
+                    }
+                }
+            }
+            return lsSinger;
+        }
+        return null;
     }
 }

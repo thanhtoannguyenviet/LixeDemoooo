@@ -1,6 +1,7 @@
 package Server.model.DAO;
 
 import Server.model.DB.*;
+import Server.model.DTO.SingerDTO;
 import Server.model.DTO.SongDTO;
 import org.springframework.stereotype.Repository;
 
@@ -78,5 +79,18 @@ public class SongSiteDAO {
                 categorysongEntityList.add(categorysongEntity);
         }
         return  new SongDTO(songEntity,albumEntity,authorEntity,imageEntity, Collections.unmodifiableList(singerEntityList),Collections.unmodifiableList(uploadEntityList),Collections.unmodifiableList(categorysongEntityList));
+    }
+    public SingerDTO getSingerDTO(SingerEntity singerEntity) {
+        List<SongSingerEntity> songSingerEntityList = songSingerDAO.getId("singerid", singerEntity.getId() + "");
+        List<SongDTO> songDTOList = new ArrayList<>();
+        for (SongSingerEntity item : songSingerEntityList
+        ) {
+            SongSiteDAO songSiteDAO = new SongSiteDAO();
+            SongDTO songDTO = songSiteDAO.getSongDTOById(item.getSongid());
+            if (songDTO != null)
+                songDTOList.add(songDTO);
+        }
+        SingerDTO singerDTO = new SingerDTO(singerEntity, songDTOList);
+        return singerDTO;
     }
 }
