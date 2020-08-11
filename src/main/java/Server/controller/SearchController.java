@@ -97,7 +97,7 @@ public class SearchController {
     @ResponseBody
     public ResponseEntity<?> updateSearch(@RequestBody String apiToken, @PathVariable("search") String search, @PathVariable("model") String model) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
 
