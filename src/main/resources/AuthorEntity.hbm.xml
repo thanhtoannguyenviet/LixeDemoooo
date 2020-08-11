@@ -10,7 +10,7 @@
 
         </id>
         <property name="name">
-            <column name="name" sql-type="varchar(255)"/>
+            <column name="authorname" sql-type="varchar(255)"/>
         </property>
         <property name="info">
             <column name="info" sql-type="text"/>

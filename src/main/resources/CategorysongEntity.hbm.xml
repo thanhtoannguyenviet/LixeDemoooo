@@ -10,7 +10,7 @@
 
         </id>
         <property name="categoryname">
-            <column name="categoryname" sql-type="varchar(255)"/>
+            <column name="categorysongname" sql-type="varchar(255)"/>
         </property>
         <property name="range">
             <column name="range" sql-type="integer"/>

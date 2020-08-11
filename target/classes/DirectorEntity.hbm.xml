@@ -10,7 +10,7 @@
 
         </id>
         <property name="name">
-            <column name="name" sql-type="varchar(255)"/>
+            <column name="directorname" sql-type="varchar(255)"/>
         </property>
         <property name="ext">
             <column name="ext" sql-type="text"/>
