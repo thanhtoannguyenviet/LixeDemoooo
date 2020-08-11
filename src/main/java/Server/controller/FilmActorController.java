@@ -22,7 +22,7 @@ public class FilmActorController {
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody FilmActorInDTO filmActorInDTO) {
         if (filmActorInDTO == null || filmActorInDTO.getApiToken() == null
-                || filmActorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmActorInDTO.getApiToken()) == 0) {
+                || filmActorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmActorInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         FilmActorEntity filmActorEntity = filmActorDAO.save(filmActorInDTO.getFilmActorEntity());
@@ -34,7 +34,7 @@ public class FilmActorController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idFilm") Long idFilm, @PathVariable("idActor") Long idActor) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (filmActorDAO.getId(idFilm, idActor) != null) {

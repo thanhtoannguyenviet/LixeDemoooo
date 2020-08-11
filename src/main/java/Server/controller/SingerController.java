@@ -30,7 +30,7 @@ public class SingerController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SingerInDTO singerInDTO) {
         if (singerInDTO == null || singerInDTO.getApiToken() == null
-                || singerInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(singerInDTO.getApiToken()) == 0) {
+                || singerInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(singerInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         SingerEntity singer = singerDAO.save(singerInDTO.getSingerEntity());
@@ -42,7 +42,7 @@ public class SingerController {
     @ResponseBody
     public ResponseEntity<?> put(@RequestBody SingerInDTO singerInDTO, @PathVariable("id") Long id) {
         if (singerInDTO == null || singerInDTO.getApiToken() == null
-                || singerInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(singerInDTO.getApiToken()) == 0) {
+                || singerInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(singerInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (singerDAO.getByID(id) != null) {
@@ -56,13 +56,13 @@ public class SingerController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (singerDAO.getByID(id) != null) {
             singerDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
-        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>("Delete Fail", HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/GetDetail/{id}",

@@ -23,7 +23,7 @@ public class ImageController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody ImageInDTO imageInDTO) {
         if (imageInDTO == null || imageInDTO.getApiToken() == null
-                || imageInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(imageInDTO.getApiToken()) == 0) {
+                || imageInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(imageInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         ImageEntity entity = imageDAO.save(imageInDTO.getImageEntity());
@@ -35,7 +35,7 @@ public class ImageController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody ImageInDTO imageInDTO, @PathVariable("id") Long id) {
         if (imageInDTO == null || imageInDTO.getApiToken() == null
-                || imageInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(imageInDTO.getApiToken()) == 0) {
+                || imageInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(imageInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (id == imageInDTO.getImageEntity().getId()) {
@@ -49,7 +49,7 @@ public class ImageController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (imageDAO.getByID(id) != null) {

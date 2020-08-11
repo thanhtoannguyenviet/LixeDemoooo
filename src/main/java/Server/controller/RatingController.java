@@ -28,7 +28,7 @@ public class RatingController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody RatingInDTO ratingInDTO) {
         if (ratingInDTO == null || ratingInDTO.getApiToken() == null
-                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) == 0) {
+                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         ratingInDTO.getRatingEntity().setVotedislike(0);
@@ -43,7 +43,7 @@ public class RatingController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody RatingInDTO ratingInDTO, @PathVariable Long id) {
         if (ratingInDTO == null || ratingInDTO.getApiToken() == null
-                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) == 0) {
+                || ratingInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (ratingDAO.getByID(id) != null) {
@@ -87,7 +87,7 @@ public class RatingController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (ratingDAO.getByID(id) != null) {

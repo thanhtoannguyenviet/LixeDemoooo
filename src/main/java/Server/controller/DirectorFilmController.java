@@ -24,7 +24,7 @@ public class DirectorFilmController {
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody DirectorFilmInDTO directorFilmInDTO) {
         if (directorFilmInDTO == null || directorFilmInDTO.getApiToken() == null
-                || directorFilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorFilmInDTO.getApiToken()) == 0) {
+                || directorFilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorFilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         DirectorFilmEntity directorFilmEntity =   directorFilmDAO.save(directorFilmInDTO.getDirectorFilmEntity());
@@ -36,7 +36,7 @@ public class DirectorFilmController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idDirector")  Long idDirector,@PathVariable("idFilm")  Long idFilm) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (directorFilmDAO.getId(idDirector,idFilm) != null) {

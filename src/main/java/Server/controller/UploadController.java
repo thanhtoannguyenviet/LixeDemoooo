@@ -23,7 +23,7 @@ public class UploadController {
     @ResponseBody
     public ResponseEntity<?> postImage(@RequestBody UploadInDTO uploadInDTO) {
         if (uploadInDTO == null || uploadInDTO.getApiToken() == null
-                || uploadInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(uploadInDTO.getApiToken()) == 0) {
+                || uploadInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(uploadInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         UploadEntity entity = uploadDAO.save(uploadInDTO.getUploadEntity());
@@ -35,7 +35,7 @@ public class UploadController {
     @ResponseBody
     public ResponseEntity<?> updateAccount(@RequestBody UploadInDTO uploadInDTO, @PathVariable("id") Long id) {
         if (uploadInDTO == null || uploadInDTO.getApiToken() == null
-                || uploadInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(uploadInDTO.getApiToken()) == 0) {
+                || uploadInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(uploadInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (uploadDAO.getByID(id) != null)
@@ -48,7 +48,7 @@ public class UploadController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteAccount(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         uploadDAO.delete(id);

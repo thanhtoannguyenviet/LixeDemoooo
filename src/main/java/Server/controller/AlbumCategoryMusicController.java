@@ -23,7 +23,8 @@ public class AlbumCategoryMusicController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody AlbumCategorymusicInDTO albumCategorymusicInDTO) {
-        if (albumCategorymusicInDTO == null || albumCategorymusicInDTO.getApiToken() == null || albumCategorymusicInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(albumCategorymusicInDTO.getApiToken()) == 0) {
+        if (albumCategorymusicInDTO == null || albumCategorymusicInDTO.getApiToken() == null
+                || albumCategorymusicInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(albumCategorymusicInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         AlbumCategorymusicEntity albumCategorymusicEntity = albumCategoryMusicDAO.save(albumCategorymusicInDTO.getAlbumCategorymusicEntity());
@@ -35,7 +36,7 @@ public class AlbumCategoryMusicController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idAlbum") Long idAlbum, @PathVariable("idCategory") Long idCategory) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (albumCategoryMusicDAO.getId(idAlbum, idCategory) != null) {

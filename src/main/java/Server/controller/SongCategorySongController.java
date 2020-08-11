@@ -24,7 +24,7 @@ public class SongCategorySongController {
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody SongCategorysongInDTO songCategorysongInDTO) {
         if (songCategorysongInDTO == null || songCategorysongInDTO.getApiToken() == null
-                || songCategorysongInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(songCategorysongInDTO.getApiToken()) == 0) {
+                || songCategorysongInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(songCategorysongInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         SongCategorysongEntity songCategorysongEntity = songCategorySongDAO.save(songCategorysongInDTO.getSongCategorysongEntity());
@@ -36,7 +36,7 @@ public class SongCategorySongController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idSong") Long idSong, @PathVariable("idCategory") Long idCategory) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (songCategorySongDAO.getId(idSong, idCategory) != null) {

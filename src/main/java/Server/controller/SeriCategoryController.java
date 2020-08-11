@@ -29,7 +29,7 @@ public class SeriCategoryController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SeriCategoryfilmInDTO seriCategoryfilmInDTO) {
         if (seriCategoryfilmInDTO == null || seriCategoryfilmInDTO.getApiToken() == null
-                || seriCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) == 0) {
+                || seriCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         SeriCategoryfilmEntity entity = seriCategoryFilmDAO.save(seriCategoryfilmInDTO.getSeriCategoryfilmEntity());
@@ -41,7 +41,7 @@ public class SeriCategoryController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody SeriCategoryfilmInDTO seriCategoryfilmInDTO, @PathVariable("id") Long id) {
         if (seriCategoryfilmInDTO == null || seriCategoryfilmInDTO.getApiToken() == null
-                || seriCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) == 0) {
+                || seriCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (seriCategoryFilmDAO.getByID(id) != null) {
@@ -55,7 +55,7 @@ public class SeriCategoryController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (seriCategoryFilmDAO.getByID(id) != null) {

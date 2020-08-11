@@ -27,7 +27,7 @@ public class CategorySongController {
     @ResponseBody
     public ResponseEntity<?> postCategorySong(@RequestBody CategorysongInDTO categorysongInDTO) {
         if (categorysongInDTO == null || categorysongInDTO.getApiToken() == null
-                || categorysongInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categorysongInDTO.getApiToken()) == 0) {
+                || categorysongInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categorysongInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         CategorysongEntity categorySongEntity = categorySongDAO.save(categorysongInDTO.getCategorysongEntity());
@@ -39,7 +39,7 @@ public class CategorySongController {
     @ResponseBody
     public ResponseEntity<?> updateCategorySong(@RequestBody CategorysongInDTO categorysongInDTO, @PathVariable Long id) {
         if (categorysongInDTO == null || categorysongInDTO.getApiToken() == null
-                || categorysongInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categorysongInDTO.getApiToken()) == 0) {
+                || categorysongInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categorysongInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (id == categorysongInDTO.getCategorysongEntity().getId()) {
@@ -53,7 +53,7 @@ public class CategorySongController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (categorySongDAO.getByID(id) != null) {

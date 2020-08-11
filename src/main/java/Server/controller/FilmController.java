@@ -31,7 +31,7 @@ public class FilmController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody FilmPostDTO filmEntity) {
         if (filmEntity == null || filmEntity.getApiToken() == null
-                || filmEntity.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmEntity.getApiToken()) == 0) {
+                || filmEntity.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmEntity.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         SearchDAO searchDAO = new SearchDAO();
@@ -60,7 +60,7 @@ public class FilmController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody FilmInDTO filmInDTO, @PathVariable("id") Long id) {
         if (filmInDTO == null || filmInDTO.getApiToken() == null
-                || filmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmInDTO.getApiToken()) == 0) {
+                || filmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (filmDAO.getByID(id) != null) {
@@ -73,10 +73,10 @@ public class FilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-//            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
-//                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
-//            }
+    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
         if (filmDAO.getByID(id) != null) {
             filmDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);

@@ -28,10 +28,10 @@ public class FilmCategoryController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody FilmCategoryfilmInDTO filmCategoryfilmInDTO) {
         if (filmCategoryfilmInDTO == null || filmCategoryfilmInDTO.getApiToken() == null
-                || filmCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) == 0) {
+                || filmCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        FilmCategoryfilmEntity entity =   filmCategoryFilmDAO.save(filmCategoryfilmInDTO.getFilmCategoryfilmEntity());
+        FilmCategoryfilmEntity entity = filmCategoryFilmDAO.save(filmCategoryfilmInDTO.getFilmCategoryfilmEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
@@ -40,7 +40,7 @@ public class FilmCategoryController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody FilmCategoryfilmInDTO filmCategoryfilmInDTO, @PathVariable("id") Long id) {
         if (filmCategoryfilmInDTO == null || filmCategoryfilmInDTO.getApiToken() == null
-                || filmCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) == 0) {
+                || filmCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (filmCategoryFilmDAO.getByID(id) != null) {
@@ -54,11 +54,11 @@ public class FilmCategoryController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("idFilm") Long idFilm, @PathVariable("idCategory") Long idCategory) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        if (filmCategoryFilmDAO.getId(idFilm,idCategory) != null) {
-            for (FilmCategoryfilmEntity item : filmCategoryFilmDAO.getId(idFilm,idCategory)) {
+        if (filmCategoryFilmDAO.getId(idFilm, idCategory) != null) {
+            for (FilmCategoryfilmEntity item : filmCategoryFilmDAO.getId(idFilm, idCategory)) {
                 Long id = item.getId();
                 filmCategoryFilmDAO.delete(id);
             }

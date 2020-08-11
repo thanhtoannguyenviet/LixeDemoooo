@@ -35,7 +35,7 @@ public class DirectorController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody DirectorInDTO directorInDTO) {
         if (directorInDTO == null || directorInDTO.getApiToken() == null
-                || directorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorInDTO.getApiToken()) == 0) {
+                || directorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         DirectorEntity entity = directorDAO.save(directorInDTO.getDirectorEntity());
@@ -48,7 +48,7 @@ public class DirectorController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody DirectorInDTO directorInDTO, @PathVariable("id") Long id) {
         if (directorInDTO == null || directorInDTO.getApiToken() == null
-                || directorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorInDTO.getApiToken()) == 0) {
+                || directorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (directorDAO.getByID(id) != null) {
@@ -62,7 +62,7 @@ public class DirectorController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (directorDAO.getByID(id) != null) {

@@ -29,7 +29,7 @@ public class CategoryFilmController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody CategoryfilmInDTO categoryfilmInDTO) {
         if (categoryfilmInDTO == null || categoryfilmInDTO.getApiToken() == null
-                || categoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) == 0) {
+                || categoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         CategoryfilmEntity categorySongEntity = categoryFilmDAO.save(categoryfilmInDTO.getCategoryfilmEntity());
@@ -41,7 +41,7 @@ public class CategoryFilmController {
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody CategoryfilmInDTO categoryfilmInDTO, @PathVariable("id") Long id) {
         if (categoryfilmInDTO == null || categoryfilmInDTO.getApiToken() == null
-                || categoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) == 0) {
+                || categoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (id == categoryfilmInDTO.getCategoryfilmEntity().getId()) {
@@ -55,7 +55,7 @@ public class CategoryFilmController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (categoryFilmDAO.getByID(id) != null) {

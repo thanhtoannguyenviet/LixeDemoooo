@@ -25,7 +25,7 @@ public class CommentController {
     @ResponseBody
     public ResponseEntity<?> postCategorySong(@RequestBody CommentInDTO commentInDTO) {
         if (commentInDTO == null || commentInDTO.getApiToken() == null
-                || commentInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(commentInDTO.getApiToken()) == 0) {
+                || commentInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(commentInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         CommentEntity entity = commentDAO.save(commentInDTO.getCommentEntity());
@@ -37,7 +37,7 @@ public class CommentController {
     @ResponseBody
     public ResponseEntity<?> updateCategorySong(@RequestBody CommentInDTO commentInDTO, @PathVariable("id") Long id) {
         if (commentInDTO == null || commentInDTO.getApiToken() == null
-                || commentInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(commentInDTO.getApiToken()) == 0) {
+                || commentInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(commentInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (commentInDTO.getCommentEntity().getId() == id) {
@@ -51,7 +51,7 @@ public class CommentController {
     )
     @ResponseBody
     public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (commentDAO.getByID(id) != null) {

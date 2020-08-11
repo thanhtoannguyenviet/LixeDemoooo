@@ -30,7 +30,7 @@ public class BannerController {
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody BannerInDTO bannerInDTO) {
         if (bannerInDTO == null || bannerInDTO.getApiToken() == null || bannerInDTO.getApiToken().isEmpty()
-                || apiAccountDAO.checkToken(bannerInDTO.getApiToken()) == 0) {
+                || apiAccountDAO.checkToken(bannerInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         bannerDAO.save(bannerInDTO.getBannerEntity());
@@ -42,7 +42,7 @@ public class BannerController {
     @ResponseBody
     public ResponseEntity<?> updateActor(@RequestBody BannerInDTO bannerInDTO, @PathVariable("id") Long id) {
         if (bannerInDTO == null || bannerInDTO.getApiToken() == null || bannerInDTO.getApiToken().isEmpty()
-                || apiAccountDAO.checkToken(bannerInDTO.getApiToken()) == 0) {
+                || apiAccountDAO.checkToken(bannerInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (id == bannerInDTO.getBannerEntity().getId()) {
@@ -56,7 +56,7 @@ public class BannerController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (bannerDAO.getByID(id) != null) {

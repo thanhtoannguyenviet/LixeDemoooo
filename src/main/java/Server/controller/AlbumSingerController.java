@@ -23,7 +23,7 @@ public class AlbumSingerController {
     @ResponseBody
     public ResponseEntity<?> registerActor(@RequestBody AlbumSingerInDTO albumSingerInDTO) {
         if (albumSingerInDTO == null || albumSingerInDTO.getApiToken() == null || albumSingerInDTO.getApiToken().isEmpty()
-                || apiAccountDAO.checkToken(albumSingerInDTO.getApiToken()) == 0) {
+                || apiAccountDAO.checkToken(albumSingerInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         AlbumSingerEntity albumSingerEntity = albumSingerDAO.save(albumSingerInDTO.getAlbumSingerEntity());
@@ -35,7 +35,7 @@ public class AlbumSingerController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idAlbum") Long idAlbum, @PathVariable("idSinger") Long idSinger) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (albumSingerDAO.getId(idAlbum, idSinger) != null) {

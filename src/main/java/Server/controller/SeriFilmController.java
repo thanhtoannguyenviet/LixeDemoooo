@@ -33,7 +33,7 @@ public class SeriFilmController {
     @ResponseBody
     public ResponseEntity<?> post(@RequestBody SerifilmInDTO serifilmInDTO) {
         if (serifilmInDTO == null || serifilmInDTO.getApiToken() == null
-                || serifilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(serifilmInDTO.getApiToken()) == 0) {
+                || serifilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(serifilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         SerifilmEntity entity = seriFilmDAO.save(serifilmInDTO.getSerifilmEntity());
@@ -45,7 +45,7 @@ public class SeriFilmController {
     @ResponseBody
     public ResponseEntity<?> updateAccount(@RequestBody SerifilmInDTO serifilmInDTO, @PathVariable("id") Long id) {
         if (serifilmInDTO == null || serifilmInDTO.getApiToken() == null
-                || serifilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(serifilmInDTO.getApiToken()) == 0) {
+                || serifilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(serifilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (seriFilmDAO.getByID(id) != null) {
@@ -59,7 +59,7 @@ public class SeriFilmController {
     )
     @ResponseBody
     public ResponseEntity<?> deleteAccount(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (seriFilmDAO.getByID(id) != null) {
