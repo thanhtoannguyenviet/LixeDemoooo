@@ -5,6 +5,7 @@ import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.SongSingerDAO;
 import Server.model.DB.SongCategorysongEntity;
 import Server.model.DB.SongSingerEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.SongSingerInDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,8 +35,8 @@ public class SongSingerController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idSong") Long idSong, @PathVariable("idSinger") Long idSinger) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idSong") Long idSong, @PathVariable("idSinger") Long idSinger) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (songSingerDAO.getId(idSong, idSinger) != null) {

@@ -4,6 +4,7 @@ import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.RatingDAO;
 import Server.model.DB.ApiaccountEntity;
 import Server.model.DB.RatingEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.RatingInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -86,8 +87,8 @@ public class RatingController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (ratingDAO.getByID(id) != null) {

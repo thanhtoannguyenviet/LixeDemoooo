@@ -44,9 +44,9 @@ public class SearchController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getResultAdvance(@RequestBody String apiToken, @PathVariable("search") String search, @PathVariable("model") String model) {
+    public ResponseEntity<?> getResultAdvance(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("search") String search, @PathVariable("model") String model) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
 
@@ -95,9 +95,9 @@ public class SearchController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> updateSearch(@RequestBody String apiToken, @PathVariable("search") String search, @PathVariable("model") String model) {
+    public ResponseEntity<?> updateSearch(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("search") String search, @PathVariable("model") String model) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
 

@@ -4,10 +4,7 @@ import Server.model.DAO.*;
 import Server.model.DB.DirectorEntity;
 import Server.model.DB.DirectorFilmEntity;
 import Server.model.DB.LogEntity;
-import Server.model.DTO.Criteria;
-import Server.model.DTO.DirectorDTO;
-import Server.model.DTO.DirectorInDTO;
-import Server.model.DTO.FilmDTO;
+import Server.model.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -61,8 +58,8 @@ public class DirectorController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (directorDAO.getByID(id) != null) {
@@ -76,8 +73,8 @@ public class DirectorController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> get(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+    public ResponseEntity<?> get(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         DirectorEntity directorEntity = directorDAO.getByID(id);
@@ -90,9 +87,9 @@ public class DirectorController {
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestBody String apiToken, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             Criteria criteria = new Criteria();
@@ -122,9 +119,9 @@ public class DirectorController {
     @RequestMapping(value = "/Count", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count(@RequestBody String apiToken) {
+    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             return new ResponseEntity<>(directorDAO.count(), HttpStatus.OK);

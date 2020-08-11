@@ -4,6 +4,7 @@ import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.AlbumSingerDAO;
 import Server.model.DB.AlbumCategorymusicEntity;
 import Server.model.DB.AlbumSingerEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.AlbumSingerInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,8 @@ public class AlbumSingerController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idAlbum") Long idAlbum, @PathVariable("idSinger") Long idSinger) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idAlbum") Long idAlbum, @PathVariable("idSinger") Long idSinger) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (albumSingerDAO.getId(idAlbum, idSinger) != null) {

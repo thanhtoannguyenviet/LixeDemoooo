@@ -3,6 +3,7 @@ package Server.controller;
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.AuthorSongDAO;
 import Server.model.DB.AuthorSongEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.AuthorSongInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,8 @@ public class AuthorSongController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idAuthor") Long idAuthor, @PathVariable("idSong") Long idSong) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idAuthor") Long idAuthor, @PathVariable("idSong") Long idSong) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (authorSongDAO.getId(idAuthor, idSong) != null) {

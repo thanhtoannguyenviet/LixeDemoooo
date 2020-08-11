@@ -2,10 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.*;
 import Server.model.DB.*;
-import Server.model.DTO.AlbumDTO;
-import Server.model.DTO.AlbumInDTO;
-import Server.model.DTO.Criteria;
-import Server.model.DTO.SongDTO;
+import Server.model.DTO.*;
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,8 +55,8 @@ public class AlbumController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> get(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+    public ResponseEntity<?> get(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         AlbumEntity albumEntity = albumDAO.getByID(id);
@@ -74,8 +71,8 @@ public class AlbumController {
     @RequestMapping(value = "/Delete/{id}",
             method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable("id") long id, @RequestBody String apiToken) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> delete(@PathVariable("id") long id, @RequestBody APIAccountDTO apiAccountDTO) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         albumDAO.delete(id);
@@ -115,8 +112,8 @@ public class AlbumController {
 
     @RequestMapping(value = "/DeleteToCategory/{idCategoryMusic}", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> updateToCategoryMusic(@RequestBody String apiToken, @PathVariable("idCategoryMusic") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> updateToCategoryMusic(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idCategoryMusic") Long id) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         albumCategoryMusicDAO.delete(id);
@@ -127,8 +124,8 @@ public class AlbumController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count(@RequestBody String apiToken) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(albumDAO.count(), HttpStatus.OK);
@@ -138,9 +135,9 @@ public class AlbumController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestBody String apiToken, @PathVariable("page") int page, @PathVariable("itemOnpage") int itemOnpage) {
+    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page, @PathVariable("itemOnpage") int itemOnpage) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             Criteria criteria = new Criteria();
@@ -166,9 +163,9 @@ public class AlbumController {
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop(@RequestBody String apiToken, @PathVariable("item") int item) {
+    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("item") int item) {
         try {
-            if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             Criteria criteria = new Criteria();

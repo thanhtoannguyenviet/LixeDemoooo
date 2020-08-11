@@ -5,6 +5,7 @@ import Server.model.DAO.DirectorFilmDAO;
 import Server.model.DB.AlbumSongEntity;
 import Server.model.DB.ApiaccountEntity;
 import Server.model.DB.DirectorFilmEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.DirectorFilmInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,8 @@ public class DirectorFilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idDirector")  Long idDirector,@PathVariable("idFilm")  Long idFilm) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idDirector")  Long idDirector, @PathVariable("idFilm")  Long idFilm) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (directorFilmDAO.getId(idDirector,idFilm) != null) {

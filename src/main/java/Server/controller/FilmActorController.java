@@ -4,6 +4,7 @@ import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.FilmActorDAO;
 import Server.model.DB.DirectorFilmEntity;
 import Server.model.DB.FilmActorEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.FilmActorInDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,8 +34,8 @@ public class FilmActorController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody String apiToken, @PathVariable("idFilm") Long idFilm, @PathVariable("idActor") Long idActor) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idFilm") Long idFilm, @PathVariable("idActor") Long idActor) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (filmActorDAO.getId(idFilm, idActor) != null) {

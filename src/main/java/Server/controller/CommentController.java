@@ -3,6 +3,7 @@ package Server.controller;
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.CommentDAO;
 import Server.model.DB.CommentEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.CommentInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,8 +51,8 @@ public class CommentController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody String apiToken, @PathVariable("id") Long id) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (commentDAO.getByID(id) != null) {
@@ -63,8 +64,8 @@ public class CommentController {
     @RequestMapping(value = "/GetComment/model={model}&id={id}",
             method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getComment(@RequestBody String apiToken, @PathVariable("id") Long id, @PathVariable("model") String model) {
-        if (apiToken == null || apiToken.isEmpty() || apiAccountDAO.checkToken(apiToken) == 0) {
+    public ResponseEntity<?> getComment(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id, @PathVariable("model") String model) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         List<CommentEntity> commentEntityList = commentDAO.getId(model, id);
