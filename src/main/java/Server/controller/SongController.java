@@ -52,9 +52,10 @@ public class SongController {
         if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        SongEntity entity = songDAO.getByID(id);
-        if (entity != null)
-            return new ResponseEntity<>(songSiteDAO.getSongDTOById(id), HttpStatus.ACCEPTED);
+        SongDTO songDTO = songSiteDAO.getSongDTOById(id);
+        SongEntity songEntity = songDTO.getSongEntity();
+        if (songDTO != null)
+            return new ResponseEntity<>(songDTO, HttpStatus.ACCEPTED);
         else
             return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
     }

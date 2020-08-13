@@ -50,20 +50,23 @@ public class SeriCategoryController {
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/Delete/{id}",
+    @RequestMapping(value = "/Delete/{seriid}/{categoryid}",
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("seriid") Long seriid,@PathVariable("categoryid") Long categoryid) {
         if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        if (seriCategoryFilmDAO.getByID(id) != null) {
-            seriCategoryFilmDAO.delete(id);
+        List<SeriCategoryfilmEntity> seriCategoryfilmEntity = seriCategoryFilmDAO.getId(seriid + "", categoryid + "");
+        if (seriCategoryfilmEntity != null) {
+            for (SeriCategoryfilmEntity item : seriCategoryfilmEntity) {
+                seriCategoryFilmDAO.delete(item.getId());
+            }
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
-        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
     }
-
     @RequestMapping(value = "/GetAll/",
             method = RequestMethod.POST
     )

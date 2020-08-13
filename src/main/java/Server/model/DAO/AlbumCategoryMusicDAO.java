@@ -37,7 +37,7 @@ public class AlbumCategoryMusicDAO {
     }
     public List<AlbumCategorymusicEntity> getId(Long condition,Long condition1 ){
         Session s = HibernateUtil.getSession(AlbumCategorymusicEntity.class);
-        List<AlbumCategorymusicEntity> entity = DBUtil.getIdTableM2M("album_categorymusic","albumId",condition+"","catagoryId",condition1+"",AlbumCategorymusicEntity.class,s);
+        List<AlbumCategorymusicEntity> entity = DBUtil.getIdTableM2M("album_categorymusic","albumId",condition+"","cateoryId",condition1+"",AlbumCategorymusicEntity.class,s);
         return Collections.unmodifiableList(entity);
     }
 }

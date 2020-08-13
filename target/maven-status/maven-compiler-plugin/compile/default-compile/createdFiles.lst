@@ -83,6 +83,7 @@ Server\model\DB\FilmCategoryfilmEntity.class
 Server\model\DAO\RoleDAO.class
 Server\model\DB\CategorysongEntity.class
 Server\model\DB\DirectorFilmEntity.class
+Server\model\DTO\APIAccountDTO.class
 Server\model\DTO\FoxDTO.class
 Server\controller\ActorController.class
 Server\model\DAO\BannerDAO.class

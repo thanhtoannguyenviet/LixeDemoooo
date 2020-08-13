@@ -88,7 +88,10 @@ public class FilmController {
         if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(filmSiteDAO.getFilmDTOById(id), HttpStatus.OK);
+        FilmDTO filmDTO =filmSiteDAO.getFilmDTOById(id);
+        FilmEntity filmEntity = filmDTO.getFilmEntity();
+        filmEntity.setIndex(filmEntity.getIndex()+1);
+        return new ResponseEntity<>(filmDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/GetTop{item}", method = RequestMethod.POST,

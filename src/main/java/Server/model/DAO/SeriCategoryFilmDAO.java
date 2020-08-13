@@ -31,9 +31,10 @@ public class SeriCategoryFilmDAO {
         SeriCategoryfilmEntity entity = DBUtil.getDataByID(id,SeriCategoryfilmEntity.class,s);
         return entity;
     }
-    public List<SeriCategoryfilmEntity> getId(String conditionColumn, String condition ){
+
+    public List<SeriCategoryfilmEntity> getId(String seriid, String categoryid ){
         Session s = HibernateUtil.getSession(SeriCategoryfilmEntity.class);
-        List<SeriCategoryfilmEntity> entity = DBUtil.getListHasCondition("seri_categoryfilm",conditionColumn,condition,SeriCategoryfilmEntity.class,s);
-        return Collections.unmodifiableList(entity);
+        List<SeriCategoryfilmEntity> entity = DBUtil.getIdTableM2M("Seri_CategoryFilm","seriId",seriid,"categoryId",categoryid,SeriCategoryfilmEntity.class,s);
+        return entity;
     }
 }
