@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/FilmSite/DirectorFilm")
 @RestController
 public class DirectorFilmController {
+
+    // Not Use
     DirectorFilmDAO directorFilmDAO = new DirectorFilmDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
 

@@ -53,7 +53,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         SongDTO songDTO = songSiteDAO.getSongDTOById(id);
-        SongEntity songEntity = songDTO.getSongEntity();
+
         if (songDTO != null)
             return new ResponseEntity<>(songDTO, HttpStatus.ACCEPTED);
         else

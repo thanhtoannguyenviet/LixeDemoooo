@@ -40,7 +40,7 @@ public class ImageController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (id == imageInDTO.getImageEntity().getId()) {
-            imageDAO.save(imageInDTO.getImageEntity());
+            ImageEntity image = imageDAO.save(imageInDTO.getImageEntity());
             return new ResponseEntity<>("Update completed", HttpStatus.OK);
         } else return new ResponseEntity<>("Update Fail", HttpStatus.BAD_REQUEST);
     }

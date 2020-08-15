@@ -41,7 +41,7 @@ public class CUSTOM_QUERY {
         return sql;
     }
     public static String sqlGetSearch(String table, String keyword , String model) {
-        String sql = "Select top 1 * from " + table + " Where keyword like '%" + keyword.toLowerCase() + "%'and model='"+model+"'";
+        String sql = "Select top 1 * from " + table + " Where keyword like N'%" + keyword.toLowerCase() + "%'and model like '"+model+"'";
         return sql;
     }
     public static String getToken(String string) {

@@ -1,9 +1,6 @@
 package Server.model.DTO;
 
-import Server.model.DB.AlbumEntity;
-import Server.model.DB.ImageEntity;
-import Server.model.DB.SingerEntity;
-import Server.model.DB.SongEntity;
+import Server.model.DB.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +10,23 @@ public class AlbumDTO {
     private ImageEntity imageEntity = new ImageEntity();
     private List<SongEntity> songDTOList = new ArrayList<>();
     private List<SingerEntity> singerEntity = new ArrayList<>();
+    private List<CategorysongEntity> categorySongEntities = new ArrayList<>();
 
-    public AlbumDTO(AlbumEntity albumEntity, ImageEntity imageEntity, List<SongEntity> songDTOList, List<SingerEntity> singerEntity) {
+
+    public List<CategorysongEntity> getCategorySongEntities() {
+        return categorySongEntities;
+    }
+
+    public void setCategorySongEntities(List<CategorysongEntity> categorySongEntities) {
+        this.categorySongEntities = categorySongEntities;
+    }
+
+    public AlbumDTO(AlbumEntity albumEntity, ImageEntity imageEntity, List<SongEntity> songDTOList, List<SingerEntity> singerEntity, List<CategorysongEntity> categorySongEntities) {
         this.albumEntity = albumEntity;
         this.imageEntity = imageEntity;
         this.songDTOList = songDTOList;
         this.singerEntity = singerEntity;
+        this.categorySongEntities = categorySongEntities;
     }
 
     public ImageEntity getImageEntity() {

@@ -22,6 +22,11 @@ public class DirectorFilmDAO {
         List<DirectorFilmEntity> entity = DBUtil.getListHasCondition("director_film",conditionColumn,condition,DirectorFilmEntity.class,s);
         return Collections.unmodifiableList(entity);
     }
+    public List<FilmEntity> getIDinfilm(String conditionColumn, String condition ){
+        Session s = HibernateUtil.getSession(FilmEntity.class);
+        List<FilmEntity> entity = DBUtil.getListHasCondition("film",conditionColumn,condition,FilmEntity.class,s);
+        return Collections.unmodifiableList(entity);
+    }
     public DirectorFilmEntity getByID(Long id){
         Session s = HibernateUtil.getSession(DirectorFilmEntity.class);
         DirectorFilmEntity entity = DBUtil.getDataByID(id,DirectorFilmEntity.class,s);

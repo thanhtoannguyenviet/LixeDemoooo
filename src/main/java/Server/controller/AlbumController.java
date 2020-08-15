@@ -60,8 +60,9 @@ public class AlbumController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         AlbumEntity albumEntity = albumDAO.getByID(id);
-        albumEntity.setIndex(albumEntity.getIndex() + 1);
-        albumDAO.save(albumEntity);
+
+        //albumEntity.setIndex(albumEntity.getIndex() + 1);
+       // albumDAO.save(albumEntity);
         if (albumEntity != null)
             return new ResponseEntity<>(getAlbumDTO(albumEntity), HttpStatus.OK);
         else
@@ -213,7 +214,16 @@ public class AlbumController {
             if (singerEntity != null)
                 singerEntityList.add(singerEntity);
         }
-        AlbumDTO albumDTO = new AlbumDTO(albumEntity,imageEntity, songEntityList, singerEntityList);
+        List<AlbumCategorymusicEntity> albumCategorymusicEntities = albumCategoryMusicDAO.getId("albumid",albumEntity.getId()+"");
+        List<CategorysongEntity> categorysongEntities = new ArrayList<>();
+        CategorySongDAO categorySongDAO = new CategorySongDAO();
+        if(albumCategorymusicEntities!=null){
+            for(AlbumCategorymusicEntity item : albumCategorymusicEntities ){
+                CategorysongEntity categorysongEntity =  categorySongDAO.getByID(item.getCatagoryid());
+                categorysongEntities.add(categorysongEntity);
+            }
+        }
+        AlbumDTO albumDTO = new AlbumDTO(albumEntity,imageEntity, songEntityList, singerEntityList,categorysongEntities);
         return albumDTO;
     }
 }

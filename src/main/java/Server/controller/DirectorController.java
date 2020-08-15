@@ -3,6 +3,7 @@ package Server.controller;
 import Server.model.DAO.*;
 import Server.model.DB.DirectorEntity;
 import Server.model.DB.DirectorFilmEntity;
+import Server.model.DB.FilmEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,11 +134,11 @@ public class DirectorController {
     }
 
     private DirectorDTO getDirectorDTO(DirectorEntity directorEntity) {
-        List<DirectorFilmEntity> directorFilmEntityList = directorFilmDAO.getID("directorid", directorEntity.getId() + "");
+        List<FilmEntity> filmEntities = directorFilmDAO.getIDinfilm("directorid", directorEntity.getId() + "");
         List<FilmDTO> filmDTOList = new ArrayList<>();
-        if (!directorFilmEntityList.isEmpty()) {
-            for (DirectorFilmEntity item : directorFilmEntityList) {
-                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item.getFilmid());
+        if (!filmEntities.isEmpty()) {
+            for (FilmEntity item : filmEntities) {
+                FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(item);
                 if (filmDTO != null) {
                     filmDTOList.add(filmDTO);
                 }

@@ -22,6 +22,7 @@ public class SongSiteDAO {
     SongCategorySongDAO songCategorySongDAO = new SongCategorySongDAO();
     public SongDTO getSongDTOById(Long id){
         SongEntity songEntity = songDAO.getByID(id);
+        if(songEntity!=null){
         List<AlbumSongEntity> albumSongEntity = albumSongDAO.getId("songid",songEntity.getId()+"");
         AlbumEntity albumEntity = new AlbumEntity();
         if(!albumSongEntity.isEmpty()){
@@ -49,6 +50,8 @@ public class SongSiteDAO {
                 categorysongEntityList.add(categorysongEntity);
         }
         return  new SongDTO(songEntity,albumEntity,authorEntity,imageEntity, Collections.unmodifiableList(singerEntityList),Collections.unmodifiableList(uploadEntityList),Collections.unmodifiableList(categorysongEntityList));
+        }
+        return  null;
     }
     public SongDTO getSongDTOById(SongEntity songEntity){
         AlbumEntity albumEntity =null;

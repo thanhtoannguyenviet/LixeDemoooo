@@ -32,12 +32,12 @@ public class AlbumCategoryMusicDAO {
     }
     public List<AlbumCategorymusicEntity> getId(String conditionColumn,String condition ){
         Session s = HibernateUtil.getSession(AlbumCategorymusicEntity.class);
-        List<AlbumCategorymusicEntity> entity = DBUtil.getListHasCondition("album_categorymusic",conditionColumn,condition,AlbumCategorymusicEntity.class,s);
+        List<AlbumCategorymusicEntity> entity = DBUtil.getListHasCondition("album_categoryMusic",conditionColumn,condition,AlbumCategorymusicEntity.class,s);
         return Collections.unmodifiableList(entity);
     }
     public List<AlbumCategorymusicEntity> getId(Long condition,Long condition1 ){
         Session s = HibernateUtil.getSession(AlbumCategorymusicEntity.class);
-        List<AlbumCategorymusicEntity> entity = DBUtil.getIdTableM2M("album_categorymusic","albumId",condition+"","cateoryId",condition1+"",AlbumCategorymusicEntity.class,s);
+        List<AlbumCategorymusicEntity> entity = DBUtil.getIdTableM2M("album_categoryMusic","albumId",condition+"","catagoryId",condition1+"",AlbumCategorymusicEntity.class,s);
         return Collections.unmodifiableList(entity);
     }
 }
