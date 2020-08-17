@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.w3c.dom.events.EventException;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -313,6 +314,58 @@ public class DBUtil {
         }
         finally {
             session.close();
+        }
+    }
+
+    public static <T> int addData2(T newItem, Session session) {
+        int cnt = 0;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(newItem);
+            cnt = 1;
+            tx.commit();
+        }  catch (HibernateException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } catch (EventException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } finally {
+            session.close();
+            return cnt;
+        }
+    }
+
+    public static <T> int updateData(T newItem, Session session) {
+        int cnt = 0;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(newItem);
+            cnt = 1;
+            tx.commit();
+        }  catch (HibernateException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } catch (EventException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } finally {
+            session.close();
+            return cnt;
         }
     }
 }
