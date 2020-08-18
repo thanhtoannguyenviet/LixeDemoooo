@@ -21,7 +21,7 @@ public class SearchController {
     @Autowired
     SearchDAO searchDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
-	UserDAO userDAO = new UserDAO();
+    UserDAO userDAO = new UserDAO();
 
     //{search}/model/{model}/
 //    @RequestMapping(value = "/q/{search}/{model}",
@@ -54,6 +54,7 @@ public class SearchController {
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
                 return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
+
             List<SearchEntity> ls = searchDAO.getSearch(search, model);
             if (ls != null && !ls.isEmpty()) {
                 SearchEntity searchEntity = ls.get(0);
@@ -108,6 +109,7 @@ public class SearchController {
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
                 return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
+
             List<SearchEntity> lsSearch = searchDAO.getSearch(search, model);
             SearchEntity searchEntity = new SearchEntity();
             if (!lsSearch.isEmpty()) {
@@ -150,7 +152,7 @@ public class SearchController {
             FilmDAO filmDAO = new FilmDAO();
             List<FilmDTO> lsFilm = new ArrayList<>();
             for (String item : arrSearch) {
-                if (!item.equals("") &&item!=null) {
+                if (!item.equals("") && item != null) {
                     FilmEntity filmEntity = filmDAO.getByID(Long.parseLong(item));
                     if (filmEntity != null) {
                         FilmSiteDAO filmSiteDAO = new FilmSiteDAO();

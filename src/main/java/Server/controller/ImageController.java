@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.ImageDAO;
+import Server.model.DAO.UserDAO;
 import Server.model.DB.ImageEntity;
 import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.ImageInDTO;
@@ -17,15 +18,18 @@ public class ImageController {
     @Autowired
     ImageDAO imageDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody ImageInDTO imageInDTO) {
-        if (imageInDTO == null || imageInDTO.getApiToken() == null
-                || imageInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(imageInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> post(@RequestBody ImageInDTO imageInDTO, @RequestHeader String userToken) {
+        if (imageInDTO == null || apiAccountDAO.checkToken(imageInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(imageInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         ImageEntity entity = imageDAO.save(imageInDTO.getImageEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -34,10 +38,12 @@ public class ImageController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody ImageInDTO imageInDTO, @PathVariable("id") Long id) {
-        if (imageInDTO == null || imageInDTO.getApiToken() == null
-                || imageInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(imageInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> update(@RequestBody ImageInDTO imageInDTO, @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (imageInDTO == null || apiAccountDAO.checkToken(imageInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(imageInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (id == imageInDTO.getImageEntity().getId()) {
             ImageEntity image = imageDAO.save(imageInDTO.getImageEntity());
@@ -49,9 +55,12 @@ public class ImageController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (imageDAO.getByID(id) != null) {
             imageDAO.delete(id);

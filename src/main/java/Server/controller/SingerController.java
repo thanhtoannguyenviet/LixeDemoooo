@@ -20,7 +20,7 @@ public class SingerController {
     SongSingerDAO songSingerDAO = new SongSingerDAO();
     SongSiteDAO songSiteDAO = new SongSiteDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
-	UserDAO userDAO = new UserDAO();
+    UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post/",
             method = RequestMethod.POST,
@@ -81,7 +81,6 @@ public class SingerController {
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
             return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
-
         return new ResponseEntity<>(singerDAO.getByID(id), HttpStatus.OK);
     }
 
@@ -95,7 +94,6 @@ public class SingerController {
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
                 return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
-
             Criteria criteria = new Criteria();
             criteria.setClazz(SingerEntity.class);
             criteria.setTop(itop);
@@ -127,7 +125,6 @@ public class SingerController {
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
                 return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
-
             Criteria criteria = new Criteria();
             criteria.setClazz(SingerEntity.class);
             criteria.setCurrentPage(page);
@@ -159,7 +156,6 @@ public class SingerController {
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
                 return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
-
             return new ResponseEntity<>(singerDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));
