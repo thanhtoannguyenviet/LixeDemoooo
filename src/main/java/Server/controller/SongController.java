@@ -294,4 +294,29 @@ public class SongController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
+    @RequestMapping(value = "/UpdateRange",
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO) {
+        try {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            List<SongEntity> songEntityList = songDAO.getWithIndex("song");
+            if(songEntityList!=null){
+                for(int i=0;i<songEntityList.size();i++){
+                    SongEntity songEntity =  songEntityList.get(i);
+                    songEntity.setRange(i+1);
+                    songDAO.save(songEntity);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

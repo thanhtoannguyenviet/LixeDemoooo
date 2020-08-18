@@ -368,4 +368,22 @@ public class DBUtil {
             return cnt;
         }
     }
+    public static <T> List<T> getWithIndex(String table,Class<T> type,Session session){
+        Transaction tx = null;
+        try {
+            tx =  session.beginTransaction();
+            String sql = CUSTOM_QUERY.sqlGetIndex(table);
+            SQLQuery q = session.createSQLQuery(sql);
+            q.addEntity(type);
+            tx.commit();
+            return  q.getResultList()  ;
+        }catch (HibernateException ex) {
+            if (tx != null) tx.rollback();
+            new LogDAO().save(new LogEntity(ex));
+            return null;
+        }
+        finally {
+            session.close();
+        }
+    }
 }

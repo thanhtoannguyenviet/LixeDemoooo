@@ -1,5 +1,6 @@
 package Server.model.DAO;
 
+import Server.model.DB.AlbumEntity;
 import Server.model.DB.FilmCategoryfilmEntity;
 import Server.model.DB.FilmEntity;
 import Server.model.DTO.Criteria;
@@ -60,5 +61,10 @@ public class FilmDAO {
        Session s = HibernateUtil.getSession(FilmEntity.class);
        List<FilmEntity> ls = DBUtil.getTopRandom(criteria,s);
        return Collections.unmodifiableList(ls);
+    }
+    public List<FilmEntity> getWithIndex(String table){
+        Session s = HibernateUtil.getSession(FilmEntity.class);
+        List<FilmEntity> ls = DBUtil.getWithIndex(table,FilmEntity.class,s);
+        return Collections.unmodifiableList(ls);
     }
 }

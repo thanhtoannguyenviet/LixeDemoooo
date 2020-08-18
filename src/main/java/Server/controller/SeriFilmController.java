@@ -1,6 +1,7 @@
 package Server.controller;
 
 import Server.model.DAO.*;
+import Server.model.DB.FilmEntity;
 import Server.model.DB.LogEntity;
 import Server.model.DB.SerifilmEntity;
 import Server.model.DB.SerifilmFilmEntity;
@@ -170,6 +171,31 @@ public class SeriFilmController {
             return new ResponseEntity<>(seriFilmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
             new LogDAO().save(new LogEntity(e));
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value = "/UpdateRange",
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO) {
+        try {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            List<SerifilmEntity> serifilmEntityList = seriFilmDAO.getWithIndex("serifilm");
+            if(serifilmEntityList!=null){
+                for(int i=0;i<serifilmEntityList.size();i++){
+                    SerifilmEntity serifilmEntity =  serifilmEntityList.get(i);
+                    serifilmEntity.setRange(i+1);
+                    seriFilmDAO.save(serifilmEntity);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
             e.printStackTrace();
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }

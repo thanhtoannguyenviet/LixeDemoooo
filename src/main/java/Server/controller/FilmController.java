@@ -214,4 +214,29 @@ public class FilmController {
             return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
         }
     }
+    @RequestMapping(value = "/UpdateRange",
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO) {
+        try {
+            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+                return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            List<FilmEntity> filmEntityList = filmDAO.getWithIndex("film");
+            if(filmEntityList!=null){
+                for(int i=0;i<filmEntityList.size();i++){
+                    FilmEntity filmEntity =  filmEntityList.get(i);
+                    filmEntity.setRange(i+1);
+                    filmDAO.save(filmEntity);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LogEntity log = new LogEntity(e);
+            (new LogDAO()).save(log);
+            e.printStackTrace();
+            return new ResponseEntity<>("If you are admin, Check table Log to see ErrorMsg", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

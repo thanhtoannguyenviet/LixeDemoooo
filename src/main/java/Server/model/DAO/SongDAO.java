@@ -67,4 +67,9 @@ public class SongDAO {
         List<SongEntity> ls = DBUtil.getTopRandom(criteria,s);
         return Collections.unmodifiableList(ls);
     }
+    public List<SongEntity> getWithIndex(String table){
+        Session s = HibernateUtil.getSession(SongEntity.class);
+        List<SongEntity> ls = DBUtil.getWithIndex(table,SongEntity.class,s);
+        return Collections.unmodifiableList(ls);
+    }
 }

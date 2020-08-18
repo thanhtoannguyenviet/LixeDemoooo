@@ -113,5 +113,8 @@ public class CUSTOM_QUERY {
                 "FROM User_ WHERE username = '" + user.getUsername() + "'";
         return sql;
     }
-    /*----- End USER/ACCOUNT ----- */
+    public static String sqlGetIndex(String table) {
+        String sql = "Select * from " + table + " order by index_ desc";
+        return sql;
+    }
 }

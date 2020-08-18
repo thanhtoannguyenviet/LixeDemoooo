@@ -56,5 +56,9 @@ public class AlbumDAO {
         List<AlbumEntity> ls = DBUtil.getTop10New("datereleased",criteria,s);
         return Collections.unmodifiableList(ls);
     }
-
+    public List<AlbumEntity> getWithIndex(String table){
+        Session s = HibernateUtil.getSession(AlbumEntity.class);
+        List<AlbumEntity> ls = DBUtil.getWithIndex(table,AlbumEntity.class,s);
+        return Collections.unmodifiableList(ls);
+    }
 }
