@@ -28,7 +28,7 @@ public class FilmActorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmActorInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         FilmActorEntity filmActorEntity = filmActorDAO.save(filmActorInDTO.getFilmActorEntity());
         return new ResponseEntity<>(filmActorEntity, HttpStatus.CREATED);
@@ -44,7 +44,7 @@ public class FilmActorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (filmActorDAO.getId(idFilm, idActor) != null) {
             for (FilmActorEntity item : filmActorDAO.getId(idFilm, idActor)) {

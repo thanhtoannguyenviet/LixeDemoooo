@@ -32,7 +32,7 @@ public class FilmController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmEntity.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SearchDAO searchDAO = new SearchDAO();
         FilmEntity entity = filmDAO.save(filmEntity.getFilmEntity());
@@ -63,7 +63,7 @@ public class FilmController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (filmDAO.getByID(id) != null) {
             filmDAO.save(filmInDTO.getFilmEntity());
@@ -80,7 +80,7 @@ public class FilmController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (filmDAO.getByID(id) != null) {
             filmDAO.delete(id);
@@ -98,7 +98,7 @@ public class FilmController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         FilmDTO filmDTO = filmSiteDAO.getFilmDTOById(id);
         FilmEntity filmEntity = filmDTO.getFilmEntity();
@@ -115,7 +115,7 @@ public class FilmController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
@@ -145,7 +145,7 @@ public class FilmController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);
@@ -174,7 +174,7 @@ public class FilmController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             return new ResponseEntity<>(filmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
@@ -194,7 +194,7 @@ public class FilmController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(FilmEntity.class);

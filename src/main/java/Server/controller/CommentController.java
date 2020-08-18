@@ -31,7 +31,7 @@ public class CommentController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(commentInDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         CommentEntity entity = commentDAO.save(commentInDTO.getCommentEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -46,7 +46,7 @@ public class CommentController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(commentInDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (commentInDTO.getCommentEntity().getId() == id) {
             commentDAO.save(commentInDTO.getCommentEntity());
@@ -64,7 +64,7 @@ public class CommentController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (commentDAO.getByID(id) != null) {
             commentDAO.delete(id);
@@ -81,7 +81,7 @@ public class CommentController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         List<CommentEntity> commentEntityList = commentDAO.getId(model, id);
         if (!commentEntityList.isEmpty()) {

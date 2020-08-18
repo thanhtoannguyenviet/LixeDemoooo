@@ -29,7 +29,7 @@ public class AlbumSongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(albumSongInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         AlbumSongEntity albumSongEntity = albumSongDAO.save(albumSongInDTO.getAlbumSongEntity());
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
@@ -45,7 +45,7 @@ public class AlbumSongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (albumSongDAO.getId(idAlbum, idSong) != null) {
             for (AlbumSongEntity item : albumSongDAO.getId(idAlbum, idSong)) {

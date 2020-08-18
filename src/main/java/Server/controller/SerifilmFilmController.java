@@ -30,7 +30,7 @@ public class SerifilmFilmController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(serifilmFilmInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SerifilmFilmEntity serifilmFilmEntity = serifilmFilmDAO.save(serifilmFilmInDTO.getSerifilmFilmEntity());
         return new ResponseEntity<>(serifilmFilmEntity, HttpStatus.CREATED);
@@ -46,7 +46,7 @@ public class SerifilmFilmController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (serifilmFilmDAO.getId(idSeri, idFilm) != null) {
             for (SerifilmFilmEntity item : serifilmFilmDAO.getId(idSeri, idFilm)) {

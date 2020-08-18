@@ -29,7 +29,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(songInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SongEntity entity = songDAO.save(songInDTO.getSongEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -43,7 +43,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(songInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         songDAO.save(songInDTO.getSongEntity());
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
@@ -57,7 +57,7 @@ public class SongController {
         if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SongDTO songDTO = songSiteDAO.getSongDTOById(id);
 
@@ -78,7 +78,7 @@ public class SongController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
@@ -109,7 +109,7 @@ public class SongController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
@@ -140,7 +140,7 @@ public class SongController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);
@@ -169,7 +169,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(songInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (songDAO.getByID(id) != null) {
             songDAO.save(songInDTO.getSongEntity());
@@ -185,7 +185,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SongEntity entity = songDAO.getByID(id);
         if (entity != null) {
@@ -203,7 +203,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SongEntity entity = songDAO.getByID(id);
         if (entity != null) {
@@ -222,7 +222,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (songDAO.getByID(id) != null) {
             songDAO.delete(id);
@@ -238,7 +238,7 @@ public class SongController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(singerInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         SongSingerEntity songSingerEntity = new SongSingerEntity();
         songSingerEntity.setSingerid(singerInDTO.getSingerEntity().getId());
@@ -254,7 +254,7 @@ public class SongController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             return new ResponseEntity<>(songDAO.count(), HttpStatus.OK);
         } catch (Exception e) {
@@ -274,7 +274,7 @@ public class SongController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(SongEntity.class);

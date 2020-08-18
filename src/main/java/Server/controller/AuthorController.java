@@ -35,7 +35,7 @@ public class AuthorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(authorInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         AuthorEntity entity = authorDAO.save(authorInDTO.getAuthorEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -51,7 +51,7 @@ public class AuthorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (authorDAO.getByID(id) != null) {
             authorDAO.delete(id);
@@ -69,7 +69,7 @@ public class AuthorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(authorDAO.getAll(), HttpStatus.OK);
     }
@@ -83,7 +83,7 @@ public class AuthorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(authorInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (id == authorInDTO.getAuthorEntity().getId()) {
             authorDAO.save(authorInDTO.getAuthorEntity());
@@ -101,7 +101,7 @@ public class AuthorController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         AuthorEntity authorEntity = authorDAO.getByID(id);
         if (authorEntity != null) {
@@ -120,7 +120,7 @@ public class AuthorController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(AuthorEntity.class);
@@ -152,7 +152,7 @@ public class AuthorController {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
             }
             if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
-                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             }
             return new ResponseEntity<>(authorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {

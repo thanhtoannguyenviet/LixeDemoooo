@@ -34,7 +34,7 @@ public class RatingController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(ratingInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         ratingInDTO.getRatingEntity().setVotedislike(0);
         ratingInDTO.getRatingEntity().setVotelike(0);
@@ -50,6 +50,9 @@ public class RatingController {
         if (ratingInDTO == null || apiAccountDAO.checkToken(ratingInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(ratingInDTO.getApiToken()))!= 1) {
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
+        }
         if (ratingDAO.getByID(id) != null) {
             ratingDAO.save(ratingInDTO.getRatingEntity());
             return new ResponseEntity<>("Update Completed", HttpStatus.OK);
@@ -64,7 +67,7 @@ public class RatingController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(ratingInDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (ratingDAO.getByID(id) != null) {
             ratingInDTO.getRatingEntity().setVotelike(1 + ratingInDTO.getRatingEntity().getVotedislike());
@@ -81,7 +84,7 @@ public class RatingController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(ratingInDTO.getApiToken())) == 0) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (ratingDAO.getByID(id) != null) {
             ratingInDTO.getRatingEntity().setVotedislike(1 + ratingInDTO.getRatingEntity().getVotedislike());
@@ -99,7 +102,7 @@ public class RatingController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (ratingDAO.getByID(id) != null) {
             ratingDAO.delete(id);

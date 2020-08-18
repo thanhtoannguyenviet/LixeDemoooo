@@ -34,7 +34,7 @@ public class FilmCategoryController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         FilmCategoryfilmEntity entity = filmCategoryFilmDAO.save(filmCategoryfilmInDTO.getFilmCategoryfilmEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -49,7 +49,7 @@ public class FilmCategoryController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (filmCategoryFilmDAO.getByID(id) != null) {
             filmCategoryFilmDAO.save(filmCategoryfilmInDTO.getFilmCategoryfilmEntity());
@@ -67,7 +67,7 @@ public class FilmCategoryController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (filmCategoryFilmDAO.getId(idFilm, idCategory) != null) {
             for (FilmCategoryfilmEntity item : filmCategoryFilmDAO.getId(idFilm, idCategory)) {

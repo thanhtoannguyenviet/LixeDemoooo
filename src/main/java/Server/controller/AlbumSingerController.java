@@ -29,7 +29,7 @@ public class AlbumSingerController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(albumSingerInDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         AlbumSingerEntity albumSingerEntity = albumSingerDAO.save(albumSingerInDTO.getAlbumSingerEntity());
         return new ResponseEntity<>(albumSingerEntity, HttpStatus.CREATED);
@@ -45,7 +45,7 @@ public class AlbumSingerController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
-            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
         if (albumSingerDAO.getId(idAlbum, idSinger) != null) {
             for (AlbumSingerEntity item : albumSingerDAO.getId(idAlbum, idSinger)) {
