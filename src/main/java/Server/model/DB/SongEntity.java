@@ -17,7 +17,7 @@ public class SongEntity {
     private String img;
     private int range;
     private Boolean active;
-
+    private int index_;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -47,6 +47,15 @@ public class SongEntity {
 
     public void setAuthorid(Long authorid) {
         this.authorid = authorid;
+    }
+    @Basic
+    @Column(name = "index_", nullable = false)
+    public int getIndex() {
+        return index_;
+    }
+
+    public void setIndex(int index) {
+        this.index_ = index;
     }
 
     @Basic

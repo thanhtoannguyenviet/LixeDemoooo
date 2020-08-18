@@ -128,7 +128,7 @@ public class SingerController {
         }
     }
 
-    @RequestMapping(value = "/Count", method = RequestMethod.POST)
+    @RequestMapping(value = "/Count", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO) {
         try {

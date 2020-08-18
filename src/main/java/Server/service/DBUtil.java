@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.w3c.dom.events.EventException;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -156,23 +157,23 @@ public class DBUtil {
     }
     public static <T> List<T> loadDataPagination(Session session,Criteria criter ) {
         try{
-        session.beginTransaction();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        int itemStart = 0;
-        int itemEnd = 2;
-        if (criter != null) {
-            itemStart = criter.getCurrentPage() * criter.getItemPerPage();
-            itemEnd = itemStart + criter.getItemPerPage();
-        }
-        CriteriaQuery<T> criteriaQuery = builder.createQuery(criter.getClazz());
-        Root<T> from = criteriaQuery.from(criter.getClazz());
-        CriteriaQuery<T> select = criteriaQuery.select(from);
-        TypedQuery<T> typedQuery = session.createQuery(select);
-        typedQuery.setFirstResult(itemStart);
-        typedQuery.setMaxResults(itemEnd);
-        List<T> data = typedQuery.getResultList();
-        // session.getTransaction().commit();
-        return typedQuery.getResultList();
+            session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            int itemStart = 0;
+            int itemEnd = 2;
+            if (criter != null) {
+                itemStart = criter.getCurrentPage() * criter.getItemPerPage();
+                itemEnd = itemStart + criter.getItemPerPage();
+            }
+            CriteriaQuery<T> criteriaQuery = builder.createQuery(criter.getClazz());
+            Root<T> from = criteriaQuery.from(criter.getClazz());
+            CriteriaQuery<T> select = criteriaQuery.select(from);
+            TypedQuery<T> typedQuery = session.createQuery(select);
+            typedQuery.setFirstResult(itemStart);
+            typedQuery.setMaxResults(itemEnd);
+            List<T> data = typedQuery.getResultList();
+            // session.getTransaction().commit();
+            return typedQuery.getResultList();
         }catch (Exception ex){
             ex.getMessage();
             return null;
@@ -313,6 +314,58 @@ public class DBUtil {
         }
         finally {
             session.close();
+        }
+    }
+
+    public static <T> int addData2(T newItem, Session session) {
+        int cnt = 0;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(newItem);
+            cnt = 1;
+            tx.commit();
+        }  catch (HibernateException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } catch (EventException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } finally {
+            session.close();
+            return cnt;
+        }
+    }
+
+    public static <T> int updateData(T newItem, Session session) {
+        int cnt = 0;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(newItem);
+            cnt = 1;
+            tx.commit();
+        }  catch (HibernateException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } catch (EventException ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            new LogDAO().save(new LogEntity(ex));
+        } finally {
+            session.close();
+            return cnt;
         }
     }
 }

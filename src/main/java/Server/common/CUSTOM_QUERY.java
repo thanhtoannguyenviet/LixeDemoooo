@@ -4,6 +4,7 @@ import Server.model.DB.FilmEntity;
 import Server.model.DB.SongEntity;
 import Server.model.DB.UserEntity;
 import Server.model.DTO.Criteria;
+import Server.model.DTO.UserDTO;
 
 import java.util.List;
 
@@ -44,10 +45,7 @@ public class CUSTOM_QUERY {
         String sql = "Select top 1 * from " + table + " Where keyword like N'%" + keyword.toLowerCase() + "%'and model like '"+model+"'";
         return sql;
     }
-    public static String getToken(String string) {
-        String sql = "SELECT * FROM APIACCOUNT WHERE TOKEN ='" + string + "'";
-        return sql;
-    }
+
     public static String getIdTableM2M(String table, String conditionColumn, String condition,String conditionColumn1, String condition1){
         String sql = "select * from "+ table + " where "+ conditionColumn+ " =" + condition + " and "+ conditionColumn1 + " = "+ condition1;
         return sql;
@@ -64,17 +62,56 @@ public class CUSTOM_QUERY {
         return sql;
     }
 
-    public static String getAllUsers() {
-        String sql = "select id, username, email, ext, follow, active, roleid, img, displayname FROM USER_";
-        return sql;
-    }
 
-    public static String getUserByID(long id) {
-        String sql = "select id, username, email, ext, follow, active, roleid, img, displayname FROM USER_ WHERE id = '" + id + "'";
-        return sql;
-    }
     public static String searchBasic(String table, String conditionColumn,String condition){
         String sql = "select * from " +table+" where "+ conditionColumn+" like N'%"+condition+"%' order by "+conditionColumn ;
         return sql;
     }
+
+    /*----- Start USER/ACCOUNT ----- */
+    public static String getToken(String string) {
+        String sql = "SELECT * FROM APIAccount WHERE token ='" + string + "'";
+        return sql;
+    }
+
+    public static String getUserByID(long id) {
+        String sql = "SELECT id, username, password, email, ext, follow, active, roleid, img, displayname, createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate FROM User_ WHERE id = '" + id + "'";
+        return sql;
+    }
+
+    public static String getUserByName(String username) {
+        String sql = "SELECT id, username, '' password, email, ext, follow, active, roleid, img, displayname, createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate FROM USER_ WHERE username = '" + username + "'";
+        return sql;
+    }
+
+    public static String checkUniqueUsername(String username) {
+        String sql = "SELECT * FROM USER_ WHERE username = '" + username + "'";
+        return sql;
+    }
+
+    public static String findUserByToken(String userToken, int type) {
+        String whereCondition = "WHERE ";
+        if (type == 1) {
+            whereCondition += "userWebToken = '" + userToken + "'";
+        } else {
+            whereCondition += "userMbToken = '" + userToken + "'";
+        }
+        String sql = "SELECT id, username, password, email, ext, follow, active, roleid, img, displayname, " +
+                "createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate " +
+                "FROM User_ " + whereCondition;
+        return sql;
+    }
+
+    public static String findNextIdentity(String tableName) {
+        String sql = "SELECT COALESCE(IDENT_CURRENT('" + tableName + "'), 0) + 1 id FROM USER_";
+        return sql;
+    }
+
+    public static String loginAccount(UserEntity user) {
+        String sql = "SELECT id, username, password, email, ext, follow, active, roleid, img, displayname, " +
+                "createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate " +
+                "FROM User_ WHERE username = '" + user.getUsername() + "'";
+        return sql;
+    }
+    /*----- End USER/ACCOUNT ----- */
 }

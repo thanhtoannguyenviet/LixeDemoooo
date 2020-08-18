@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
     <class name="Server.model.DB.UserEntity" table="User_" schema="dbo" catalog="ProjectMusicFilm">
@@ -35,6 +35,30 @@
         </property>
         <property name="active">
             <column name="active" sql-type="boolean" not-null="true"/>
+        </property>
+        <property name="createDate">
+            <column name="createDate" sql-type="timestamp" not-null="false"/>
+        </property>
+        <property name="createUser">
+            <column name="createUser" sql-type="timestamp" not-null="false"/>
+        </property>
+        <property name="updateDate">
+            <column name="updateDate" sql-type="timestamp" not-null="false"/>
+        </property>
+        <property name="updateUser">
+            <column name="updateUser" sql-type="timestamp" not-null="false"/>
+        </property>
+        <property name="userWebToken">
+            <column name="userWebToken" sql-type="varchar(35)" not-null="false"/>
+        </property>
+        <property name="webTokenCreateDate">
+            <column name="webTokenCreateDate" sql-type="timestamp" not-null="false"/>
+        </property>
+        <property name="userMbToken">
+            <column name="userMbToken" sql-type="varchar(35)" not-null="false"/>
+        </property>
+        <property name="mbTokenCreateDate">
+            <column name="mbTokenCreateDate" sql-type="timestamp" not-null="false"/>
         </property>
     </class>
 </hibernate-mapping>

@@ -1,6 +1,8 @@
+
 package Server.model.DB;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +18,14 @@ public class UserEntity {
     private String img;
     private String displayname;
     private Boolean active;
+    private Timestamp createDate;
+    private long createUser;
+    private Timestamp updateDate;
+    private long updateUser;
+    private String userWebToken;
+    private Timestamp webTokenCreateDate;
+    private String userMbToken;
+    private Timestamp mbTokenCreateDate;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -118,6 +128,86 @@ public class UserEntity {
         this.active = active;
     }
 
+    @Basic
+    @Column(name = "createDate", nullable = true)
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "createUser", nullable = true)
+    public long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(long createUser) {
+        this.createUser = createUser;
+    }
+
+    @Basic
+    @Column(name = "updateDate", nullable = true)
+    public Timestamp getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Timestamp updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Basic
+    @Column(name = "updateUser", nullable = true)
+    public long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(long updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    @Basic
+    @Column(name = "userWebToken", nullable = true, length = 35)
+    public String getUserWebToken() {
+        return userWebToken;
+    }
+
+    public void setUserWebToken(String userWebToken) {
+        this.userWebToken = userWebToken;
+    }
+
+    @Basic
+    @Column(name = "webTokenCreateDate", nullable = true)
+    public Timestamp getWebTokenCreateDate() {
+        return webTokenCreateDate;
+    }
+
+    public void setWebTokenCreateDate(Timestamp webTokenCreateDate) {
+        this.webTokenCreateDate = webTokenCreateDate;
+    }
+
+    @Basic
+    @Column(name = "userMbToken", nullable = true, length = 35)
+    public String getUserMbToken() {
+        return userMbToken;
+    }
+
+    public void setUserMbToken(String userMbToken) {
+        this.userMbToken = userMbToken;
+    }
+
+    @Basic
+    @Column(name = "mbTokenCreateDate", nullable = true)
+    public Timestamp getMbTokenCreateDate() {
+        return mbTokenCreateDate;
+    }
+
+    public void setMbTokenCreateDate(Timestamp mbTokenCreateDate) {
+        this.mbTokenCreateDate = mbTokenCreateDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -125,6 +215,8 @@ public class UserEntity {
         UserEntity that = (UserEntity) o;
         return id == that.id &&
                 roleid == that.roleid &&
+                createUser == that.createUser &&
+                updateUser == that.updateUser &&
                 Objects.equals(username, that.username) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(email, that.email) &&
@@ -132,11 +224,18 @@ public class UserEntity {
                 Objects.equals(follow, that.follow) &&
                 Objects.equals(img, that.img) &&
                 Objects.equals(displayname, that.displayname) &&
-                Objects.equals(active, that.active);
+                Objects.equals(active, that.active) &&
+                Objects.equals(createDate, that.createDate) &&
+                Objects.equals(updateDate, that.updateDate) &&
+                Objects.equals(userWebToken, that.userWebToken) &&
+                Objects.equals(webTokenCreateDate, that.webTokenCreateDate) &&
+                Objects.equals(userMbToken, that.userMbToken) &&
+                Objects.equals(mbTokenCreateDate, that.mbTokenCreateDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, email, ext, follow, roleid, img, displayname, active);
+        return Objects.hash(id, username, password, email, ext, follow, roleid, img, displayname, active, createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate);
     }
+
 }
