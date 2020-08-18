@@ -157,23 +157,23 @@ public class DBUtil {
     }
     public static <T> List<T> loadDataPagination(Session session,Criteria criter ) {
         try{
-        session.beginTransaction();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        int itemStart = 0;
-        int itemEnd = 2;
-        if (criter != null) {
-            itemStart = criter.getCurrentPage() * criter.getItemPerPage();
-            itemEnd = itemStart + criter.getItemPerPage();
-        }
-        CriteriaQuery<T> criteriaQuery = builder.createQuery(criter.getClazz());
-        Root<T> from = criteriaQuery.from(criter.getClazz());
-        CriteriaQuery<T> select = criteriaQuery.select(from);
-        TypedQuery<T> typedQuery = session.createQuery(select);
-        typedQuery.setFirstResult(itemStart);
-        typedQuery.setMaxResults(itemEnd);
-        List<T> data = typedQuery.getResultList();
-        // session.getTransaction().commit();
-        return typedQuery.getResultList();
+            session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            int itemStart = 0;
+            int itemEnd = 2;
+            if (criter != null) {
+                itemStart = criter.getCurrentPage() * criter.getItemPerPage();
+                itemEnd = itemStart + criter.getItemPerPage();
+            }
+            CriteriaQuery<T> criteriaQuery = builder.createQuery(criter.getClazz());
+            Root<T> from = criteriaQuery.from(criter.getClazz());
+            CriteriaQuery<T> select = criteriaQuery.select(from);
+            TypedQuery<T> typedQuery = session.createQuery(select);
+            typedQuery.setFirstResult(itemStart);
+            typedQuery.setMaxResults(itemEnd);
+            List<T> data = typedQuery.getResultList();
+            // session.getTransaction().commit();
+            return typedQuery.getResultList();
         }catch (Exception ex){
             ex.getMessage();
             return null;

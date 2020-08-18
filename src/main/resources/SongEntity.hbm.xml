@@ -36,5 +36,8 @@
         <property name="active">
             <column name="active" sql-type="boolean" not-null="true"/>
         </property>
+        <property name="index">
+            <column name="index_" sql-type="integer"/>
+        </property>
     </class>
 </hibernate-mapping>

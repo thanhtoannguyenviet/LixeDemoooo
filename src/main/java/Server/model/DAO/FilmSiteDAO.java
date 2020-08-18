@@ -87,7 +87,12 @@ public class FilmSiteDAO {
                     filmDTOList.add(filmDTO);
             }
         }
-        return new SeriFilmDTO(serifilmEntity,filmDTOList);
+        List<ImageEntity> imageEntityList = imageDAO.getId("serifilm",serifilmEntity.getId());
+        ImageEntity imageEntity = new ImageEntity();
+        if(!imageEntityList.isEmpty()){
+            imageEntity = imageEntityList.get(0);
+        }
+        return new SeriFilmDTO(serifilmEntity,filmDTOList,imageEntity);
     }
     public SeriFilmDTO getSeriFilmDTO(Long id){
         SerifilmEntity serifilmEntity = seriFilmDAO.getByID(id);
@@ -100,6 +105,11 @@ public class FilmSiteDAO {
                     filmDTOList.add(filmDTO);
             }
         }
-        return new SeriFilmDTO(serifilmEntity,filmDTOList);
+        List<ImageEntity> imageEntityList = imageDAO.getId("serifilm",serifilmEntity.getId());
+        ImageEntity imageEntity = new ImageEntity();
+        if(!imageEntityList.isEmpty()){
+            imageEntity = imageEntityList.get(0);
+        }
+        return new SeriFilmDTO(serifilmEntity,filmDTOList,imageEntity);
     }
 }

@@ -150,7 +150,7 @@ public class SearchController {
             FilmDAO filmDAO = new FilmDAO();
             List<FilmDTO> lsFilm = new ArrayList<>();
             for (String item : arrSearch) {
-                if (item != "") {
+                if (!item.equals("") &&item!=null) {
                     FilmEntity filmEntity = filmDAO.getByID(Long.parseLong(item));
                     if (filmEntity != null) {
                         FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
@@ -165,7 +165,7 @@ public class SearchController {
             SongDAO songDAO = new SongDAO();
             List<SongDTO> lsSong = new ArrayList<>();
             for (String item : arrSearch) {
-                if (item != "") {
+                if (!item.equals("")) {
                     SongEntity songEntity = songDAO.getByID(Long.parseLong(item));
                     if (songEntity != null) {
                         SongDTO songDTO = songSiteDAO.getSongDTOById(songEntity);
@@ -227,7 +227,7 @@ public class SearchController {
             SingerDAO singerDAO = new SingerDAO();
             List<SingerDTO> lsSinger = new ArrayList<>();
             for (String item : arrSearch) {
-                if (item != "") {
+                if (!item.equals("")) {
                     SingerEntity singerEntity = singerDAO.getByID(Long.parseLong(item));
                     if (singerEntity != null) {
                         SingerDTO singerDTO = songSiteDAO.getSingerDTO(singerEntity);

@@ -5,7 +5,6 @@ import Server.model.DB.UserEntity;
 public class UserInDTO {
     private String apiToken = null;
     private UserEntity userEntity = new UserEntity();
-    private String newPassword = null;
 
     public UserInDTO() {
     }
@@ -13,12 +12,6 @@ public class UserInDTO {
     public UserInDTO(String apiToken, UserEntity userEntity) {
         this.apiToken = apiToken;
         this.userEntity = userEntity;
-    }
-
-    public UserInDTO(String apiToken, UserEntity userEntity, String newPassword) {
-        this.apiToken = apiToken;
-        this.userEntity = userEntity;
-        this.newPassword = newPassword;
     }
 
     public String getApiToken() {
@@ -35,13 +28,5 @@ public class UserInDTO {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
     }
 }

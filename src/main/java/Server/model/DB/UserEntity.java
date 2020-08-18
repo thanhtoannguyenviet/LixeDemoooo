@@ -1,3 +1,4 @@
+
 package Server.model.DB;
 
 import javax.persistence.*;

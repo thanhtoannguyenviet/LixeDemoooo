@@ -1,20 +1,31 @@
 package Server.model.DTO;
 
+import Server.model.DB.ImageEntity;
 import Server.model.DB.SerifilmEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeriFilmDTO {
-    public SerifilmEntity seriFilmEntity = new SerifilmEntity();
-    public List<FilmDTO> filmDTOList = new ArrayList<>();
+    private SerifilmEntity seriFilmEntity = new SerifilmEntity();
+    private List<FilmDTO> filmDTOList = new ArrayList<>();
+    private ImageEntity imageEntity = new ImageEntity();
+
+    public ImageEntity getImageEntity() {
+        return imageEntity;
+    }
+
+    public void setImageEntity(ImageEntity imageEntity) {
+        this.imageEntity = imageEntity;
+    }
 
     public SeriFilmDTO() {
     }
 
-    public SeriFilmDTO(SerifilmEntity seriFilmEntity, List<FilmDTO> filmDTOList) {
+    public SeriFilmDTO(SerifilmEntity seriFilmEntity, List<FilmDTO> filmDTOList, ImageEntity imageEntity) {
         this.seriFilmEntity = seriFilmEntity;
         this.filmDTOList = filmDTOList;
+        this.imageEntity = imageEntity;
     }
 
     public SerifilmEntity getSeriFilmEntity() {
