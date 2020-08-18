@@ -1,8 +1,7 @@
 package Server.controller;
 
-import Server.model.DAO.APIAccountDAO;
-import Server.model.DAO.UploadDAO;
-import Server.model.DB.UploadEntity;
+import Server.model.DAO.*;
+import Server.model.DB.*;
 import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.UploadInDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("File")
+@RequestMapping("api/File")
 @RestController
 public class UploadController {
     @Autowired
     UploadDAO uploadDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
-
+    SongDAO songDAO = new SongDAO();
+    FilmDAO filmDAO = new FilmDAO();
+    AlbumDAO albumDAO = new AlbumDAO();
+    SeriFilmDAO serifilmDAO = new SeriFilmDAO();
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -65,5 +67,44 @@ public class UploadController {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(uploadDAO.getByID(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/InsertIndex/{id}/{model}",
+            method = RequestMethod.POST
+    )
+    @ResponseBody
+    public ResponseEntity<?> increaseIndex(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id,@PathVariable("model") String model ) {
+        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if(model.equals("song")){
+            SongEntity songEntity = songDAO.getByID(id);
+            if(songEntity!=null){
+                songEntity.setIndex(songEntity.getIndex()+1);
+                songDAO.save(songEntity);
+            }
+        }
+        else if(model.equals("film")){
+            FilmEntity filmEntity = filmDAO.getByID(id);
+            if(filmEntity!= null){
+                filmEntity.setIndex(filmEntity.getIndex()+1);
+                filmDAO.save(filmEntity);
+                }
+        }
+        else if(model.equals("serifilm")){
+            SerifilmEntity serifilmEntity = serifilmDAO.getByID(id);
+            if(serifilmEntity!=null){
+                serifilmEntity.setIndex(serifilmEntity.getIndex()+1);
+                serifilmDAO.save(serifilmEntity);
+            }
+        }
+        else if(model.equals("album")){
+            AlbumEntity albumEntity = albumDAO.getByID(id);
+            if(albumEntity!=null){
+                albumEntity.setIndex(albumEntity.getIndex()+1);
+                albumDAO.save(albumEntity);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
