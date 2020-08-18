@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.AuthorSongDAO;
+import Server.model.DAO.UserDAO;
 import Server.model.DB.AuthorSongEntity;
 import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.AuthorSongInDTO;
@@ -17,15 +18,18 @@ public class AuthorSongController {
 
     AuthorSongDAO authorSongDAO = new AuthorSongDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post/",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestBody AuthorSongInDTO authorSongInDTO) {
-        if (authorSongInDTO == null || authorSongInDTO.getApiToken() == null || authorSongInDTO.getApiToken().isEmpty()
-                || apiAccountDAO.checkToken(authorSongInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> registerActor(@RequestBody AuthorSongInDTO authorSongInDTO, @RequestHeader String userToken) {
+        if (authorSongInDTO == null || apiAccountDAO.checkToken(authorSongInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(authorSongInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         AuthorSongEntity authorSongEntity = authorSongDAO.save(authorSongInDTO.getAuthorSongEntity());
         return new ResponseEntity<>("Post completed", HttpStatus.CREATED);
@@ -35,9 +39,13 @@ public class AuthorSongController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idAuthor") Long idAuthor, @PathVariable("idSong") Long idSong) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idAuthor") Long idAuthor,
+                                         @PathVariable("idSong") Long idSong, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (authorSongDAO.getId(idAuthor, idSong) != null) {
             for (AuthorSongEntity item : authorSongDAO.getId(idAuthor, idSong)) {

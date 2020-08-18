@@ -11,13 +11,20 @@ import java.util.List;
 
 public class APIAccountDAO {
 
-    public int checkToken(String condition) {
+    /**
+     * Check token<br>
+     * @param apiToken String
+     * @return apiTokenType int
+     */
+    public int checkToken(String apiToken) {
+        if (apiToken == null || "".equalsIgnoreCase(apiToken)) return 0;
+
         Session s = HibernateUtil.getSession(ApiaccountEntity.class);
-        List<ApiaccountEntity> entity = DBUtil.execCustomSQL(ApiaccountEntity.class, CUSTOM_QUERY.getToken(condition), s);
+        List<ApiaccountEntity> entity = DBUtil.execCustomSQL(ApiaccountEntity.class, CUSTOM_QUERY.getToken(apiToken), s);
         if (entity != null && entity.size() != 0) {
             return DBUtil.convertToOBject(entity.get(0), ApiaccountEntity.class).getType();
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 }

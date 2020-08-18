@@ -26,15 +26,18 @@ public class DirectorController {
     DirectorFilmDAO directorFilmDAO = new DirectorFilmDAO();
     FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody DirectorInDTO directorInDTO) {
-        if (directorInDTO == null || directorInDTO.getApiToken() == null
-                || directorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> post(@RequestBody DirectorInDTO directorInDTO, @RequestHeader String userToken) {
+        if (directorInDTO == null || apiAccountDAO.checkToken(directorInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(directorInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         DirectorEntity entity = directorDAO.save(directorInDTO.getDirectorEntity());
 
@@ -44,10 +47,13 @@ public class DirectorController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody DirectorInDTO directorInDTO, @PathVariable("id") Long id) {
-        if (directorInDTO == null || directorInDTO.getApiToken() == null
-                || directorInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(directorInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> update(@RequestBody DirectorInDTO directorInDTO,
+                                    @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (directorInDTO == null || apiAccountDAO.checkToken(directorInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(directorInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (directorDAO.getByID(id) != null) {
             directorDAO.save(directorInDTO.getDirectorEntity());
@@ -59,9 +65,13 @@ public class DirectorController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id,
+                                    @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (directorDAO.getByID(id) != null) {
             directorDAO.delete(id);
@@ -74,9 +84,13 @@ public class DirectorController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> get(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+    public ResponseEntity<?> get(@RequestBody APIAccountDTO apiAccountDTO,
+                                 @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         DirectorEntity directorEntity = directorDAO.getByID(id);
         if (directorEntity != null) {
@@ -88,10 +102,14 @@ public class DirectorController {
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page,
+                                     @PathVariable("itemOnPage") int itemOnPage, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(DirectorEntity.class);
@@ -120,10 +138,13 @@ public class DirectorController {
     @RequestMapping(value = "/Count", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO) {
+    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             return new ResponseEntity<>(directorDAO.count(), HttpStatus.OK);
         } catch (Exception e) {

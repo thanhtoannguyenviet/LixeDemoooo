@@ -75,7 +75,7 @@ public class CUSTOM_QUERY {
     }
 
     public static String getUserByID(long id) {
-        String sql = "SELECT id, username, password, email, ext, follow, active, roleid, img, displayname, createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate FROM User_ WHERE id = '" + id + "'";
+        String sql = "SELECT id, username, '' password, email, ext, follow, active, roleid, img, displayname, createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate FROM User_ WHERE id = '" + id + "'";
         return sql;
     }
 

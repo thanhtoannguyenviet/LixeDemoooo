@@ -20,14 +20,17 @@ public class CategoryFilmController {
     FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
     FilmCategoryFilmDAO filmCategoryFilmDAO = new FilmCategoryFilmDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody CategoryfilmInDTO categoryfilmInDTO) {
-        if (categoryfilmInDTO == null || categoryfilmInDTO.getApiToken() == null
-                || categoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> post(@RequestBody CategoryfilmInDTO categoryfilmInDTO, @RequestHeader String userToken) {
+        if (categoryfilmInDTO == null || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         CategoryfilmEntity categorySongEntity = categoryFilmDAO.save(categoryfilmInDTO.getCategoryfilmEntity());
         return new ResponseEntity<>(categorySongEntity, HttpStatus.CREATED);
@@ -36,10 +39,13 @@ public class CategoryFilmController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody CategoryfilmInDTO categoryfilmInDTO, @PathVariable("id") Long id) {
-        if (categoryfilmInDTO == null || categoryfilmInDTO.getApiToken() == null
-                || categoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> update(@RequestBody CategoryfilmInDTO categoryfilmInDTO, @PathVariable("id") Long id,
+                                    @RequestHeader String userToken) {
+        if (categoryfilmInDTO == null || apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(categoryfilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (id == categoryfilmInDTO.getCategoryfilmEntity().getId()) {
             categoryFilmDAO.save(categoryfilmInDTO.getCategoryfilmEntity());
@@ -51,9 +57,13 @@ public class CategoryFilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id,
+                                    @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (categoryFilmDAO.getByID(id) != null) {
             categoryFilmDAO.delete(id);
@@ -65,9 +75,13 @@ public class CategoryFilmController {
             method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getDetail(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+    public ResponseEntity<?> getDetail(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id,
+                                       @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         CategoryfilmEntity categoryfilmEntity = categoryFilmDAO.getByID(id);
         if (categoryfilmEntity != null) {
@@ -81,10 +95,13 @@ public class CategoryFilmController {
             method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getAll(@RequestBody APIAccountDTO apiAccountDTO) {
+    public ResponseEntity<?> getAll(@RequestBody APIAccountDTO apiAccountDTO, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getAll();
             if (!categoryfilmEntityList.isEmpty()) {
@@ -108,10 +125,14 @@ public class CategoryFilmController {
 
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page,
+                                     @PathVariable("itemOnPage") int itemOnPage, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
@@ -139,10 +160,14 @@ public class CategoryFilmController {
     @RequestMapping(value = "/GetTop{itop}/", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("itop") int itop) {
+    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("itop") int itop,
+                                    @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
@@ -172,10 +197,14 @@ public class CategoryFilmController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getRandom(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("iRandom") int iRandom) {
+    public ResponseEntity<?> getRandom(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("iRandom") int iRandom,
+                                       @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setTop(iRandom);
@@ -203,10 +232,14 @@ public class CategoryFilmController {
     @RequestMapping(value = "/Count", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO) {
+    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO,
+                                   @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             return new ResponseEntity<>(categoryFilmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {

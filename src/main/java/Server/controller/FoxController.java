@@ -3,6 +3,7 @@ package Server.controller;
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.FoxDAO;
 import Server.model.DB.SongEntity;
+import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.FoxDTO;
 import Server.model.DTO.FoxInDTO;
 import org.springframework.beans.factory.annotation.Autowired;

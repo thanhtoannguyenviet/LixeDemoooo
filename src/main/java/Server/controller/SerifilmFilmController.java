@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.SerifilmFilmDAO;
+import Server.model.DAO.UserDAO;
 import Server.model.DB.DirectorFilmEntity;
 import Server.model.DB.SerifilmFilmEntity;
 import Server.model.DTO.APIAccountDTO;
@@ -18,15 +19,18 @@ public class SerifilmFilmController {
     @Autowired
     SerifilmFilmDAO serifilmFilmDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post/",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> registerActor(@RequestBody SerifilmFilmInDTO serifilmFilmInDTO) {
-        if (serifilmFilmInDTO == null || serifilmFilmInDTO.getApiToken() == null
-                || serifilmFilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(serifilmFilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> registerActor(@RequestBody SerifilmFilmInDTO serifilmFilmInDTO, @RequestHeader String userToken) {
+        if (serifilmFilmInDTO == null || apiAccountDAO.checkToken(serifilmFilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(serifilmFilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         SerifilmFilmEntity serifilmFilmEntity = serifilmFilmDAO.save(serifilmFilmInDTO.getSerifilmFilmEntity());
         return new ResponseEntity<>(serifilmFilmEntity, HttpStatus.CREATED);
@@ -36,9 +40,13 @@ public class SerifilmFilmController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idSeri") Long idSeri, @PathVariable("idFilm") Long idFilm) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> deleteActor(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idSeri") Long idSeri,
+                                         @PathVariable("idFilm") Long idFilm, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (serifilmFilmDAO.getId(idSeri, idFilm) != null) {
             for (SerifilmFilmEntity item : serifilmFilmDAO.getId(idSeri, idFilm)) {

@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.FilmCategoryFilmDAO;
+import Server.model.DAO.UserDAO;
 import Server.model.DB.FilmActorEntity;
 import Server.model.DB.FilmCategoryfilmEntity;
 import Server.model.DTO.APIAccountDTO;
@@ -22,15 +23,18 @@ public class FilmCategoryController {
     @Autowired
     FilmCategoryFilmDAO filmCategoryFilmDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody FilmCategoryfilmInDTO filmCategoryfilmInDTO) {
-        if (filmCategoryfilmInDTO == null || filmCategoryfilmInDTO.getApiToken() == null
-                || filmCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> post(@RequestBody FilmCategoryfilmInDTO filmCategoryfilmInDTO, @RequestHeader String userToken) {
+        if (filmCategoryfilmInDTO == null || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         FilmCategoryfilmEntity entity = filmCategoryFilmDAO.save(filmCategoryfilmInDTO.getFilmCategoryfilmEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -39,10 +43,13 @@ public class FilmCategoryController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody FilmCategoryfilmInDTO filmCategoryfilmInDTO, @PathVariable("id") Long id) {
-        if (filmCategoryfilmInDTO == null || filmCategoryfilmInDTO.getApiToken() == null
-                || filmCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> update(@RequestBody FilmCategoryfilmInDTO filmCategoryfilmInDTO, @PathVariable("id") Long id,
+                                    @RequestHeader String userToken) {
+        if (filmCategoryfilmInDTO == null || apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(filmCategoryfilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (filmCategoryFilmDAO.getByID(id) != null) {
             filmCategoryFilmDAO.save(filmCategoryfilmInDTO.getFilmCategoryfilmEntity());
@@ -54,9 +61,13 @@ public class FilmCategoryController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idFilm") Long idFilm, @PathVariable("idCategory") Long idCategory) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("idFilm") Long idFilm,
+                                    @PathVariable("idCategory") Long idCategory, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (filmCategoryFilmDAO.getId(idFilm, idCategory) != null) {
             for (FilmCategoryfilmEntity item : filmCategoryFilmDAO.getId(idFilm, idCategory)) {

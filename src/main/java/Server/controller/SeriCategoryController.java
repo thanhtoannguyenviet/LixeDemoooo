@@ -22,15 +22,18 @@ public class SeriCategoryController {
     CategoryFilmDAO categoryFilmDAO = new CategoryFilmDAO();
     FilmSiteDAO filmSiteDAO = new FilmSiteDAO();
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> post(@RequestBody SeriCategoryfilmInDTO seriCategoryfilmInDTO) {
-        if (seriCategoryfilmInDTO == null || seriCategoryfilmInDTO.getApiToken() == null
-                || seriCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> post(@RequestBody SeriCategoryfilmInDTO seriCategoryfilmInDTO, @RequestHeader String userToken) {
+        if (seriCategoryfilmInDTO == null || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         SeriCategoryfilmEntity entity = seriCategoryFilmDAO.save(seriCategoryfilmInDTO.getSeriCategoryfilmEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -39,10 +42,13 @@ public class SeriCategoryController {
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody SeriCategoryfilmInDTO seriCategoryfilmInDTO, @PathVariable("id") Long id) {
-        if (seriCategoryfilmInDTO == null || seriCategoryfilmInDTO.getApiToken() == null
-                || seriCategoryfilmInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> update(@RequestBody SeriCategoryfilmInDTO seriCategoryfilmInDTO,
+                                    @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (seriCategoryfilmInDTO == null || apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(seriCategoryfilmInDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (seriCategoryFilmDAO.getByID(id) != null) {
             seriCategoryFilmDAO.save(seriCategoryfilmInDTO.getSeriCategoryfilmEntity());
@@ -54,9 +60,13 @@ public class SeriCategoryController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("seriid") Long seriid,@PathVariable("categoryid") Long categoryid) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("seriid") Long seriid,
+                                    @PathVariable("categoryid") Long categoryid, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         List<SeriCategoryfilmEntity> seriCategoryfilmEntity = seriCategoryFilmDAO.getId(seriid + "", categoryid + "");
         if (seriCategoryfilmEntity != null) {
@@ -65,16 +75,20 @@ public class SeriCategoryController {
             }
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Delete Fail", HttpStatus.BAD_REQUEST);
     }
+
     @RequestMapping(value = "/GetAll/",
             method = RequestMethod.POST
     )
     @ResponseBody
-    public ResponseEntity<?> getAll(@RequestBody APIAccountDTO apiAccountDTO) {
+    public ResponseEntity<?> getAll(@RequestBody APIAccountDTO apiAccountDTO, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             List<CategoryfilmEntity> categoryfilmEntityList = categoryFilmDAO.getAll();
             if (!categoryfilmEntityList.isEmpty()) {
@@ -98,10 +112,14 @@ public class SeriCategoryController {
 
     @RequestMapping(value = "/GetAllHasPage{itemOnPage}/{page}", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page, @PathVariable("itemOnPage") int itemOnPage) {
+    public ResponseEntity<?> getPage(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("page") int page,
+                                     @PathVariable("itemOnPage") int itemOnPage, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
@@ -130,10 +148,13 @@ public class SeriCategoryController {
     @RequestMapping(value = "/GetTop{itop}/", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("itop") int itop) {
+    public ResponseEntity<?> getTop(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("itop") int itop, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setClazz(CategoryfilmEntity.class);
@@ -163,10 +184,14 @@ public class SeriCategoryController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public ResponseEntity<?> getRandom(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("iRandom") int iRandom) {
+    public ResponseEntity<?> getRandom(@RequestBody APIAccountDTO apiAccountDTO,
+                                       @PathVariable("iRandom") int iRandom, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             Criteria criteria = new Criteria();
             criteria.setTop(iRandom);
@@ -194,10 +219,13 @@ public class SeriCategoryController {
     @RequestMapping(value = "/Count", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO) {
+    public ResponseEntity<?> count(@RequestBody APIAccountDTO apiAccountDTO, @RequestHeader String userToken) {
         try {
-            if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+            if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
                 return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+            }
+            if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+                return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             }
             return new ResponseEntity<>(categoryFilmDAO.count(), HttpStatus.OK);
         } catch (Exception e) {

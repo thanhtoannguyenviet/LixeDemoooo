@@ -2,6 +2,7 @@ package Server.controller;
 
 import Server.model.DAO.APIAccountDAO;
 import Server.model.DAO.CommentDAO;
+import Server.model.DAO.UserDAO;
 import Server.model.DB.CommentEntity;
 import Server.model.DTO.APIAccountDTO;
 import Server.model.DTO.CommentInDTO;
@@ -19,15 +20,18 @@ public class CommentController {
     @Autowired
     CommentDAO commentDAO;
     APIAccountDAO apiAccountDAO = new APIAccountDAO();
+	UserDAO userDAO = new UserDAO();
 
     @RequestMapping(value = "/Post",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> postCategorySong(@RequestBody CommentInDTO commentInDTO) {
-        if (commentInDTO == null || commentInDTO.getApiToken() == null
-                || commentInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(commentInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> postCategorySong(@RequestBody CommentInDTO commentInDTO, @RequestHeader String userToken) {
+        if (commentInDTO == null || apiAccountDAO.checkToken(commentInDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(commentInDTO.getApiToken())) == 0) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         CommentEntity entity = commentDAO.save(commentInDTO.getCommentEntity());
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
@@ -36,10 +40,13 @@ public class CommentController {
     @RequestMapping(value = "/Put/{id}",
             method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateCategorySong(@RequestBody CommentInDTO commentInDTO, @PathVariable("id") Long id) {
-        if (commentInDTO == null || commentInDTO.getApiToken() == null
-                || commentInDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(commentInDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> updateCategorySong(@RequestBody CommentInDTO commentInDTO,
+                                                @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (commentInDTO == null || apiAccountDAO.checkToken(commentInDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(commentInDTO.getApiToken())) == 0) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (commentInDTO.getCommentEntity().getId() == id) {
             commentDAO.save(commentInDTO.getCommentEntity());
@@ -51,22 +58,30 @@ public class CommentController {
             method = RequestMethod.DELETE
     )
     @ResponseBody
-    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
+    public ResponseEntity<?> delete(@RequestBody APIAccountDTO apiAccountDTO,
+                                    @PathVariable("id") Long id, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) != 1) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) != 1) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         if (commentDAO.getByID(id) != null) {
             commentDAO.delete(id);
             return new ResponseEntity<>("Delete Completed", HttpStatus.OK);
-        } else return new ResponseEntity<>("Delte Fail", HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>("Delete Fail", HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/GetComment/model={model}&id={id}",
             method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<?> getComment(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id, @PathVariable("model") String model) {
-        if (apiAccountDTO == null || apiAccountDTO.getApiToken() == null || apiAccountDTO.getApiToken().isEmpty() || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
+    public ResponseEntity<?> getComment(@RequestBody APIAccountDTO apiAccountDTO, @PathVariable("id") Long id,
+                                        @PathVariable("model") String model, @RequestHeader String userToken) {
+        if (apiAccountDTO == null || apiAccountDAO.checkToken(apiAccountDTO.getApiToken()) == 0) {
             return new ResponseEntity<>("Token is not valid.", HttpStatus.FORBIDDEN);
+        }
+        if (userDAO.checkUserRoleId(userToken, apiAccountDAO.checkToken(apiAccountDTO.getApiToken())) == 0) {
+            return new ResponseEntity<>("", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         }
         List<CommentEntity> commentEntityList = commentDAO.getId(model, id);
         if (!commentEntityList.isEmpty()) {

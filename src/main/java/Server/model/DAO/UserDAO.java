@@ -3,6 +3,7 @@ package Server.model.DAO;
 import Server.common.CUSTOM_QUERY;
 import Server.model.DB.*;
 import Server.model.DTO.UserDTO;
+import Server.model.DTO.UserInDTO;
 import Server.service.*;
 import org.hibernate.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,10 @@ import java.util.UUID;
 public class UserDAO {
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     RoleDAO roleDAO = new RoleDAO();
+
+    public String bCryptPassword(String plainPassword) {
+        return bCryptPasswordEncoder.encode(plainPassword);
+    }
 
     public List<UserDTO> getAllUsers() {
         List<UserDTO> listRtn = new ArrayList<UserDTO>();
@@ -33,6 +38,10 @@ public class UserDAO {
         return listRtn;
     }
 
+    /**
+     * Internal use
+     * @return List<UserEntity>
+     */
     public List<UserEntity> getAllUser_() {
         Session s = HibernateUtil.getSession(UserEntity.class);
         List<UserEntity> ls = DBUtil.loadAllData(UserEntity.class, s);
@@ -66,9 +75,8 @@ public class UserDAO {
         List<UserEntity> entity = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.checkUniqueUsername(username), s);
         if (entity != null && entity.size() > 0) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**
@@ -153,7 +161,7 @@ public class UserDAO {
             user.setMbTokenCreateDate(currentTimestamp);
         }
 
-        int cnt = DBUtil.updateData(user, s);
+        int cnt = DBUtil.updateData(user, s); // UPDATE USER_
         if (cnt == 1) {
             token = uniqueId;
         }
@@ -169,12 +177,12 @@ public class UserDAO {
         UserDTO uD = new UserDTO();
         Session s = HibernateUtil.getSession(UserEntity.class);
         List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.loginAccount(user), s);
-        if (listUsers != null && listUsers.size() > 0) {
+        if (listUsers != null && listUsers.size() > 0) { // Account exists
             UserEntity uE = DBUtil.convertToOBject(listUsers.get(0), UserEntity.class);
-            if (bCryptPasswordEncoder.matches(user.getPassword(), uE.getPassword())) {
+            if (bCryptPasswordEncoder.matches(user.getPassword(), uE.getPassword())) { // Right Password
                 if (type == 1 && (uE.getUserWebToken() == null || "".equalsIgnoreCase(uE.getUserWebToken()))) {
                     uE.setUserWebToken(createToken(uE, type));
-                } else if (type == 2 && (uE.getUserMbToken() == null || "".equalsIgnoreCase(uE.getUserMbToken()))) {
+                } else if (type == 2) { // Login from Mobile => Reset MbToken
                     uE.setUserMbToken(createToken(uE, type));
                 }
                 uE.setPassword("");
@@ -185,7 +193,47 @@ public class UserDAO {
         return uD;
     }
 
-    public String bCryptPassword(String plainPassword) {
-        return bCryptPasswordEncoder.encode(plainPassword);
+    /**
+     * Quick search User Role<br>
+     * @param userToken String
+     * @param aipTokenType int (1: WEB, 2: MOBILE)
+     * @return roleId long (1: ADMIN, 2: MEMBER)
+     */
+    public long checkUserRoleId(String userToken, int aipTokenType) {
+        UserEntity uE = findUserByToken(userToken, aipTokenType);
+        if (uE != null) {
+            return uE.getRoleid();
+        }
+        return 0;
+    }
+
+    /**
+     * Change Password
+     * @param userInDTO UserInDTO
+     * @return int
+     */
+    public int changePassword(UserInDTO userInDTO) {
+        int rtn = 0;
+        Session s = HibernateUtil.getSession(UserEntity.class);
+        List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.loginAccount(userInDTO.getUserEntity()), s);
+        if (listUsers != null && listUsers.size() > 0) { // Account exists
+            UserEntity uE = DBUtil.convertToOBject(listUsers.get(0), UserEntity.class);
+            if (bCryptPasswordEncoder.matches(userInDTO.getUserEntity().getPassword(), uE.getPassword())) { // Right Password
+                // Update new Password
+                Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                Session s2 = HibernateUtil.getSession(UserEntity.class);
+                uE.setPassword(userInDTO.getNewPassword());
+                uE.setUpdateDate(currentTimestamp);
+                uE.setUpdateUser(uE.getId());
+                uE.setUserWebToken("");
+                uE.setWebTokenCreateDate(currentTimestamp);
+                uE.setUserMbToken("");
+                uE.setMbTokenCreateDate(currentTimestamp);
+
+                rtn = DBUtil.updateData(uE, s); // UPDATE USER_
+            }
+        }
+
+        return rtn;
     }
 }
