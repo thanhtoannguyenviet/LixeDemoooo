@@ -62,6 +62,7 @@ public class UserDAO {
         entity.setWebTokenCreateDate(null);
         entity.setUserMbToken(null);
         entity.setMbTokenCreateDate(null);
+        entity.setRoleid(2);
 
         int cnt = DBUtil.addData2(entity, s);
         if (cnt == 1) {
@@ -156,7 +157,6 @@ public class UserDAO {
      */
     public String createToken(UserEntity user, int type) {
         String token = "";
-        UserEntity uE = null;
         Session s = HibernateUtil.getSession(UserEntity.class);
         String uniqueId = UUID.randomUUID().toString().replace("-","");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
