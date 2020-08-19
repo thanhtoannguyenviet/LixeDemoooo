@@ -56,7 +56,12 @@ public class UserDAO {
         entity.setCreateDate(currentTimestamp);
         entity.setUpdateDate(currentTimestamp);
         entity.setCreateUser(searchMaxIdentity());
+        entity.setUpdateUser(searchMaxIdentity());
         entity.setPassword(bCryptPassword(entity.getPassword()));
+        entity.setUserWebToken(null);
+        entity.setWebTokenCreateDate(null);
+        entity.setUserMbToken(null);
+        entity.setMbTokenCreateDate(null);
 
         int cnt = DBUtil.addData2(entity, s);
         if (cnt == 1) {
@@ -132,6 +137,8 @@ public class UserDAO {
      * @return UserEntity
      */
     public UserEntity findUserByToken(String token, int type) {
+        if (token == null || "".equalsIgnoreCase(token)) return null;
+
         Session s = HibernateUtil.getSession(UserEntity.class);
         UserEntity uE = null;
         List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.findUserByToken(token, type), s);
@@ -200,6 +207,7 @@ public class UserDAO {
      * @return roleId long (1: ADMIN, 2: MEMBER)
      */
     public long checkUserRoleId(String userToken, int aipTokenType) {
+        if (userToken == null || "".equalsIgnoreCase(userToken)) return 0;
         UserEntity uE = findUserByToken(userToken, aipTokenType);
         if (uE != null) {
             return uE.getRoleid();

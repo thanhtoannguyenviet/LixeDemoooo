@@ -105,10 +105,10 @@ public class UserController {
 
         String userToken = "";
         if (userInDTO.getUserEntity() != null) {
-            // 1. Check if there is userToken
-            String postUserToken = apiTokenType == 1 ? userInDTO.getUserEntity().getUserWebToken() : userInDTO.getUserEntity().getUserMbToken();
-            UserEntity uEbyToken = userDAO.findUserByToken(postUserToken, apiTokenType);
-            if (uEbyToken != null) return new ResponseEntity<>("Already login.", HttpStatus.CONFLICT);
+//            // 1. Check if there is userToken
+//            String postUserToken = apiTokenType == 1 ? userInDTO.getUserEntity().getUserWebToken() : userInDTO.getUserEntity().getUserMbToken();
+//            UserEntity uEbyToken = userDAO.findUserByToken(postUserToken, apiTokenType);
+//            if (uEbyToken != null) return new ResponseEntity<>("Already login.", HttpStatus.CONFLICT);
 
             // 2. Login
             UserDTO user = userDAO.login(userInDTO.getUserEntity(), apiTokenType);
