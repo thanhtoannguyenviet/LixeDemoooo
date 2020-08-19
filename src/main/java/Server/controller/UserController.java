@@ -112,17 +112,19 @@ public class UserController {
 
             // 2. Login
             UserDTO user = userDAO.login(userInDTO.getUserEntity(), apiTokenType);
-            if (user != null) {
+            if (user.getUserEntity() != null) {
                 if (apiTokenType == 1) {
-                    userToken = user.getUserEntity().getUserWebToken();
+                    user.getUserEntity().setUserMbToken("");
                 } else {
-                    userToken = user.getUserEntity().getUserMbToken();
+                    user.getUserEntity().setUserWebToken("");
                 }
+                return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Login failed!", HttpStatus.BAD_REQUEST);
             }
+        } else {
+            return new ResponseEntity<>("Login failed!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(userToken, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/changePassword",

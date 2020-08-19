@@ -39,7 +39,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "username", nullable = false, length = 255)
+    @Column(name = "username", nullable = true, length = 255)
     public String getUsername() {
         return username;
     }
@@ -49,7 +49,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = true, length = 255)
     public String getPassword() {
         return password;
     }
@@ -59,7 +59,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "email", nullable = false, length = 255)
+    @Column(name = "email", nullable = true, length = 255)
     public String getEmail() {
         return email;
     }
@@ -69,7 +69,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "ext", nullable = false, length = -1)
+    @Column(name = "ext", nullable = true, length = -1)
     public String getExt() {
         return ext;
     }
@@ -79,7 +79,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "follow", nullable = false, length = -1)
+    @Column(name = "follow", nullable = true, length = -1)
     public String getFollow() {
         return follow;
     }
@@ -89,7 +89,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "roleid", nullable = false)
+    @Column(name = "roleid", nullable = true)
     public long getRoleid() {
         return roleid;
     }
@@ -99,7 +99,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "img", nullable = false, length = -1)
+    @Column(name = "img", nullable = true, length = -1)
     public String getImg() {
         return img;
     }
@@ -109,7 +109,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "displayname", nullable = false, length = 255)
+    @Column(name = "displayname", nullable = true, length = 255)
     public String getDisplayname() {
         return displayname;
     }
