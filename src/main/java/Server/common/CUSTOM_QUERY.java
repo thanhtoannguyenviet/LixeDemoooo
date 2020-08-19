@@ -85,7 +85,9 @@ public class CUSTOM_QUERY {
     }
 
     public static String checkUniqueUsername(String username) {
-        String sql = "SELECT * FROM USER_ WHERE username = '" + username + "'";
+        String sql = "SELECT id, username, password, email, ext, follow, active, roleid, img, displayname, " +
+                "createDate, createUser, updateDate, updateUser, userWebToken, webTokenCreateDate, userMbToken, mbTokenCreateDate " +
+                "FROM User_ where username = '" + username + "'";
         return sql;
     }
 

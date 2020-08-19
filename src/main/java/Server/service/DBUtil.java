@@ -386,4 +386,18 @@ public class DBUtil {
             session.close();
         }
     }
+    public static <T> List<T> getUserbyUsername(Class<T> clazz, String query,Session session) {
+        try {
+
+            SQLQuery q = session.createSQLQuery(query); // bỏ custom SQL vào
+            q.addEntity(clazz);
+
+            return q.getResultList();
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
 }

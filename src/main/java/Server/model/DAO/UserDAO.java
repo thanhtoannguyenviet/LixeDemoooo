@@ -77,7 +77,7 @@ public class UserDAO {
      */
     public boolean checkUniqueUsername(String username) {
         Session s = HibernateUtil.getSession(UserEntity.class);
-        List<UserEntity> entity = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.checkUniqueUsername(username), s);
+        List<UserEntity> entity = DBUtil.getUserbyUsername(UserEntity.class, CUSTOM_QUERY.checkUniqueUsername(username), s);
         if (entity != null && entity.size() > 0) {
             return false;
         }
@@ -141,7 +141,7 @@ public class UserDAO {
 
         Session s = HibernateUtil.getSession(UserEntity.class);
         UserEntity uE = null;
-        List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.findUserByToken(token, type), s);
+        List<UserEntity> listUsers = DBUtil.getUserbyUsername(UserEntity.class, CUSTOM_QUERY.findUserByToken(token, type), s);
         if (listUsers != null && listUsers.size() > 0) {
             uE = DBUtil.convertToOBject(listUsers.get(0), UserEntity.class);
         }
@@ -183,7 +183,7 @@ public class UserDAO {
     public UserDTO login(UserEntity user, int type) {
         UserDTO uD = new UserDTO();
         Session s = HibernateUtil.getSession(UserEntity.class);
-        List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.loginAccount(user), s);
+        List<UserEntity> listUsers = DBUtil.getUserbyUsername(UserEntity.class, CUSTOM_QUERY.loginAccount(user), s);
         if (listUsers != null && listUsers.size() > 0) { // Account exists
             UserEntity uE = DBUtil.convertToOBject(listUsers.get(0), UserEntity.class);
             if (bCryptPasswordEncoder.matches(user.getPassword(), uE.getPassword())) { // Right Password
@@ -223,7 +223,7 @@ public class UserDAO {
     public int changePassword(UserInDTO userInDTO) {
         int rtn = 0;
         Session s = HibernateUtil.getSession(UserEntity.class);
-        List<UserEntity> listUsers = DBUtil.execCustomSQL(UserEntity.class, CUSTOM_QUERY.loginAccount(userInDTO.getUserEntity()), s);
+        List<UserEntity> listUsers = DBUtil.getUserbyUsername(UserEntity.class, CUSTOM_QUERY.loginAccount(userInDTO.getUserEntity()), s);
         if (listUsers != null && listUsers.size() > 0) { // Account exists
             UserEntity uE = DBUtil.convertToOBject(listUsers.get(0), UserEntity.class);
             if (bCryptPasswordEncoder.matches(userInDTO.getUserEntity().getPassword(), uE.getPassword())) { // Right Password
